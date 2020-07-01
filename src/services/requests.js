@@ -6,7 +6,7 @@ export const getRevenueCenters = (
   let params = `revenue_center_type=${revenue_center_type}`
   if (is_outpost) params += '&is_outpost=true'
   if (lat && lng) params += `&lat=${lat}&lng=${lng}`
-  return api.request(`/revenue-centers?${params}`)
+  return api.request && api.request(`/revenue-centers?${params}`)
 }
 
 // export const getRevenueCenter = (revenue_center_type_id) => {

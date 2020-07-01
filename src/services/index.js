@@ -35,8 +35,8 @@ const handleReponse = (response) => {
 }
 
 class OpenTenderAPI {
-  constructor(config, brandId) {
-    this.brandId = brandId
+  constructor(config) {
+    this.brandId = config.brandId
     this.clientId = config.clientId
     this.baseUrl = config.baseUrl
     this.authUrl = config.authUrl
@@ -98,6 +98,14 @@ class OpenTenderAPI {
           reject(err)
         })
     })
+  }
+
+  getRevenueCenters(revenue_center_type, is_outpost, lat, lng) {
+    // console.log('open-tender-redux', api)
+    let params = `revenue_center_type=${revenue_center_type}`
+    if (is_outpost) params += '&is_outpost=true'
+    if (lat && lng) params += `&lat=${lat}&lng=${lng}`
+    return this.request(`/revenue-centers?${params}`)
   }
 }
 
