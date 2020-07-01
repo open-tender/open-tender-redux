@@ -1,4 +1,5 @@
-import rootReducer from './reducers'
+import openTenderReducer from './reducers'
 import OpenTenderAPI from './services'
 
-export { rootReducer, OpenTenderAPI }
+export * from './actions'
+export { openTenderReducer, OpenTenderAPI }

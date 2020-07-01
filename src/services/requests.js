@@ -2,7 +2,7 @@ export const getRevenueCenters = (
   api,
   { revenue_center_type, is_outpost, lat, lng }
 ) => {
-  console.log('open-tender-redux', api)
+  // console.log('open-tender-redux', api)
   let params = `revenue_center_type=${revenue_center_type}`
   if (is_outpost) params += '&is_outpost=true'
   if (lat && lng) params += `&lat=${lat}&lng=${lng}`
