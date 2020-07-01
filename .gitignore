@@ -1,0 +1,17 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# https://betterstack.dev/blog/npm-package-best-practices/#heading-set-up-ignore-files
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/dist
+
+# misc
+.DS_Store
+.env
+yarn-debug.log*
+yarn-error.log*
