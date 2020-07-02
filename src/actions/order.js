@@ -1,24 +1,14 @@
 import {
-  addItem,
-  removeItem,
-  incrementItem,
-  decrementItem,
-  calcCartCounts,
   rehydrateCart,
   rehydrateCheckoutForm,
-  serviceTypeNamesMap,
-  orderTypeNamesMap,
-  timezoneMap,
-  getUserTimezone,
   makeFirstRequestedAt,
   makeFirstTimes,
-  makeRequestedAtStr,
-  makeRandomNumberString,
 } from 'open-tender-js'
 import { pending, fulfill, reject } from '../utils'
 import {
   RESET_ORDER,
   RESET_ORDER_TYPE,
+  RESET_REVENUE_CENTER,
   RESET_MESSAGES,
   RESET_ALERT,
   SET_ORDER_TYPE,
@@ -29,21 +19,26 @@ import {
   SET_REQUESTED_AT,
   SET_CART,
   SET_CURRENT_ITEM,
+  SET_ALERT,
+  ADD_MESSAGE,
   ADD_ITEM,
   REMOVE_ITEM,
   INCREMENT_ITEM,
   DECREMENT_ITEM,
   FETCH_REVENUE_CENTER,
   REFRESH_REVENUE_CENTER,
-  SET_ALERT,
-  ADD_MESSAGE,
+  EDIT_ORDER,
+  REORDER,
 } from '../reducers/order'
 import { setMenuItems } from './menuItems'
+import { updateForm } from './checkout'
+import { resetMenuVars } from './menu'
 
 // action creators
 
 export const resetOrder = () => ({ type: RESET_ORDER })
 export const resetOrderType = () => ({ type: RESET_ORDER_TYPE })
+export const resetRevenueCenter = () => ({ type: RESET_REVENUE_CENTER })
 export const resetMessages = () => ({ type: RESET_MESSAGES })
 export const resetAlert = () => ({ type: RESET_ALERT })
 
@@ -151,9 +146,10 @@ export const refreshRevenueCenter = ({
 export const editOrder = order => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
+  const alert = { type: 'working', args: { text: 'Building your order...' } }
+  dispatch(setAlert(alert))
+  dispatch(pending(EDIT_ORDER))
   try {
-    const alert = { type: 'working', args: { text: 'Building your order...' } }
-    dispatch(setAlert(alert))
     const {
       order_id: orderId,
       order_type: orderType,
@@ -168,10 +164,10 @@ export const editOrder = order => async (dispatch, getState) => {
     const { cart, cartCounts } = rehydrateCart(menuItems, order.cart)
     dispatch(setMenuItems(menuItems))
     const form = rehydrateCheckoutForm(order)
-    // dispatch(updateForm(form))
+    dispatch(updateForm(form))
     // dispatch(toggleSidebar())
     const isOutpost = revenueCenter.is_outpost
-    return {
+    const payload = {
       orderId,
       orderType,
       serviceType,
@@ -182,8 +178,49 @@ export const editOrder = order => async (dispatch, getState) => {
       cart,
       cartCounts,
     }
+    dispatch(fulfill(EDIT_ORDER, payload))
   } catch (err) {
     dispatch(addMessage('Something went wrong. Please contact support.'))
+    dispatch(reject(EDIT_ORDER, null))
   }
   dispatch(resetAlert())
+}
+
+export const reorderPastOrder = ({
+  revenueCenterId,
+  serviceType,
+  items,
+}) => async (dispatch, getState) => {
+  const { api } = getState().config
+  if (!api) return
+  const alert = { type: 'working', args: { text: 'Building your order...' } }
+  dispatch(setAlert(alert))
+  dispatch(pending(REORDER))
+  try {
+    const revenueCenter = await api.getRevenueCenter(revenueCenterId)
+    const requestedAt = makeFirstRequestedAt(revenueCenter, serviceType)
+    if (!requestedAt) {
+      const { status } = revenueCenter
+      const alert = { type: 'closed', args: { status, isCancel: true } }
+      dispatch(setAlert(alert))
+      dispatch(fulfill(REORDER, {}))
+    } else {
+      dispatch(resetMenuVars())
+      dispatch(resetRevenueCenter())
+      const menuItems = await api.getMenuItems(revenueCenterId, serviceType)
+      const { cart, cartCounts } = rehydrateCart(menuItems, items)
+      dispatch(setMenuItems(menuItems))
+      const payload = { revenueCenter, requestedAt, cart, cartCounts }
+      dispatch(fulfill(REORDER, payload))
+      const alert = {
+        type: 'requestedAt',
+        // args: { onCloseAction: toggleSidebar },
+      }
+      dispatch(alert(alert))
+    }
+  } catch (err) {
+    dispatch(resetAlert())
+    dispatch(addMessage('Something went wrong. Please contact support.'))
+    dispatch(reject(REORDER, null))
+  }
 }

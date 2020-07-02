@@ -38,6 +38,7 @@ const NAME = 'order'
 
 export const RESET_ORDER = `${NAME}/resetOrder`
 export const RESET_ORDER_TYPE = `${NAME}/resetOrderType`
+export const RESET_REVENUE_CENTER = `${NAME}/resetRevenueCenter`
 export const RESET_MESSAGES = `${NAME}/resetMessages`
 export const RESET_ALERT = `${NAME}/resetAlert`
 
@@ -58,6 +59,8 @@ export const ADD_MESSAGE = `${NAME}/addMessage`
 
 export const FETCH_REVENUE_CENTER = `${NAME}/fetchRevenueCenter`
 export const REFRESH_REVENUE_CENTER = `${NAME}/refreshRevenueCenter`
+export const EDIT_ORDER = `${NAME}/editOrder`
+export const REORDER = `${NAME}/reorderPastOrder`
 
 export default (state = initState, action) => {
   switch (action.type) {
@@ -73,6 +76,8 @@ export default (state = initState, action) => {
         revenueCenter: null,
         requestedAt: null,
       }
+    case RESET_REVENUE_CENTER:
+      return { ...state, revenueCenter: null }
     case RESET_MESSAGES:
       return { ...state, messages: [] }
     case RESET_ALERT:
@@ -174,6 +179,28 @@ export default (state = initState, action) => {
         error: null,
       }
     case `${REFRESH_REVENUE_CENTER}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
+    case `${EDIT_ORDER}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${EDIT_ORDER}/fulfilled`:
+      return {
+        ...state,
+        ...action.payload,
+        loading: 'idle',
+        error: null,
+      }
+    case `${EDIT_ORDER}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
+    case `${REORDER}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${REORDER}/fulfilled`:
+      return {
+        ...state,
+        ...action.payload,
+        loading: 'idle',
+        error: null,
+      }
+    case `${REORDER}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
     default:
       return state
