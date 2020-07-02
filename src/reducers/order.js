@@ -4,12 +4,7 @@ import {
   incrementItem,
   decrementItem,
   calcCartCounts,
-  rehydrateCart,
-  rehydrateCheckoutForm,
-  serviceTypeNamesMap,
-  orderTypeNamesMap,
   timezoneMap,
-  getUserTimezone,
   makeFirstRequestedAt,
   makeFirstTimes,
   makeRequestedAtStr,
@@ -46,6 +41,7 @@ export const RESET_ORDER_TYPE = `${NAME}/resetOrderType`
 export const RESET_MESSAGES = `${NAME}/resetMessages`
 export const RESET_ALERT = `${NAME}/resetAlert`
 
+export const SET_ALERT = `${NAME}/setAlert`
 export const SET_ORDER_TYPE = `${NAME}/setOrderType`
 export const SET_SERVICE_TYPE = `${NAME}/setServiceType`
 export const SET_ORDER_SERVICE_TYPE = `${NAME}/setOrderServiceType`
@@ -58,6 +54,7 @@ export const ADD_ITEM = `${NAME}/addItemToCart`
 export const REMOVE_ITEM = `${NAME}/removeItemFromCart`
 export const INCREMENT_ITEM = `${NAME}/incrementItemInCart`
 export const DECREMENT_ITEM = `${NAME}/decrementItemInCart`
+export const ADD_MESSAGE = `${NAME}/addMessage`
 
 export const FETCH_REVENUE_CENTER = `${NAME}/fetchRevenueCenter`
 export const REFRESH_REVENUE_CENTER = `${NAME}/refreshRevenueCenter`
@@ -80,6 +77,19 @@ export default (state = initState, action) => {
       return { ...state, messages: [] }
     case RESET_ALERT:
       return { ...state, alert: null }
+    case SET_ALERT:
+      return { ...state, alert: action.payload }
+    case ADD_MESSAGE:
+      return {
+        ...state,
+        messages: [
+          ...state.messages,
+          {
+            message: action.payload,
+            id: makeRandomNumberString(),
+          },
+        ],
+      }
     case SET_ORDER_TYPE:
       return { ...state, orderType: action.payload }
     case SET_SERVICE_TYPE:

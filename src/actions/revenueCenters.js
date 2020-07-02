@@ -28,7 +28,3 @@ export const fetchRevenueCenters = ({ type, is_outpost, lat, lng }) => async (
     dispatch(reject(FETCH_REVENUE_CENTERS, err))
   }
 }
-
-// selectors
-
-export const selectRevenueCenters = state => state.data.revenueCenters
