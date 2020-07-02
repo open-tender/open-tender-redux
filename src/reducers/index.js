@@ -5,6 +5,7 @@ import menu from './menu'
 import menuItems from './menuItems'
 import allergens from './allergens'
 import checkout from './checkout'
+import notifications from './notifications'
 
 const openTenderReducer = combineReducers({
   order,
@@ -13,6 +14,7 @@ const openTenderReducer = combineReducers({
   menuItems,
   allergens,
   checkout,
+  notifications,
 })
 
 export default openTenderReducer
