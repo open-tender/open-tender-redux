@@ -1,15 +1,15 @@
 import { addDistance } from 'open-tender-js'
-import { fetch, fulfill, reject } from '../utils'
+import { pending, fulfill, reject } from '../utils'
 import {
   RESET_REVENUE_CENTERS,
   FETCH_REVENUE_CENTERS,
 } from '../reducers/revenueCenters'
 
-// actions
+// action creators
 
 export const resetRevenueCenters = () => ({ type: RESET_REVENUE_CENTERS })
 
-// action creators
+// async action creators
 
 export const fetchRevenueCenters = ({ type, is_outpost, lat, lng }) => async (
   dispatch,
@@ -17,7 +17,7 @@ export const fetchRevenueCenters = ({ type, is_outpost, lat, lng }) => async (
 ) => {
   const { api } = getState().config
   if (!api) return
-  dispatch(fetch(FETCH_REVENUE_CENTERS))
+  dispatch(pending(FETCH_REVENUE_CENTERS))
   try {
     if (lat) lat = parseFloat(lat).toFixed(7)
     if (lng) lng = parseFloat(lng).toFixed(7)

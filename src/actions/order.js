@@ -15,19 +15,35 @@ import {
   makeRequestedAtStr,
   makeRandomNumberString,
 } from 'open-tender-js'
+import { pending, fulfill, reject } from '../utils'
 import {
   RESET_ORDER,
   RESET_ORDER_TYPE,
+  RESET_MESSAGES,
+  RESET_ALERT,
   SET_ORDER_TYPE,
   SET_SERVICE_TYPE,
   SET_ORDER_SERVICE_TYPE,
   SET_REVENUE_CENTER,
+  SET_ADDRESS,
+  SET_REQUESTED_AT,
+  SET_CART,
+  SET_CURRENT_ITEM,
+  ADD_ITEM,
+  REMOVE_ITEM,
+  INCREMENT_ITEM,
+  DECREMENT_ITEM,
+  FETCH_REVENUE_CENTER,
+  REFRESH_REVENUE_CENTER,
 } from '../reducers/order'
 
-// actions
+// action creators
 
 export const resetOrder = () => ({ type: RESET_ORDER })
 export const resetOrderType = () => ({ type: RESET_ORDER_TYPE })
+export const resetMessages = () => ({ type: RESET_MESSAGES })
+export const resetAlert = () => ({ type: RESET_ALERT })
+
 export const setOrderType = orderType => ({
   type: SET_ORDER_TYPE,
   payload: orderType,
@@ -40,10 +56,86 @@ export const setOrderServiceType = (orderType, serviceType, isOutpost) => ({
   type: SET_ORDER_SERVICE_TYPE,
   payload: { orderType, serviceType, isOutpost: isOutpost || false },
 })
+export const setAddress = address => ({
+  type: SET_ADDRESS,
+  payload: address,
+})
+export const setRequestedAt = requestedAt => ({
+  type: SET_REQUESTED_AT,
+  payload: requestedAt,
+})
 export const setRevenueCenter = revenueCenter => ({
   type: SET_REVENUE_CENTER,
   payload: revenueCenter,
 })
+export const setCart = cart => ({
+  type: SET_CART,
+  payload: cart,
+})
+export const setCurrentItem = item => ({
+  type: SET_CURRENT_ITEM,
+  payload: item,
+})
+export const addItemToCart = item => ({
+  type: ADD_ITEM,
+  payload: item,
+})
+export const removeItemFromCart = item => ({
+  type: REMOVE_ITEM,
+  payload: item,
+})
+export const incrementItemInCart = item => ({
+  type: INCREMENT_ITEM,
+  payload: item,
+})
+export const decrementItemInCart = item => ({
+  type: DECREMENT_ITEM,
+  payload: item,
+})
+
+// async action creators
+
+export const fetchRevenueCenter = revenueCenterId => async (
+  dispatch,
+  getState
+) => {
+  const { api } = getState().config
+  if (!api) return
+  dispatch(pending(FETCH_REVENUE_CENTER))
+  try {
+    const revenueCenter = api.getRevenueCenter(revenueCenterId)
+    dispatch(fulfill(FETCH_REVENUE_CENTER, revenueCenter))
+  } catch (err) {
+    dispatch(reject(FETCH_REVENUE_CENTER, err))
+  }
+}
+
+export const refreshRevenueCenter = ({
+  revenueCenterId,
+  serviceType,
+  requestedAt,
+}) => async (dispatch, getState) => {
+  const { api } = getState().config
+  if (!api) return
+  dispatch(pending(REFRESH_REVENUE_CENTER))
+  try {
+    const revenueCenter = await api.getRevenueCenter(revenueCenterId)
+    const firstTimes = makeFirstTimes(revenueCenter, serviceType, requestedAt)
+    const { status } = revenueCenter
+    let alert
+    if (!firstTimes || status !== 'OPEN') {
+      alert = { type: 'closed', args: { status, preventClose: true } }
+    } else {
+      alert = {
+        type: 'adjustRequestedAt',
+        args: { firstTimes, revenueCenter, preventClose: true },
+      }
+    }
+    dispatch(fulfill(REFRESH_REVENUE_CENTER, alert))
+  } catch (err) {
+    dispatch(reject(REFRESH_REVENUE_CENTER, err))
+  }
+}
 
 // selectors
 

@@ -1,8 +1,8 @@
-const handleError = (err) => {
+const handleError = err => {
   return err.detail || err.message
 }
 
-export const fetch = (action) => {
+export const pending = action => {
   return { type: `${action}/pending` }
 }
 

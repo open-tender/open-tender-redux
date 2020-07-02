@@ -23,7 +23,7 @@ export default (state = initState, action) => {
         error: null,
       }
     case `${FETCH_REVENUE_CENTERS}/rejected`:
-      return { ...state, error: action.payload }
+      return { ...state, loading: 'idle', error: action.payload }
     default:
       return state
   }

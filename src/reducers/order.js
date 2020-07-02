@@ -1,3 +1,27 @@
+import {
+  addItem,
+  removeItem,
+  incrementItem,
+  decrementItem,
+  calcCartCounts,
+  rehydrateCart,
+  rehydrateCheckoutForm,
+  serviceTypeNamesMap,
+  orderTypeNamesMap,
+  timezoneMap,
+  getUserTimezone,
+  makeFirstRequestedAt,
+  makeFirstTimes,
+  makeRequestedAtStr,
+  makeRandomNumberString,
+} from 'open-tender-js'
+// import { setMenuItems, resetMenuVars } from './menuSlice'
+// import { updateForm } from './checkoutSlice'
+
+// import { openModal, closeModal } from './modalSlice'
+// import { toggleSidebar } from './sidebarSlice'
+// import { modalConfig as mc } from '../components/modals/config'
+
 const initState = {
   orderId: null,
   orderType: null,
@@ -10,6 +34,7 @@ const initState = {
   cart: [],
   cartCounts: {},
   messages: [],
+  alert: null,
   error: null,
   loading: 'idle',
 }
@@ -18,11 +43,24 @@ const NAME = 'order'
 
 export const RESET_ORDER = `${NAME}/resetOrder`
 export const RESET_ORDER_TYPE = `${NAME}/resetOrderType`
+export const RESET_MESSAGES = `${NAME}/resetMessages`
+export const RESET_ALERT = `${NAME}/resetAlert`
 
 export const SET_ORDER_TYPE = `${NAME}/setOrderType`
 export const SET_SERVICE_TYPE = `${NAME}/setServiceType`
 export const SET_ORDER_SERVICE_TYPE = `${NAME}/setOrderServiceType`
 export const SET_REVENUE_CENTER = `${NAME}/setRevenueCenter`
+export const SET_ADDRESS = `${NAME}/setAddress`
+export const SET_REQUESTED_AT = `${NAME}/setRequestedAt`
+export const SET_CART = `${NAME}/setCart`
+export const SET_CURRENT_ITEM = `${NAME}/setCurrentItem`
+export const ADD_ITEM = `${NAME}/addItemToCart`
+export const REMOVE_ITEM = `${NAME}/removeItemFromCart`
+export const INCREMENT_ITEM = `${NAME}/incrementItemInCart`
+export const DECREMENT_ITEM = `${NAME}/decrementItemInCart`
+
+export const FETCH_REVENUE_CENTER = `${NAME}/fetchRevenueCenter`
+export const REFRESH_REVENUE_CENTER = `${NAME}/refreshRevenueCenter`
 
 export default (state = initState, action) => {
   switch (action.type) {
@@ -38,14 +76,95 @@ export default (state = initState, action) => {
         revenueCenter: null,
         requestedAt: null,
       }
+    case RESET_MESSAGES:
+      return { ...state, messages: [] }
+    case RESET_ALERT:
+      return { ...state, alert: null }
     case SET_ORDER_TYPE:
       return { ...state, orderType: action.payload }
     case SET_SERVICE_TYPE:
       return { ...state, serviceType: action.payload }
     case SET_ORDER_SERVICE_TYPE:
       return { ...state, ...action.payload }
-    case SET_REVENUE_CENTER:
-      return { ...state, revenueCenter: action.payload }
+    case SET_ADDRESS:
+      return { ...state, address: action.payload }
+    case SET_REQUESTED_AT:
+      return { ...state, requestedAt: action.payload }
+    case SET_REVENUE_CENTER: {
+      const revenueCenter = action.payload
+      const previousRequestedAt = state.requestedAt
+      const requestedAt = makeFirstRequestedAt(
+        revenueCenter,
+        state.serviceType,
+        previousRequestedAt
+      )
+      const otherMessages = state.messages.filter(
+        i => !i.message.includes('Requested time')
+      )
+      let messages
+      if (requestedAt !== previousRequestedAt) {
+        const tz = timezoneMap[revenueCenter.timezone]
+        const requestedAtText = makeRequestedAtStr(requestedAt, tz)
+        const msg = {
+          message: `Requested time updated to ${requestedAtText}`,
+          id: makeRandomNumberString(),
+        }
+        messages = [msg, ...otherMessages]
+      } else {
+        messages = otherMessages
+      }
+      return { ...state, revenueCenter, requestedAt, messages }
+    }
+    case SET_CART: {
+      const cartCounts = calcCartCounts(action.payload)
+      return { ...state, cart: action.payload, cartCounts }
+    }
+    case SET_CURRENT_ITEM:
+      return { ...state, currentItem: action.payload }
+    case ADD_ITEM: {
+      const { cart, cartCounts } = addItem([...state.cart], action.payload)
+      return { ...state, cart, cartCounts }
+    }
+    case REMOVE_ITEM: {
+      const { cart, cartCounts } = removeItem([...state.cart], action.payload)
+      return { ...state, cart, cartCounts }
+    }
+    case INCREMENT_ITEM: {
+      const { cart, cartCounts } = incrementItem(
+        [...state.cart],
+        action.payload
+      )
+      return { ...state, cart, cartCounts }
+    }
+    case DECREMENT_ITEM: {
+      const { cart, cartCounts } = decrementItem(
+        [...state.cart],
+        action.payload
+      )
+      return { ...state, cart, cartCounts }
+    }
+    case `${FETCH_REVENUE_CENTER}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${FETCH_REVENUE_CENTER}/fulfilled`:
+      return {
+        ...state,
+        revenueCenter: action.payload,
+        loading: 'idle',
+        error: null,
+      }
+    case `${FETCH_REVENUE_CENTER}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
+    case `${REFRESH_REVENUE_CENTER}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${REFRESH_REVENUE_CENTER}/fulfilled`:
+      return {
+        ...state,
+        alert: action.payload,
+        loading: 'idle',
+        error: null,
+      }
+    case `${REFRESH_REVENUE_CENTER}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
     default:
       return state
   }
