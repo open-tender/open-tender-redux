@@ -109,7 +109,7 @@ export const fetchRevenueCenter = revenueCenterId => async (
   if (!api) return
   dispatch(pending(FETCH_REVENUE_CENTER))
   try {
-    const revenueCenter = api.getRevenueCenter(revenueCenterId)
+    const revenueCenter = await api.getRevenueCenter(revenueCenterId)
     dispatch(fulfill(FETCH_REVENUE_CENTER, revenueCenter))
   } catch (err) {
     dispatch(reject(FETCH_REVENUE_CENTER, err))

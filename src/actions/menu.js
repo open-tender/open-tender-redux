@@ -6,7 +6,7 @@ import {
   RESET_CART_ERRORS,
   SET_CART_ERRORS,
   FETCH_MENU,
-} from '../reducers/menuItems'
+} from '../reducers/menu'
 import { setCart, setAlert, refreshRevenueCenter } from './order'
 
 // action creators
@@ -29,7 +29,7 @@ export const fetchMenu = menuVars => async (dispatch, getState) => {
   try {
     const requestedIso = makeRequestedIso(requestedAt)
     const menu = await api.getMenu(revenueCenterId, serviceType, requestedIso)
-    const { cart } = getState().order
+    const { cart } = getState().data.order
     const { menu: categories, sold_out_items: soldOut } = menu
     const { newCart, errors } = validateCart(cart, categories, soldOut)
     if (errors) {

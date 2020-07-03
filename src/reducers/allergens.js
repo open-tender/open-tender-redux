@@ -1,5 +1,5 @@
 const initState = {
-  allergens: [],
+  entities: [],
   selectedAllergens: null,
   loading: 'idle',
   error: null,
@@ -22,7 +22,7 @@ export default (state = initState, action) => {
     case `${FETCH_ALLERGENS}/fulfilled`:
       return {
         ...state,
-        allergens: action.payload,
+        entities: action.payload,
         loading: 'idle',
         error: null,
       }
