@@ -45,6 +45,17 @@ export const entitiesReducer = (state = initState, action, name, entity) => {
       }
     case `${name}/remove${entity}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
+    case `${name}/add${entity}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${name}/add${entity}/fulfilled`:
+      return {
+        ...state,
+        entities: action.payload,
+        loading: 'idle',
+        error: null,
+      }
+    case `${name}/add${entity}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
     default:
       return state
   }

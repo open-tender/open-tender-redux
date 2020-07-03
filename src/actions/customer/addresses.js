@@ -72,6 +72,6 @@ export const removeCustomerAddress = (addressId, callback) => async (
     dispatch(showNotification('Address removed!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/remove${entity}`, makeFormErrors(err)))
+    dispatch(reject(`${name}/remove${entity}`, err))
   }
 }
