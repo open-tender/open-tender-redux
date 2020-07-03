@@ -8,8 +8,10 @@ export const entitiesReducer = (state = initState, action, name, entity) => {
   switch (action.type) {
     case `${name}/reset${entity}`:
       return { ...initState }
+    case `${name}/reset${entity}Error`:
+      return { ...state, loading: 'idle', error: null }
     case `${name}/set${entity}`:
-      return { ...state, entities: action.payload }
+      return { ...state, entities: action.payload, error: null }
     case `${name}/fetch${entity}/pending`:
       return { ...state, loading: 'pending' }
     case `${name}/fetch${entity}/fulfilled`:
@@ -20,6 +22,28 @@ export const entitiesReducer = (state = initState, action, name, entity) => {
         error: null,
       }
     case `${name}/fetch${entity}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
+    case `${name}/update${entity}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${name}/update${entity}/fulfilled`:
+      return {
+        ...state,
+        entities: action.payload,
+        loading: 'idle',
+        error: null,
+      }
+    case `${name}/update${entity}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
+    case `${name}/remove${entity}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${name}/remove${entity}/fulfilled`:
+      return {
+        ...state,
+        entities: action.payload,
+        loading: 'idle',
+        error: null,
+      }
+    case `${name}/remove${entity}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
     default:
       return state

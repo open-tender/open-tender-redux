@@ -6,4 +6,4 @@ export const showNotification = message => ({
   type: SHOW_NOTIFICATION,
   payload: message,
 })
-export const hideNotification = () => ({ type: HIDE_NOTIFICATION })
+export const hideNotification = id => ({ type: HIDE_NOTIFICATION, payload: id })

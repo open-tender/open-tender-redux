@@ -82,7 +82,7 @@ export const updateCustomer = data => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   const token = selectToken(getState())
-  if (!token) return dispatch(reject(FETCH_CUSTOMER, MISSING_CUSTOMER))
+  if (!token) return dispatch(reject(UPDATE_CUSTOMER, MISSING_CUSTOMER))
   dispatch(pending(UPDATE_CUSTOMER))
   try {
     const customer = await api.putCustomer(token, data)

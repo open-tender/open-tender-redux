@@ -1,6 +1,7 @@
 import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import { name, entity } from '../../reducers/customer/allergens'
 import { selectToken } from '../../selectors/customer'
+import { showNotification } from '../notifications'
 
 // action creators
 
@@ -12,19 +13,33 @@ export const setCustomerAllergens = allergens => ({
 
 // async action creators
 
-const FETCH_CUSTOMER_ALLERGENS = `${name}/fetch${entity}`
-
 export const fetchCustomerAllergens = () => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   const token = selectToken(getState())
   if (!token)
-    return dispatch(reject(FETCH_CUSTOMER_ALLERGENS, MISSING_CUSTOMER))
-  dispatch(pending(FETCH_CUSTOMER_ALLERGENS))
+    return dispatch(reject(`${name}/fetch${entity}`, MISSING_CUSTOMER))
+  dispatch(pending(`${name}/fetch${entity}`))
   try {
     const allergens = await api.getCustomerAllergens(token)
-    dispatch(fulfill(FETCH_CUSTOMER_ALLERGENS, allergens))
+    dispatch(fulfill(`${name}/fetch${entity}`, allergens))
   } catch (err) {
-    dispatch(reject(FETCH_CUSTOMER_ALLERGENS, err))
+    dispatch(reject(`${name}/fetch${entity}`, err))
+  }
+}
+
+export const updateCustomerAllergens = data => async (dispatch, getState) => {
+  const { api } = getState().config
+  if (!api) return
+  const token = selectToken(getState())
+  if (!token)
+    return dispatch(reject(`${name}/update${entity}`, MISSING_CUSTOMER))
+  dispatch(pending(`${name}/update${entity}`))
+  try {
+    const allergens = await api.putCustomerAllergens(token, data)
+    dispatch(fulfill(`${name}/update${entity}`, allergens))
+    dispatch(showNotification('Allergens updated!'))
+  } catch (err) {
+    dispatch(reject(`${name}/update${entity}`, err))
   }
 }

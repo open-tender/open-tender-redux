@@ -29,7 +29,7 @@ export const resetTip = () => ({ type: RESET_TIP })
 export const resetCompletedOrder = () => ({ type: RESET_COMPLETED_ORDER })
 export const setSubmitting = bool => ({ type: SET_SUBMITTING, payload: bool })
 export const updateForm = form => ({ type: UPDATE_FORM, payload: form })
-export const updateCustomer = account => ({
+export const updateCheckoutCustomer = account => ({
   type: UPDATE_CUSTOMER,
   payload: account,
 })
