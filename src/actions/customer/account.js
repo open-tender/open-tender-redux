@@ -1,4 +1,4 @@
-import { makeCustomerProfile } from 'open-tender-js'
+import { makeCustomerProfile, makeFavoritesLookup } from 'open-tender-js'
 import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import {
   RESET_CUSTOMER,
@@ -13,6 +13,8 @@ import { resetOrder } from '../order'
 import { resetCheckout } from '../checkout'
 import { showNotification } from '../notifications'
 import { selectToken } from '../../selectors/customer'
+import { setCustomerGiftCards } from './giftCards'
+import { setCustomerFavorites, setCustomerFavoritesLookup } from './favorites'
 
 // action creators
 
@@ -29,14 +31,8 @@ export const loginCustomer = (email, password) => async (
   dispatch(pending(LOGIN_CUSTOMER))
   try {
     const auth = await api.postLogin(email, password)
-    const customer = await api.getCustomer(auth.access_token)
-    const { allergens, gift_cards, favorites } = customer
-    if (allergens.length) {
-      dispatch(setCustomerAllergens(allergens))
-      dispatch(setSelectedAllergens(allergens))
-    }
-    const profile = makeCustomerProfile(customer)
-    dispatch(fulfill(LOGIN_CUSTOMER, { auth, profile }))
+    dispatch(fulfill(LOGIN_CUSTOMER, auth))
+    dispatch(fetchCustomer())
   } catch (err) {
     dispatch(reject(LOGIN_CUSTOMER, err.message))
   }
@@ -67,9 +63,16 @@ export const fetchCustomer = () => async (dispatch, getState) => {
   dispatch(pending(FETCH_CUSTOMER))
   try {
     const customer = await api.getCustomer(token)
-    const { allergens } = customer
+    const { allergens, gift_cards, favorites } = customer
     if (allergens.length) {
+      dispatch(setCustomerAllergens(allergens))
       dispatch(setSelectedAllergens(allergens))
+    }
+    if (gift_cards.length) dispatch(setCustomerGiftCards(gift_cards))
+    if (favorites.length) {
+      dispatch(setCustomerFavorites(favorites))
+      const lookup = makeFavoritesLookup(favorites)
+      dispatch(setCustomerFavoritesLookup(lookup))
     }
     const profile = makeCustomerProfile(customer)
     dispatch(fulfill(FETCH_CUSTOMER, profile))

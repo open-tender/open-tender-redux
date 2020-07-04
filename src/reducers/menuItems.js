@@ -1,5 +1,5 @@
 const initState = {
-  menuItems: [],
+  entities: [],
   loading: 'idle',
   error: null,
 }
@@ -15,13 +15,13 @@ export default (state = initState, action) => {
     case RESET_MENU_ITEMS:
       return { ...initState }
     case SET_MENU_ITEMS:
-      return { ...state, menuItems: action.payload }
+      return { ...state, entities: action.payload }
     case `${FETCH_MENU_ITEMS}/pending`:
       return { ...state, loading: 'pending' }
     case `${FETCH_MENU_ITEMS}/fulfilled`:
       return {
         ...state,
-        menuItems: action.payload,
+        entities: action.payload,
         loading: 'idle',
         error: null,
       }

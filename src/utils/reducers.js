@@ -1,5 +1,6 @@
 const initState = {
   entities: [],
+  lookup: {},
   loading: 'idle',
   error: null,
 }
@@ -12,6 +13,8 @@ export const entitiesReducer = (state = initState, action, name, entity) => {
       return { ...state, loading: 'idle', error: null }
     case `${name}/set${entity}`:
       return { ...state, entities: action.payload, error: null }
+    case `${name}/set${entity}Lookup`:
+      return { ...state, lookup: action.payload, error: null }
     case `${name}/fetch${entity}/pending`:
       return { ...state, loading: 'pending' }
     case `${name}/fetch${entity}/fulfilled`:

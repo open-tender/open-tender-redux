@@ -25,7 +25,7 @@ export default (state = initState, action) => {
     case `${LOGIN_CUSTOMER}/fulfilled`:
       return {
         ...state,
-        ...action.payload,
+        auth: action.payload,
         loading: 'idle',
         error: null,
       }

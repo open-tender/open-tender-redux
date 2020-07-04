@@ -24,6 +24,7 @@ export const fetchMenuItems = ({ revenueCenterId, serviceType }) => async (
   dispatch(pending(FETCH_MENU_ITEMS))
   try {
     const menuItems = await api.getMenuItems(revenueCenterId, serviceType)
+    console.log(menuItems)
     dispatch(fulfill(FETCH_MENU_ITEMS, menuItems))
   } catch (err) {
     dispatch(reject(FETCH_MENU_ITEMS, err))

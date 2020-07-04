@@ -92,7 +92,6 @@ export const addCustomerCreditCard = (data, callback) => async (
     dispatch(showNotification('Credit card added!'))
     if (callback) callback()
   } catch (err) {
-    console.log(err)
     dispatch(reject(`${name}/add${entity}`, makeFormErrors(err)))
   }
 }
