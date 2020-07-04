@@ -1,6 +1,6 @@
 export const selectAllergens = state => state.data.allergens
 export const selectSelectedAllergenNames = state => {
-  const { allergens, selectedAllergens } = state.data.allergens
+  const { entities: allergens, selectedAllergens } = state.data.allergens
   if (!allergens.length || !selectedAllergens || !selectedAllergens.length) {
     return []
   }

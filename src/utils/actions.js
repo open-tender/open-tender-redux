@@ -1,5 +1,5 @@
 const handleError = err => {
-  return err.form ? err : err.detail || err.message
+  return !err ? null : err.form ? err : err.detail || err.message
 }
 
 export const pending = action => {

@@ -21,6 +21,7 @@ import {
   SET_CURRENT_ITEM,
   SET_ALERT,
   ADD_MESSAGE,
+  REMOVE_MESSAGE,
   ADD_ITEM,
   REMOVE_ITEM,
   INCREMENT_ITEM,
@@ -98,6 +99,10 @@ export const addMessage = message => ({
   type: ADD_MESSAGE,
   payload: message,
 })
+export const removeMessage = id => ({
+  type: REMOVE_MESSAGE,
+  payload: id,
+})
 
 // async action creators
 
@@ -110,6 +115,7 @@ export const fetchRevenueCenter = revenueCenterId => async (
   dispatch(pending(FETCH_REVENUE_CENTER))
   try {
     const revenueCenter = await api.getRevenueCenter(revenueCenterId)
+    dispatch(setRevenueCenter(revenueCenter))
     dispatch(fulfill(FETCH_REVENUE_CENTER, revenueCenter))
   } catch (err) {
     dispatch(reject(FETCH_REVENUE_CENTER, err))
@@ -210,13 +216,19 @@ export const reorderPastOrder = ({
       const menuItems = await api.getMenuItems(revenueCenterId, serviceType)
       const { cart, cartCounts } = rehydrateCart(menuItems, items)
       dispatch(setMenuItems(menuItems))
-      const payload = { revenueCenter, requestedAt, cart, cartCounts }
+      const payload = {
+        revenueCenter,
+        requestedAt,
+        serviceType,
+        cart,
+        cartCounts,
+      }
       dispatch(fulfill(REORDER, payload))
       const alert = {
         type: 'requestedAt',
-        // args: { onCloseAction: toggleSidebar },
+        args: { openSidebar: true },
       }
-      dispatch(alert(alert))
+      dispatch(setAlert(alert))
     }
   } catch (err) {
     dispatch(resetAlert())

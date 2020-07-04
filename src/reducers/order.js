@@ -6,7 +6,6 @@ import {
   calcCartCounts,
   timezoneMap,
   makeFirstRequestedAt,
-  makeFirstTimes,
   makeRequestedAtStr,
   makeRandomNumberString,
 } from 'open-tender-js'
@@ -56,6 +55,7 @@ export const REMOVE_ITEM = `${NAME}/removeItemFromCart`
 export const INCREMENT_ITEM = `${NAME}/incrementItemInCart`
 export const DECREMENT_ITEM = `${NAME}/decrementItemInCart`
 export const ADD_MESSAGE = `${NAME}/addMessage`
+export const REMOVE_MESSAGE = `${NAME}/removeMessage`
 
 export const FETCH_REVENUE_CENTER = `${NAME}/fetchRevenueCenter`
 export const REFRESH_REVENUE_CENTER = `${NAME}/refreshRevenueCenter`
@@ -94,6 +94,11 @@ export default (state = initState, action) => {
             id: makeRandomNumberString(),
           },
         ],
+      }
+    case REMOVE_MESSAGE:
+      return {
+        ...state,
+        messages: state.messages.filter(i => i.id !== action.payload),
       }
     case SET_ORDER_TYPE:
       return { ...state, orderType: action.payload }
@@ -163,7 +168,7 @@ export default (state = initState, action) => {
     case `${FETCH_REVENUE_CENTER}/fulfilled`:
       return {
         ...state,
-        revenueCenter: action.payload,
+        // revenueCenter: action.payload,
         loading: 'idle',
         error: null,
       }

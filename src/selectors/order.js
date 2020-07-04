@@ -6,6 +6,7 @@ import {
 } from 'open-tender-js'
 
 export const selectOrder = state => state.data.order
+export const selectAlert = state => state.data.order.alert
 export const selectOrderType = state => state.data.order.orderType
 export const selectOrderTypeName = state =>
   orderTypeNamesMap[state.data.order.orderType]
