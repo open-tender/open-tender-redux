@@ -4,7 +4,7 @@ const initState = {
   error: null,
 }
 
-const NAME = 'order'
+const NAME = 'customer/order'
 
 export const RESET_ORDER = `${NAME}/resetCustomerOrder`
 export const SET_ORDER = `${NAME}/setCustomerOrder`

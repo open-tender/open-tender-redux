@@ -8,13 +8,23 @@ import {
   UPDATE_CUSTOMER,
 } from '../../reducers/customer/account'
 import { setSelectedAllergens } from '../allergens'
-import { setCustomerAllergens } from './allergens'
 import { resetOrder } from '../order'
 import { resetCheckout } from '../checkout'
 import { showNotification } from '../notifications'
 import { selectToken } from '../../selectors/customer'
-import { setCustomerGiftCards } from './giftCards'
-import { setCustomerFavorites, setCustomerFavoritesLookup } from './favorites'
+import { resetCustomerAddresses } from './addresses'
+import { setCustomerAllergens, resetCustomerAllergens } from './allergens'
+import { resetCustomerCreditCards } from './creditCards'
+import {
+  setCustomerFavorites,
+  setCustomerFavoritesLookup,
+  resetCustomerFavorites,
+} from './favorites'
+import { setCustomerGiftCards, resetCustomerGiftCards } from './giftCards'
+import { resetCustomerHouseAccounts } from './houseAccounts'
+import { resetCustomerLoyalty } from './loyalty'
+import { resetCustomerOrder } from './order'
+import { resetCustomerOrders } from './orders'
 
 // action creators
 
@@ -50,6 +60,15 @@ export const logoutCustomer = () => async (dispatch, getState) => {
     dispatch(setSelectedAllergens(null))
     await api.postLogout(token)
     dispatch(fulfill(LOGOUT_CUSTOMER, null))
+    dispatch(resetCustomerAddresses())
+    dispatch(resetCustomerAllergens())
+    dispatch(resetCustomerCreditCards())
+    dispatch(resetCustomerFavorites())
+    dispatch(resetCustomerGiftCards())
+    dispatch(resetCustomerHouseAccounts())
+    dispatch(resetCustomerLoyalty())
+    dispatch(resetCustomerOrder())
+    dispatch(resetCustomerOrders())
   } catch (err) {
     dispatch(reject(LOGOUT_CUSTOMER, null))
   }
@@ -64,16 +83,12 @@ export const fetchCustomer = () => async (dispatch, getState) => {
   try {
     const customer = await api.getCustomer(token)
     const { allergens, gift_cards, favorites } = customer
-    if (allergens.length) {
-      dispatch(setCustomerAllergens(allergens))
-      dispatch(setSelectedAllergens(allergens))
-    }
-    if (gift_cards.length) dispatch(setCustomerGiftCards(gift_cards))
-    if (favorites.length) {
-      dispatch(setCustomerFavorites(favorites))
-      const lookup = makeFavoritesLookup(favorites)
-      dispatch(setCustomerFavoritesLookup(lookup))
-    }
+    dispatch(setCustomerAllergens(allergens || []))
+    dispatch(setSelectedAllergens(allergens || []))
+    dispatch(setCustomerGiftCards(gift_cards || []))
+    dispatch(setCustomerFavorites(favorites || []))
+    const lookup = makeFavoritesLookup(favorites)
+    dispatch(setCustomerFavoritesLookup(lookup || {}))
     const profile = makeCustomerProfile(customer)
     dispatch(fulfill(FETCH_CUSTOMER, profile))
   } catch (err) {

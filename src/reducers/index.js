@@ -9,6 +9,7 @@ import notifications from './notifications'
 import confirmation from './confirmation'
 import customer from './customer'
 import resetPassword from './resetPassword'
+import signUp from './signUp'
 
 const openTenderReducer = combineReducers({
   order,
@@ -19,8 +20,9 @@ const openTenderReducer = combineReducers({
   checkout,
   notifications,
   confirmation,
-  customer,
   resetPassword,
+  signUp,
+  customer,
 })
 
 export default openTenderReducer

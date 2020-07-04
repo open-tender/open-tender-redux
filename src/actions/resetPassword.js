@@ -25,7 +25,7 @@ export const sendPasswordResetEmail = (email, link_url) => async (
   }
 }
 
-export const resetPassword = (new_password, token) => async (
+export const resetPassword = (new_password, resetToken) => async (
   dispatch,
   getState
 ) => {
@@ -33,7 +33,7 @@ export const resetPassword = (new_password, token) => async (
   if (!api) return
   dispatch(pending(RESET_PASSWORD))
   try {
-    await api.postResetPassword(new_password, token)
+    await api.postResetPassword(new_password, resetToken)
     dispatch(fulfill(RESET_PASSWORD))
   } catch (err) {
     const errors = makeFormErrors(err)
