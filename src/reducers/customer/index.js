@@ -7,6 +7,8 @@ import giftCards from './giftCards'
 import favorites from './favorites'
 import houseAccounts from './houseAccounts'
 import loyalty from './loyalty'
+import orders from './orders'
+import order from './order'
 
 const customerReducer = combineReducers({
   account,
@@ -17,6 +19,8 @@ const customerReducer = combineReducers({
   favorites,
   houseAccounts,
   loyalty,
+  orders,
+  order,
 })
 
 export default customerReducer

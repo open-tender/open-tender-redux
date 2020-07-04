@@ -16,3 +16,8 @@ export const selectCustomerFavorites = state => state.data.customer.favorites
 export const selectCustomerLoyalty = state => state.data.customer.loyalty
 export const selectCustomerHouseAccounts = state =>
   state.data.customer.houseAccounts
+export const selectCustomerOrders = state => state.data.customer.orders
+export const selectCustomerOrder = state => {
+  const { entity: order, loading, error } = state.data.customer.order
+  return { order, loading, error }
+}

@@ -96,6 +96,7 @@ export const addCustomerFavorite = (data, callback) => async (
   if (!token) return dispatch(reject(`${name}/add${entity}`, MISSING_CUSTOMER))
   dispatch(pending(`${name}/add${entity}`))
   try {
+    if (!data.name) data.name = ''
     await api.postCustomerFavorite(token, data)
     const { data: favorites } = await api.getCustomerFavorites(token)
     const lookup = makeFavoritesLookup(favorites)

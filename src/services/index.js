@@ -179,7 +179,7 @@ class OpenTenderAPI {
     return this.request(`/customer`, 'PUT', data, null, token)
   }
 
-  getCustomerOrders(token, timing, limit) {
+  getCustomerOrders(token, limit, timing) {
     let params = []
     if (limit) params.push(`limit=${limit}`)
     if (timing) params.push(`requested_type=${timing}`)
