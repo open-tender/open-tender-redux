@@ -185,6 +185,8 @@ export const editOrder = order => async (dispatch, getState) => {
       cartCounts,
     }
     dispatch(fulfill(EDIT_ORDER, payload))
+    dispatch(setAlert({ type: 'closeAndSidebar' }))
+    // dispatch(setAlert({ type: 'sidebar' }))
   } catch (err) {
     dispatch(addMessage('Something went wrong. Please contact support.'))
     dispatch(reject(EDIT_ORDER, null))

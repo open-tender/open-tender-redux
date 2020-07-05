@@ -80,7 +80,7 @@ export const submitOrder = () => async (dispatch, getState) => {
   const alert = { type: 'working', args: { text: 'Submitting your order...' } }
   dispatch(setAlert(alert))
   // start order assembly
-  const { order, checkout } = getState()
+  const { order, checkout } = getState().data
   const { orderId, revenueCenter, serviceType, requestedAt, cart } = order
   const { revenue_center_id: revenueCenterId } = revenueCenter || {}
   const { check, form } = checkout
@@ -115,7 +115,7 @@ export const submitOrder = () => async (dispatch, getState) => {
   // end order assembly
   try {
     const completedOrder = await api.postOrder(preparedOrder)
-    dispatch(resetAlert())
+    dispatch(setAlert({ type: 'close' }))
     dispatch(fulfill(SUBMIT_ORDER, completedOrder))
   } catch (err) {
     dispatch(resetAlert())

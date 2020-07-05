@@ -37,6 +37,7 @@ export const fetchMenu = menuVars => async (dispatch, getState) => {
       dispatch(setAlert({ type: 'cartErrors' }))
     } else {
       dispatch(setCart(newCart))
+      dispatch(resetCartErrors())
     }
     dispatch(fulfill(FETCH_MENU, { categories, soldOut, menuVars }))
   } catch (err) {
