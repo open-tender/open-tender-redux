@@ -20,8 +20,7 @@ export const sendPasswordResetEmail = (email, link_url) => async (
     dispatch(fulfill(SEND_PASSWORD_RESET))
   } catch (err) {
     const errors = makeFormErrors(err)
-    const error = errors.email || errors.form
-    dispatch(reject(SEND_PASSWORD_RESET, error))
+    dispatch(reject(SEND_PASSWORD_RESET, errors))
   }
 }
 

@@ -1,4 +1,8 @@
-import { makeCustomerProfile, makeFavoritesLookup } from 'open-tender-js'
+import {
+  makeCustomerProfile,
+  makeFavoritesLookup,
+  makeFormErrors,
+} from 'open-tender-js'
 import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import {
   RESET_CUSTOMER,
@@ -44,22 +48,23 @@ export const loginCustomer = (email, password) => async (
     dispatch(fulfill(LOGIN_CUSTOMER, auth))
     dispatch(fetchCustomer())
   } catch (err) {
-    dispatch(reject(LOGIN_CUSTOMER, err.message))
+    dispatch(reject(LOGIN_CUSTOMER, err))
   }
 }
 
-export const logoutCustomer = () => async (dispatch, getState) => {
+export const logoutCustomer = isReset => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   const token = selectToken(getState())
   if (!token) return dispatch(reject(LOGOUT_CUSTOMER, null))
   dispatch(pending(LOGOUT_CUSTOMER))
   try {
-    dispatch(resetOrder())
-    dispatch(resetCheckout())
-    dispatch(setSelectedAllergens(null))
+    if (isReset) {
+      dispatch(resetOrder())
+      dispatch(resetCheckout())
+      dispatch(setSelectedAllergens(null))
+    }
     await api.postLogout(token)
-    dispatch(fulfill(LOGOUT_CUSTOMER, null))
     dispatch(resetCustomerAddresses())
     dispatch(resetCustomerAllergens())
     dispatch(resetCustomerCreditCards())
@@ -69,6 +74,7 @@ export const logoutCustomer = () => async (dispatch, getState) => {
     dispatch(resetCustomerLoyalty())
     dispatch(resetCustomerOrder())
     dispatch(resetCustomerOrders())
+    dispatch(fulfill(LOGOUT_CUSTOMER, null))
   } catch (err) {
     dispatch(reject(LOGOUT_CUSTOMER, null))
   }
@@ -108,6 +114,7 @@ export const updateCustomer = data => async (dispatch, getState) => {
     dispatch(fulfill(UPDATE_CUSTOMER, profile))
     dispatch(showNotification('Account updated!'))
   } catch (err) {
-    dispatch(reject(UPDATE_CUSTOMER, err))
+    const errors = makeFormErrors(err)
+    dispatch(reject(UPDATE_CUSTOMER, errors))
   }
 }

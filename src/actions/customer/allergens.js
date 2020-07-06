@@ -2,6 +2,7 @@ import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import { name, entity } from '../../reducers/customer/allergens'
 import { selectToken } from '../../selectors/customer'
 import { showNotification } from '../notifications'
+import { setSelectedAllergens } from '../allergens'
 
 // action creators
 
@@ -38,6 +39,7 @@ export const updateCustomerAllergens = data => async (dispatch, getState) => {
   try {
     const allergens = await api.putCustomerAllergens(token, data)
     dispatch(fulfill(`${name}/update${entity}`, allergens))
+    dispatch(setSelectedAllergens(allergens || []))
     dispatch(showNotification('Allergens updated!'))
   } catch (err) {
     dispatch(reject(`${name}/update${entity}`, err))
