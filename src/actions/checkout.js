@@ -118,7 +118,7 @@ export const submitOrder = () => async (dispatch, getState) => {
     dispatch(setAlert({ type: 'close' }))
     dispatch(fulfill(SUBMIT_ORDER, completedOrder))
   } catch (err) {
-    dispatch(resetAlert())
+    dispatch(setAlert({ type: 'close' }))
     const errors = handleCheckoutErrors(err)
     const keys = Object.keys(errors)
     const args = makeRefreshArgs(preparedOrder)
@@ -135,6 +135,7 @@ export const submitOrder = () => async (dispatch, getState) => {
       }
       dispatch(reject(SUBMIT_ORDER, {}))
     } else {
+      window.scroll(0, 0)
       dispatch(reject(SUBMIT_ORDER, errors))
     }
   }

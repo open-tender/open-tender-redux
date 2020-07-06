@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import order from './order'
 import revenueCenters from './revenueCenters'
+import validTimes from './validTimes'
 import menu from './menu'
 import menuItems from './menuItems'
 import allergens from './allergens'
@@ -14,6 +15,7 @@ import signUp from './signUp'
 const openTenderReducer = combineReducers({
   order,
   revenueCenters,
+  validTimes,
   menu,
   menuItems,
   allergens,
