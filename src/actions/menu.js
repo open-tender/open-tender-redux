@@ -1,4 +1,4 @@
-import { makeRequestedIso, validateCart } from 'open-tender-js'
+import { makeRequestedIso, validateCart } from '@open-tender/js'
 import { pending, fulfill, reject } from '../utils'
 import {
   RESET_MENU,

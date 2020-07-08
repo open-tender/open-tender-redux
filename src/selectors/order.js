@@ -3,7 +3,7 @@ import {
   serviceTypeNamesMap,
   timezoneMap,
   getUserTimezone,
-} from 'open-tender-js'
+} from '@open-tender/js'
 
 export const selectOrder = state => state.data.order
 export const selectAlert = state => state.data.order.alert

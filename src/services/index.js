@@ -1,4 +1,4 @@
-import { serialize } from 'open-tender-js'
+import { serialize } from '@open-tender/js'
 
 const requestException = (message, response, exception, extracted) => {
   this.message = `${message || 'An unknown exception was triggered.'}`

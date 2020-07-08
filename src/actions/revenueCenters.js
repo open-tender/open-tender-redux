@@ -1,4 +1,4 @@
-import { addDistance } from 'open-tender-js'
+import { addDistance } from '@open-tender/js'
 import { pending, fulfill, reject } from '../utils'
 import {
   RESET_REVENUE_CENTERS,

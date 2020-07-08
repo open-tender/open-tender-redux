@@ -8,7 +8,7 @@ import {
   makeFirstRequestedAt,
   makeRequestedAtStr,
   makeRandomNumberString,
-} from 'open-tender-js'
+} from '@open-tender/js'
 // import { setMenuItems, resetMenuVars } from './menuSlice'
 // import { updateForm } from './checkoutSlice'
 

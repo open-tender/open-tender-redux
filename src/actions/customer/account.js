@@ -2,7 +2,7 @@ import {
   makeCustomerProfile,
   makeFavoritesLookup,
   makeFormErrors,
-} from 'open-tender-js'
+} from '@open-tender/js'
 import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import {
   RESET_CUSTOMER,

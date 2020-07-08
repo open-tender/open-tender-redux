@@ -19,6 +19,6 @@ module.exports = {
   },
   externals: {
     redux: 'redux',
-    'open-tender-js': 'open-tender-js',
+    '@open-tender/js': '@open-tender/js',
   },
 }

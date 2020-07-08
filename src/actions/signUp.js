@@ -1,4 +1,4 @@
-import { makeFormErrors } from 'open-tender-js'
+import { makeFormErrors } from '@open-tender/js'
 import { pending, fulfill, reject } from '../utils'
 import { RESET_SIGN_UP, SIGN_UP } from '../reducers/signUp'
 import { loginCustomer } from './customer/account'

@@ -1,4 +1,4 @@
-import { makeFormErrors } from 'open-tender-js'
+import { makeFormErrors } from '@open-tender/js'
 import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import { name, entity } from '../../reducers/customer/addresses'
 import { selectToken } from '../../selectors/customer'

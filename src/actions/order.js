@@ -3,7 +3,7 @@ import {
   rehydrateCheckoutForm,
   makeFirstRequestedAt,
   makeFirstTimes,
-} from 'open-tender-js'
+} from '@open-tender/js'
 import { pending, fulfill, reject } from '../utils'
 import {
   RESET_ORDER,

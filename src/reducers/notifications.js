@@ -1,4 +1,4 @@
-import { makeRandomNumberString } from 'open-tender-js'
+import { makeRandomNumberString } from '@open-tender/js'
 
 const initState = []
 

@@ -789,6 +789,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@open-tender/js@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@open-tender/js/-/js-1.0.2.tgz#3c2bbe30268d981e3107f2c5a34ec2a5dfe7165b"
+  integrity sha512-uu9hADnAGtzC/5UUdge+R7ogRZ1GxnvaLsxjBnStniFvx+8QBdxL4OJHdydsVfrRAE/nDNLyY7gf4zKJmbUUFg==
+
 "@types/color-name@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"

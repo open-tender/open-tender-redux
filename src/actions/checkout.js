@@ -5,7 +5,7 @@ import {
   getDefaultTip,
   prepareOrder,
   handleCheckoutErrors,
-} from 'open-tender-js'
+} from '@open-tender/js'
 import { pending, fulfill, reject } from '../utils'
 import {
   RESET_CHECKOUT,
