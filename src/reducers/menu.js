@@ -31,9 +31,10 @@ export default (state = initState, action) => {
     case `${FETCH_MENU}/fulfilled`:
       return {
         ...state,
-        ...action.payload,
+        previousMenuVars: state.menuVars || null,
         loading: 'idle',
         error: null,
+        ...action.payload,
       }
     case `${FETCH_MENU}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
