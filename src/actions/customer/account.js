@@ -13,7 +13,7 @@ import {
 } from '../../reducers/customer/account'
 import { setSelectedAllergens } from '../allergens'
 import { resetOrder } from '../order'
-import { resetCheckout } from '../checkout'
+import { resetCheckout, updateCheckoutCustomer } from '../checkout'
 import { showNotification } from '../notifications'
 import { selectToken } from '../../selectors/customer'
 import { resetCustomerAddresses } from './addresses'
@@ -65,6 +65,7 @@ export const logoutCustomer = isReset => async (dispatch, getState) => {
       dispatch(setSelectedAllergens(null))
     }
     await api.postLogout(token)
+    dispatch(updateCheckoutCustomer(null))
     dispatch(resetCustomerAddresses())
     dispatch(resetCustomerAllergens())
     dispatch(resetCustomerCreditCards())
