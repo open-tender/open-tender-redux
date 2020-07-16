@@ -53,13 +53,10 @@ export const selectOrderLimits = state => {
 
 export const selectAddress = state => state.data.order.address
 
-const makeMenuSlug = revenueCenter => {
-  if (!revenueCenter) return '/'
-  const { slug, revenue_center_type } = revenueCenter
-  return `/menu/${slug}-${revenue_center_type.toLowerCase()}`
+export const selectMenuSlug = state => {
+  const { revenueCenter } = state.data.order
+  return revenueCenter ? `/menu/${revenueCenter.slug}` : '/'
 }
-export const selectMenuSlug = state =>
-  makeMenuSlug(state.data.order.revenueCenter)
 
 export const selectMenuVars = state => {
   if (!state.data.order.revenueCenter) return {}
