@@ -16,11 +16,9 @@ export const selectServiceTypeName = state =>
   serviceTypeNamesMap[state.data.order.serviceType]
 
 export const selectAutoSelect = state => {
-  const rcConfig = state.config.content.revenueCenters
+  const autoSelect = state.config.settings.autoSelect
   const { orderType, serviceType } = state.data.order
-  return orderType && serviceType
-    ? rcConfig.autoSelect[orderType][serviceType]
-    : false
+  return orderType && serviceType ? autoSelect[orderType][serviceType] : false
 }
 
 export const selectRequestedAt = state =>
