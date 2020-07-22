@@ -55,9 +55,9 @@ class OpenTenderAPI {
       const headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'client-id': `${this.clientId}`,
-        'brand-id': `${this.brandId}`,
       }
+      if (this.clientId) headers['client-id'] = `${this.clientId}`
+      if (this.brandId) headers['brand-id'] = `${this.brandId}`
       if (token) headers.Authorization = `Bearer ${token}`
       let options = {
         method: method,
@@ -98,6 +98,10 @@ class OpenTenderAPI {
           reject(err)
         })
     })
+  }
+
+  getConfig() {
+    return this.request(`/config`)
   }
 
   getRevenueCenters(revenue_center_type, is_outpost, lat, lng) {
