@@ -122,7 +122,7 @@ export default (state = initState, action) => {
         i => !i.message.includes('Requested time')
       )
       let messages
-      if (requestedAt !== previousRequestedAt) {
+      if (previousRequestedAt && requestedAt !== previousRequestedAt) {
         const tz = timezoneMap[revenueCenter.timezone]
         const requestedAtText = makeRequestedAtStr(requestedAt, tz)
         const msg = {
