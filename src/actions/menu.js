@@ -1,4 +1,4 @@
-import { makeRequestedIso, validateCart } from '@open-tender/js'
+import { validateCart } from '@open-tender/js'
 import { pending, fulfill, reject } from '../utils'
 import {
   RESET_MENU,
@@ -27,8 +27,7 @@ export const fetchMenu = menuVars => async (dispatch, getState) => {
   dispatch(pending(FETCH_MENU))
   const { revenueCenterId, serviceType, requestedAt } = menuVars
   try {
-    const requestedIso = makeRequestedIso(requestedAt)
-    const menu = await api.getMenu(revenueCenterId, serviceType, requestedIso)
+    const menu = await api.getMenu(revenueCenterId, serviceType, requestedAt)
     const { cart } = getState().data.order
     const { menu: categories, sold_out_items: soldOut } = menu
     const { newCart, errors } = validateCart(cart, categories, soldOut)
