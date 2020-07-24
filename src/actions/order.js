@@ -14,6 +14,7 @@ import {
   SET_ORDER_TYPE,
   SET_SERVICE_TYPE,
   SET_ORDER_SERVICE_TYPE,
+  SET_MENU_VARS,
   SET_REVENUE_CENTER,
   SET_ADDRESS,
   SET_REQUESTED_AT,
@@ -27,6 +28,7 @@ import {
   INCREMENT_ITEM,
   DECREMENT_ITEM,
   FETCH_REVENUE_CENTER,
+  REVERT_MENU,
   REFRESH_REVENUE_CENTER,
   EDIT_ORDER,
   REORDER,
@@ -58,6 +60,10 @@ export const setServiceType = serviceType => ({
 export const setOrderServiceType = (orderType, serviceType, isOutpost) => ({
   type: SET_ORDER_SERVICE_TYPE,
   payload: { orderType, serviceType, isOutpost: isOutpost || false },
+})
+export const setMenuVars = (revenueCenter, serviceType, requestedAt) => ({
+  type: SET_MENU_VARS,
+  payload: { revenueCenter, serviceType, requestedAt },
 })
 export const setAddress = address => ({
   type: SET_ADDRESS,
@@ -119,6 +125,24 @@ export const fetchRevenueCenter = revenueCenterId => async (
     dispatch(fulfill(FETCH_REVENUE_CENTER, revenueCenter))
   } catch (err) {
     dispatch(reject(FETCH_REVENUE_CENTER, err))
+  }
+}
+
+export const revertMenu = ({
+  revenueCenterId,
+  serviceType,
+  requestedAt,
+}) => async (dispatch, getState) => {
+  const { api } = getState().config
+  if (!api) return
+  dispatch(pending(REVERT_MENU))
+  try {
+    const revenueCenter = await api.getRevenueCenter(revenueCenterId)
+    console.log(revenueCenter, serviceType, requestedAt)
+    dispatch(setMenuVars(revenueCenter, serviceType, requestedAt))
+    dispatch(fulfill(REVERT_MENU, revenueCenter))
+  } catch (err) {
+    dispatch(reject(REVERT_MENU, err))
   }
 }
 

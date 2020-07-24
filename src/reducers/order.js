@@ -45,6 +45,7 @@ export const SET_ALERT = `${NAME}/setAlert`
 export const SET_ORDER_TYPE = `${NAME}/setOrderType`
 export const SET_SERVICE_TYPE = `${NAME}/setServiceType`
 export const SET_ORDER_SERVICE_TYPE = `${NAME}/setOrderServiceType`
+export const SET_MENU_VARS = `${NAME}/setMenuVars`
 export const SET_REVENUE_CENTER = `${NAME}/setRevenueCenter`
 export const SET_ADDRESS = `${NAME}/setAddress`
 export const SET_REQUESTED_AT = `${NAME}/setRequestedAt`
@@ -58,6 +59,7 @@ export const ADD_MESSAGE = `${NAME}/addMessage`
 export const REMOVE_MESSAGE = `${NAME}/removeMessage`
 
 export const FETCH_REVENUE_CENTER = `${NAME}/fetchRevenueCenter`
+export const REVERT_MENU = `${NAME}/revertMenu`
 export const REFRESH_REVENUE_CENTER = `${NAME}/refreshRevenueCenter`
 export const EDIT_ORDER = `${NAME}/editOrder`
 export const REORDER = `${NAME}/reorderPastOrder`
@@ -106,10 +108,23 @@ export default (state = initState, action) => {
       return { ...state, serviceType: action.payload }
     case SET_ORDER_SERVICE_TYPE:
       return { ...state, ...action.payload }
+    case SET_MENU_VARS: {
+      const { revenueCenter } = action.payload
+      return {
+        ...state,
+        ...action.payload,
+        orderType: revenueCenter.revenue_center_type,
+        isOutpost: revenueCenter.is_outpost,
+      }
+    }
     case SET_ADDRESS:
       return { ...state, address: action.payload }
-    case SET_REQUESTED_AT:
-      return { ...state, requestedAt: action.payload }
+    case SET_REQUESTED_AT: {
+      const messages = state.messages.filter(
+        i => !i.message.includes('Requested time')
+      )
+      return { ...state, requestedAt: action.payload, messages }
+    }
     case SET_REVENUE_CENTER: {
       const revenueCenter = action.payload
       const previousRequestedAt = state.requestedAt
@@ -118,11 +133,11 @@ export default (state = initState, action) => {
         state.serviceType,
         previousRequestedAt
       )
-      const otherMessages = state.messages.filter(
-        i => !i.message.includes('Requested time')
-      )
       let messages
       if (previousRequestedAt && requestedAt !== previousRequestedAt) {
+        const otherMessages = state.messages.filter(
+          i => !i.message.includes('Requested time')
+        )
         const tz = timezoneMap[revenueCenter.timezone]
         const requestedAtText = makeRequestedAtStr(requestedAt, tz)
         const msg = {
@@ -131,7 +146,7 @@ export default (state = initState, action) => {
         }
         messages = [msg, ...otherMessages]
       } else {
-        messages = otherMessages
+        messages = state.messages
       }
       return { ...state, revenueCenter, requestedAt, messages }
     }
@@ -173,6 +188,16 @@ export default (state = initState, action) => {
         error: null,
       }
     case `${FETCH_REVENUE_CENTER}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
+    case `${REVERT_MENU}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${REVERT_MENU}/fulfilled`:
+      return {
+        ...state,
+        loading: 'idle',
+        error: null,
+      }
+    case `${REVERT_MENU}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
     case `${REFRESH_REVENUE_CENTER}/pending`:
       return { ...state, loading: 'pending' }
