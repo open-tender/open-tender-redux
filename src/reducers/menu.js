@@ -1,6 +1,7 @@
 const initState = {
   menuVars: null,
   previousMenuVars: null,
+  revenueCenters: null,
   categories: [],
   soldOut: [],
   cartErrors: null,

@@ -29,7 +29,11 @@ export const fetchMenu = menuVars => async (dispatch, getState) => {
   try {
     const menu = await api.getMenu(revenueCenterId, serviceType, requestedAt)
     const { cart } = getState().data.order
-    const { menu: categories, sold_out_items: soldOut } = menu
+    const {
+      menu: categories,
+      sold_out_items: soldOut,
+      revenue_centers: revenueCenters,
+    } = menu
     const { newCart, errors } = validateCart(cart, categories, soldOut)
     if (errors) {
       dispatch(setCartErrors(newCart, errors))
@@ -38,7 +42,9 @@ export const fetchMenu = menuVars => async (dispatch, getState) => {
       dispatch(setCart(newCart))
       dispatch(resetCartErrors())
     }
-    dispatch(fulfill(FETCH_MENU, { categories, soldOut, menuVars }))
+    dispatch(
+      fulfill(FETCH_MENU, { categories, soldOut, revenueCenters, menuVars })
+    )
   } catch (err) {
     dispatch(refreshRevenueCenter(menuVars))
     dispatch(reject(FETCH_MENU, err))
