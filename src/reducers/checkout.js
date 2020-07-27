@@ -42,7 +42,8 @@ export default (state = initState, action) => {
       return { ...state, submitting: action.payload }
     case UPDATE_FORM: {
       let errors = { ...state.errors }
-      if (action.payload.tenders) delete errors.tenders
+      const { tenders } = action.payload
+      if (tenders) delete errors.tenders
       return { ...state, form: { ...state.form, ...action.payload }, errors }
     }
     case UPDATE_CUSTOMER: {
