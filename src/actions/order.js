@@ -138,7 +138,6 @@ export const revertMenu = ({
   dispatch(pending(REVERT_MENU))
   try {
     const revenueCenter = await api.getRevenueCenter(revenueCenterId)
-    console.log(revenueCenter, serviceType, requestedAt)
     dispatch(setMenuVars(revenueCenter, serviceType, requestedAt))
     dispatch(fulfill(REVERT_MENU, revenueCenter))
   } catch (err) {
@@ -146,16 +145,16 @@ export const revertMenu = ({
   }
 }
 
-export const refreshRevenueCenter = ({
-  revenueCenterId,
-  serviceType,
-  requestedAt,
-}) => async (dispatch, getState) => {
+export const refreshRevenueCenter = (
+  { revenueCenterId, serviceType, requestedAt },
+  reset
+) => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   dispatch(pending(REFRESH_REVENUE_CENTER))
   try {
     const revenueCenter = await api.getRevenueCenter(revenueCenterId)
+    if (reset) requestedAt = null
     const firstTimes = makeFirstTimes(revenueCenter, serviceType, requestedAt)
     const { status } = revenueCenter
     let alert

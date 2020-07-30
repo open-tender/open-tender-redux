@@ -46,7 +46,7 @@ export const fetchMenu = menuVars => async (dispatch, getState) => {
       fulfill(FETCH_MENU, { categories, soldOut, revenueCenters, menuVars })
     )
   } catch (err) {
-    dispatch(refreshRevenueCenter(menuVars))
+    dispatch(refreshRevenueCenter(menuVars, true))
     dispatch(reject(FETCH_MENU, err))
   }
 }
