@@ -31,6 +31,9 @@ const initState = {
   alert: null,
   error: null,
   loading: 'idle',
+  token: null,
+  isCartOwner: false,
+  cartGuestId: null,
 }
 
 const NAME = 'order'
@@ -63,6 +66,7 @@ export const REVERT_MENU = `${NAME}/revertMenu`
 export const REFRESH_REVENUE_CENTER = `${NAME}/refreshRevenueCenter`
 export const EDIT_ORDER = `${NAME}/editOrder`
 export const REORDER = `${NAME}/reorderPastOrder`
+export const SHARE_CART = `${NAME}/shareCart`
 
 export default (state = initState, action) => {
   switch (action.type) {
@@ -231,6 +235,17 @@ export default (state = initState, action) => {
         error: null,
       }
     case `${REORDER}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
+    case `${SHARE_CART}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${SHARE_CART}/fulfilled`:
+      return {
+        ...state,
+        ...action.payload,
+        loading: 'idle',
+        error: null,
+      }
+    case `${SHARE_CART}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
     default:
       return state

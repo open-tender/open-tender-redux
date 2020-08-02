@@ -142,6 +142,10 @@ class OpenTenderAPI {
     return this.request(`/orders`, 'POST', order)
   }
 
+  postCart(data) {
+    return this.request(`/carts`, 'POST', data)
+  }
+
   postSignUp(data) {
     return this.request(`/customer`, 'POST', data)
   }

@@ -84,3 +84,5 @@ export const selectCanOrder = state =>
   state.data.order.requestedAt
 
 export const selectMessages = state => state.data.order.messages
+
+export const selectCartToken = state => state.data.order.token
