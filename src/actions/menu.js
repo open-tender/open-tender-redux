@@ -27,6 +27,10 @@ export const fetchMenu = menuVars => async (dispatch, getState) => {
   dispatch(pending(FETCH_MENU))
   const { revenueCenterId, serviceType, requestedAt } = menuVars
   try {
+    if (requestedAt === null) {
+      const err = getState().data.menu.error
+      return dispatch(reject(FETCH_MENU, err))
+    }
     const menu = await api.getMenu(revenueCenterId, serviceType, requestedAt)
     const { cart } = getState().data.order
     const {
