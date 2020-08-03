@@ -32,7 +32,6 @@ import {
   REFRESH_REVENUE_CENTER,
   EDIT_ORDER,
   REORDER,
-  SHARE_CART,
 } from '../reducers/order'
 import { setMenuItems } from './menuItems'
 import { updateForm } from './checkout'
@@ -260,32 +259,5 @@ export const reorderPastOrder = ({
     dispatch(resetAlert())
     dispatch(addMessage('Something went wrong. Please contact support.'))
     dispatch(reject(REORDER, null))
-  }
-}
-
-export const shareCart = () => async (dispatch, getState) => {
-  const { api } = getState().config
-  if (!api) return
-  dispatch(pending(SHARE_CART))
-  try {
-    const {
-      revenueCenter,
-      requestedAt,
-      serviceType,
-      cart,
-    } = getState().data.order
-    const { customer_id } = getState().data.customer.account.profile
-    const data = {
-      revenue_center_id: revenueCenter.revenue_center_id,
-      requested_at: requestedAt,
-      service_type: serviceType,
-      cart,
-      customer_id,
-    }
-    const { token } = await api.postCart(data)
-    const payload = { token, isCartOwner: true }
-    dispatch(fulfill(SHARE_CART, payload))
-  } catch (err) {
-    dispatch(reject(SHARE_CART, err))
   }
 }
