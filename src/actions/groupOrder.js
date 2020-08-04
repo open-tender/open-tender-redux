@@ -1,20 +1,25 @@
 import { pending, fulfill, reject } from '../utils'
 import {
   RESET_GROUP_ORDER,
-  SHARE_CART,
+  UPDATE_GROUP_ORDER,
+  START_GROUP_ORDER,
   FETCH_GROUP_ORDER,
 } from '../reducers/groupOrder'
 
 // action creators
 
 export const resetGroupOrder = () => ({ type: RESET_GROUP_ORDER })
+export const updateGroupOrder = data => ({
+  type: UPDATE_GROUP_ORDER,
+  payload: data,
+})
 
 // async action creators
 
-export const shareCart = () => async (dispatch, getState) => {
+export const startGroupOrder = () => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
-  dispatch(pending(SHARE_CART))
+  dispatch(pending(START_GROUP_ORDER))
   try {
     const {
       revenueCenter,
@@ -30,11 +35,11 @@ export const shareCart = () => async (dispatch, getState) => {
       cart,
       customer_id,
     }
-    const { token } = await api.postCart(data)
-    const payload = { token, isCartOwner: true }
-    dispatch(fulfill(SHARE_CART, payload))
+    const { token, cart_id } = await api.postCart(data)
+    const payload = { token, isCartOwner: true, cartId: cart_id }
+    dispatch(fulfill(START_GROUP_ORDER, payload))
   } catch (err) {
-    dispatch(reject(SHARE_CART, err))
+    dispatch(reject(START_GROUP_ORDER, err))
   }
 }
 
