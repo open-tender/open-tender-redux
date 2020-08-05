@@ -6,6 +6,7 @@ const initState = {
   cartGuestId: null,
   closed: false,
   firstIso: null,
+  cutoffIso: null,
   error: null,
   loading: 'idle',
 }
