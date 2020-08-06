@@ -280,6 +280,20 @@ class OpenTenderAPI {
     return this.request(`/customer/gift-cards`, 'GET', null, null, token)
   }
 
+  postCustomerGiftCard(token, data) {
+    return this.request(`/customer/gift-cards`, 'POST', data, null, token)
+  }
+
+  putCustomerGiftCard(token, giftCardId, data) {
+    return this.request(
+      `/customer/gift-cards/${giftCardId}`,
+      'PUT',
+      data,
+      null,
+      token
+    )
+  }
+
   getCustomerFavorites(token, limit) {
     const params = limit ? `?limit=${limit}` : ''
     return this.request(
