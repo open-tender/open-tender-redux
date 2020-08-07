@@ -5,8 +5,8 @@ const initState = {
   cartOwnerName: null,
   cartGuestId: null,
   closed: false,
-  firstIso: null,
-  cutoffIso: null,
+  requestedAt: null,
+  cutoffAt: null,
   error: null,
   loading: 'idle',
 }

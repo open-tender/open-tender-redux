@@ -5,6 +5,7 @@ import {
   START_GROUP_ORDER,
   FETCH_GROUP_ORDER,
 } from '../reducers/groupOrder'
+import { setRequestedAt, fetchRevenueCenter } from './order'
 
 // action creators
 
@@ -35,8 +36,14 @@ export const startGroupOrder = () => async (dispatch, getState) => {
       cart,
       customer_id,
     }
-    const { token, cart_id } = await api.postCart(data)
-    const payload = { token, isCartOwner: true, cartId: cart_id }
+    const { token, cart_id, cutoff_at, requested_at } = await api.postCart(data)
+    dispatch(setRequestedAt(requested_at))
+    const payload = {
+      token,
+      isCartOwner: true,
+      cartId: cart_id,
+      cutoffAt: cutoff_at,
+    }
     dispatch(fulfill(START_GROUP_ORDER, payload))
   } catch (err) {
     dispatch(reject(START_GROUP_ORDER, err))
@@ -48,13 +55,27 @@ export const fetchGroupOrder = token => async (dispatch, getState) => {
   if (!api) return
   dispatch(pending(FETCH_GROUP_ORDER))
   try {
-    const { cart_id, first_name, last_name, closed } = await api.getCart(token)
+    const {
+      first_name,
+      last_name,
+      closed,
+      cart_id: cartId,
+      revenue_center_id: revenueCenterId,
+      service_type: serviceType,
+      requested_at: requestedAt,
+      cutoff_at: cutoffAt,
+    } = await api.getCart(token)
     const payload = {
       cartOwnerName: `${first_name} ${last_name}`,
       closed,
       token,
-      cartId: cart_id,
+      cartId,
+      revenueCenterId,
+      serviceType,
+      requestedAt,
+      cutoffAt,
     }
+    dispatch(fetchRevenueCenter(revenueCenterId))
     dispatch(fulfill(FETCH_GROUP_ORDER, payload))
   } catch (err) {
     dispatch(reject(FETCH_GROUP_ORDER, err))
