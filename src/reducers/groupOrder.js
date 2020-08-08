@@ -1,12 +1,15 @@
 const initState = {
   token: null,
   cartId: null,
+  requestedAt: null,
+  serviceType: null,
+  cutoffAt: null,
+  guestLimit: null,
+  guestCount: null,
+  closed: false,
   isCartOwner: false,
   cartOwnerName: null,
-  cartGuestId: null,
-  closed: false,
-  requestedAt: null,
-  cutoffAt: null,
+  cartGuest: null,
   error: null,
   loading: 'idle',
 }
@@ -17,6 +20,8 @@ export const RESET_GROUP_ORDER = `${NAME}/resetGroupOrder`
 export const UPDATE_GROUP_ORDER = `${NAME}/updateGroupOrder`
 export const START_GROUP_ORDER = `${NAME}/startGroupOrder`
 export const FETCH_GROUP_ORDER = `${NAME}/fetchGroupOrder`
+export const DELETE_GROUP_ORDER = `${NAME}/deleteGroupOrder`
+export const JOIN_GROUP_ORDER = `${NAME}/joinGroupOrder`
 
 export default (state = initState, action) => {
   switch (action.type) {
@@ -24,6 +29,7 @@ export default (state = initState, action) => {
       return { ...initState }
     case UPDATE_GROUP_ORDER:
       return { ...state, ...action.payload }
+
     case `${START_GROUP_ORDER}/pending`:
       return { ...state, loading: 'pending' }
     case `${START_GROUP_ORDER}/fulfilled`:
@@ -35,6 +41,7 @@ export default (state = initState, action) => {
       }
     case `${START_GROUP_ORDER}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
+
     case `${FETCH_GROUP_ORDER}/pending`:
       return { ...state, loading: 'pending' }
     case `${FETCH_GROUP_ORDER}/fulfilled`:
@@ -46,6 +53,26 @@ export default (state = initState, action) => {
       }
     case `${FETCH_GROUP_ORDER}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
+
+    case `${DELETE_GROUP_ORDER}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${DELETE_GROUP_ORDER}/fulfilled`:
+      return { ...initState }
+    case `${DELETE_GROUP_ORDER}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
+
+    case `${JOIN_GROUP_ORDER}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${JOIN_GROUP_ORDER}/fulfilled`:
+      return {
+        ...state,
+        cartGuest: action.payload,
+        loading: 'idle',
+        error: null,
+      }
+    case `${JOIN_GROUP_ORDER}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
+
     default:
       return state
   }
