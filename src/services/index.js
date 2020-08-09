@@ -150,6 +150,10 @@ class OpenTenderAPI {
     return this.request(`/carts/${token}`)
   }
 
+  putCart(cartId, data) {
+    return this.request(`/carts/${cartId}`, 'PUT', data)
+  }
+
   deleteCart(cartId) {
     return this.request(`/carts/${cartId}`, 'DELETE')
   }
