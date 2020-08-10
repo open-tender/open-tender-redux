@@ -146,8 +146,8 @@ class OpenTenderAPI {
     return this.request(`/carts`, 'POST', data)
   }
 
-  getCart(token) {
-    return this.request(`/carts/${token}`)
+  getCart(cartId) {
+    return this.request(`/carts/${cartId}`)
   }
 
   putCart(cartId, data) {

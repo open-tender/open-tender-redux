@@ -1,4 +1,4 @@
-import { makeSimpleCart } from '@open-tender/js'
+import { makeSimpleCart, rehydrateCart } from '@open-tender/js'
 import { pending, fulfill, reject } from '../utils'
 import {
   RESET_GROUP_ORDER,
@@ -7,14 +7,9 @@ import {
   UPDATE_GROUP_ORDER,
   DELETE_GROUP_ORDER,
   JOIN_GROUP_ORDER,
+  RELOAD_GUEST_ORDER,
 } from '../reducers/groupOrder'
-import {
-  setRequestedAt,
-  fetchRevenueCenter,
-  setMenuVars,
-  setCart,
-  resetOrder,
-} from './order'
+import { setRequestedAt, setMenuVars, setCart, resetOrder } from './order'
 
 // action creators
 
@@ -22,12 +17,13 @@ export const resetGroupOrder = () => ({ type: RESET_GROUP_ORDER })
 
 // async action creators
 
-const makeCartPayload = response => {
+const makeCartPayload = (response, cartGuestId) => {
   const {
     customer,
     closed,
     cart_id: cartId,
     token,
+    cart,
     revenue_center_id: revenueCenterId,
     service_type: serviceType,
     requested_at: requestedAt,
@@ -36,6 +32,9 @@ const makeCartPayload = response => {
     guest_limit: guestLimit,
     guest_count: guestCount,
   } = response
+  const filteredCart = cartGuestId
+    ? cart.filter(i => i.cart_guest_id === cartGuestId)
+    : cart
   return {
     cartId,
     token,
@@ -48,6 +47,7 @@ const makeCartPayload = response => {
     spendingLimit,
     closed,
     cartOwner: customer,
+    cart: filteredCart,
   }
 }
 
@@ -84,15 +84,16 @@ export const startGroupOrder = spendingLimit => async (dispatch, getState) => {
   }
 }
 
-export const fetchGroupOrder = token => async (dispatch, getState) => {
+// id can be either a cartId or a token
+export const fetchGroupOrder = id => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   dispatch(pending(FETCH_GROUP_ORDER))
   try {
-    const response = await api.getCart(token)
-    const { revenue_center_id } = response
-    dispatch(fetchRevenueCenter(revenue_center_id))
-    const payload = makeCartPayload(response)
+    const response = await api.getCart(id)
+    const { cartGuest } = getState().data.groupOrder
+    const cartGuestId = cartGuest ? cartGuest.cartGuestId : null
+    const payload = makeCartPayload(response, cartGuestId)
     dispatch(fulfill(FETCH_GROUP_ORDER, payload))
   } catch (err) {
     dispatch(reject(FETCH_GROUP_ORDER, err))
@@ -142,9 +143,10 @@ export const updateGroupOrder = (data = {}) => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   dispatch(pending(UPDATE_GROUP_ORDER))
+  const { cartId, cartGuest, isCartOwner } = getState().data.groupOrder
   try {
     data.cart = makeSimpleCart(getState().data.order.cart)
-    const { cartId, cartGuest, isCartOwner } = getState().data.groupOrder
+
     if (isCartOwner) {
       const { customer_id } = getState().data.customer.account.profile
       data.customer_id = customer_id
@@ -152,8 +154,26 @@ export const updateGroupOrder = (data = {}) => async (dispatch, getState) => {
       data.cart_guest_id = cartGuest.cartGuestId
     }
     await api.putCart(cartId, data)
+    dispatch(fetchGroupOrder(cartId))
     dispatch(fulfill(UPDATE_GROUP_ORDER))
   } catch (err) {
+    await dispatch(fetchGroupOrder(cartId))
     dispatch(reject(UPDATE_GROUP_ORDER, err))
+  }
+}
+
+export const reloadGuestOrder = () => async (dispatch, getState) => {
+  const { api } = getState().config
+  if (!api) return
+  dispatch(pending(RELOAD_GUEST_ORDER))
+  try {
+    const { revenueCenterId, serviceType } = getState().data.groupOrder
+    const { cart: items } = getState().data.groupOrder
+    const menuItems = await api.getMenuItems(revenueCenterId, serviceType)
+    const { cart } = rehydrateCart(menuItems, items)
+    dispatch(setCart(cart))
+    dispatch(fulfill(RELOAD_GUEST_ORDER))
+  } catch (err) {
+    dispatch(reject(RELOAD_GUEST_ORDER, err))
   }
 }

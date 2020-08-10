@@ -12,6 +12,7 @@ const initState = {
   isCartOwner: false,
   cartOwner: null,
   cartGuest: null,
+  cart: [],
   error: null,
   loading: 'idle',
 }
@@ -24,6 +25,7 @@ export const FETCH_GROUP_ORDER = `${NAME}/fetchGroupOrder`
 export const UPDATE_GROUP_ORDER = `${NAME}/updateGroupOrder`
 export const DELETE_GROUP_ORDER = `${NAME}/deleteGroupOrder`
 export const JOIN_GROUP_ORDER = `${NAME}/joinGroupOrder`
+export const RELOAD_GUEST_ORDER = `${NAME}/reloadGuestOrder`
 
 export default (state = initState, action) => {
   switch (action.type) {
@@ -82,6 +84,13 @@ export default (state = initState, action) => {
         error: null,
       }
     case `${JOIN_GROUP_ORDER}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
+
+    case `${RELOAD_GUEST_ORDER}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${RELOAD_GUEST_ORDER}/fulfilled`:
+      return { ...state, loading: 'idle' }
+    case `${RELOAD_GUEST_ORDER}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
 
     default:
