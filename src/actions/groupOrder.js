@@ -1,5 +1,5 @@
 import { makeSimpleCart, rehydrateCart } from '@open-tender/js'
-import { pending, fulfill, reject } from '../utils'
+import { pending, fulfill, reject, MISSING_CUSTOMER } from '../utils'
 import {
   RESET_GROUP_ORDER,
   START_GROUP_ORDER,
@@ -17,9 +17,9 @@ export const resetGroupOrder = () => ({ type: RESET_GROUP_ORDER })
 
 // async action creators
 
-const makeCartPayload = (response, cartGuestId) => {
+export const makeCartPayload = (response, cartGuestId) => {
   const {
-    customer,
+    customer = null,
     closed,
     cart_id: cartId,
     token,
@@ -146,7 +146,6 @@ export const updateGroupOrder = (data = {}) => async (dispatch, getState) => {
   const { cartId, cartGuest, isCartOwner } = getState().data.groupOrder
   try {
     data.cart = makeSimpleCart(getState().data.order.cart)
-
     if (isCartOwner) {
       const { customer_id } = getState().data.customer.account.profile
       data.customer_id = customer_id

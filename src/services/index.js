@@ -215,6 +215,24 @@ class OpenTenderAPI {
     return this.request(`/customer/orders/${orderId}`, 'GET', null, null, token)
   }
 
+  getCustomerGroupOrders(token) {
+    return this.request(`/customer/carts?expand=true`, 'GET', null, null, token)
+  }
+
+  getCustomerGroupOrder(token, cartId) {
+    return this.request(`/customer/carts/${cartId}`, 'GET', null, null, token)
+  }
+
+  deleteCustomerGroupOrder(token, cartId) {
+    return this.request(
+      `/customer/carts/${cartId}`,
+      'DELETE',
+      null,
+      null,
+      token
+    )
+  }
+
   getCustomerAllergens(token) {
     return this.request(`/customer/allergens`, 'GET', null, null, token)
   }

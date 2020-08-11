@@ -21,3 +21,5 @@ export const selectCustomerOrder = state => {
   const { entity: order, loading, error } = state.data.customer.order
   return { order, loading, error }
 }
+export const selectCustomerGroupOrders = state =>
+  state.data.customer.groupOrders
