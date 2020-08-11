@@ -35,6 +35,7 @@ export const RESET_REVENUE_CENTER = `${NAME}/resetRevenueCenter`
 export const RESET_MESSAGES = `${NAME}/resetMessages`
 export const RESET_ALERT = `${NAME}/resetAlert`
 
+export const UPDATE_ORDER = `${NAME}/updateOrder`
 export const SET_ALERT = `${NAME}/setAlert`
 export const SET_ORDER_TYPE = `${NAME}/setOrderType`
 export const SET_SERVICE_TYPE = `${NAME}/setServiceType`
@@ -96,6 +97,8 @@ export default (state = initState, action) => {
         ...state,
         messages: state.messages.filter(i => i.id !== action.payload),
       }
+    case UPDATE_ORDER:
+      return { ...state, ...action.payload }
     case SET_ORDER_TYPE:
       return { ...state, orderType: action.payload }
     case SET_SERVICE_TYPE:

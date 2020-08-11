@@ -223,6 +223,10 @@ class OpenTenderAPI {
     return this.request(`/customer/carts/${cartId}`, 'GET', null, null, token)
   }
 
+  putCustomerGroupOrder(token, cartId, data) {
+    return this.request(`/customer/carts/${cartId}`, 'PUT', data, null, token)
+  }
+
   deleteCustomerGroupOrder(token, cartId) {
     return this.request(
       `/customer/carts/${cartId}`,

@@ -45,6 +45,10 @@ export const resetRevenueCenter = () => ({ type: RESET_REVENUE_CENTER })
 export const resetMessages = () => ({ type: RESET_MESSAGES })
 export const resetAlert = () => ({ type: RESET_ALERT })
 
+export const updateOrder = data => ({
+  type: SET_ALERT,
+  payload: data,
+})
 export const setAlert = alert => ({
   type: SET_ALERT,
   payload: alert,

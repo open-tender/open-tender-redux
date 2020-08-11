@@ -12,6 +12,7 @@ const initState = {
   isCartOwner: false,
   cartOwner: null,
   cartGuest: null,
+  cartGuests: [],
   cart: [],
   error: null,
   loading: 'idle',

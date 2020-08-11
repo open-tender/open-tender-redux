@@ -31,6 +31,7 @@ export const makeCartPayload = (response, cartGuestId) => {
     spending_limit: spendingLimit,
     guest_limit: guestLimit,
     guest_count: guestCount,
+    cart_quests: cartGuests,
   } = response
   const filteredCart = cartGuestId
     ? cart.filter(i => i.cart_guest_id === cartGuestId)
@@ -48,6 +49,7 @@ export const makeCartPayload = (response, cartGuestId) => {
     closed,
     cartOwner: customer,
     cart: filteredCart,
+    cartGuests: cartGuests || [],
   }
 }
 
