@@ -80,7 +80,7 @@ export const submitOrder = () => async (dispatch, getState) => {
   const alert = { type: 'working', args: { text: 'Submitting your order...' } }
   dispatch(setAlert(alert))
   // start order assembly
-  const { order, checkout } = getState().data
+  const { order, checkout, groupOrder } = getState().data
   const { orderId, revenueCenter, serviceType, requestedAt, cart } = order
   const { revenue_center_id: revenueCenterId } = revenueCenter || {}
   const { check, form } = checkout
@@ -110,6 +110,7 @@ export const submitOrder = () => async (dispatch, getState) => {
     promoCodes,
     tip: tip === null ? defaultTip : tip,
     tenders,
+    cartId: groupOrder.cartId || null,
   }
   const preparedOrder = prepareOrder(data)
   // end order assembly

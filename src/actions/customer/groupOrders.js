@@ -1,4 +1,9 @@
-import { makeSimpleCart, rehydrateCart } from '@open-tender/js'
+import {
+  makeSimpleCart,
+  rehydrateCart,
+  timezoneMap,
+  makeRequestedAtStr,
+} from '@open-tender/js'
 import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import { name, entity } from '../../reducers/customer/groupOrders'
 import {
@@ -6,6 +11,7 @@ import {
   FETCH_GROUP_ORDER,
   START_GROUP_ORDER,
   UPDATE_GROUP_ORDER,
+  CLOSE_GROUP_ORDER,
 } from '../../reducers/groupOrder'
 import { selectToken } from '../../selectors/customer'
 import { showNotification } from '../notifications'
@@ -119,13 +125,38 @@ export const updateCustomerGroupOrder = (cartId, data, callback) => async (
   dispatch(pending(UPDATE_GROUP_ORDER))
   try {
     const cartData = makeCartData(getState().data.order, data)
+    console.log(cartData)
     await api.putCustomerGroupOrder(token, cartId, cartData)
     const response = await api.getCustomerGroupOrder(token, cartId)
+    const { requestedAt, revenueCenter } = getState().data.order
+    if (response.requested_at !== requestedAt) {
+      dispatch(setRequestedAt(response.requested_at))
+      const tz = timezoneMap[revenueCenter.timezone]
+      const requestedAtText = makeRequestedAtStr(response.requested_at, tz)
+      dispatch(addMessage(`Requested time updated to ${requestedAtText}`))
+    }
     const payload = { ...makeCartPayload(response), isCartOwner: true }
     dispatch(fulfill(UPDATE_GROUP_ORDER, payload))
     if (callback) callback()
   } catch (err) {
     dispatch(reject(UPDATE_GROUP_ORDER, err))
+  }
+}
+
+export const closeGroupOrder = (cartId, closed) => async (
+  dispatch,
+  getState
+) => {
+  const { api } = getState().config
+  if (!api) return
+  const token = selectToken(getState())
+  if (!token) return dispatch(reject(CLOSE_GROUP_ORDER, MISSING_CUSTOMER))
+  dispatch(pending(CLOSE_GROUP_ORDER))
+  try {
+    await api.putCustomerGroupOrderStatus(token, cartId, { closed })
+    dispatch(fulfill(CLOSE_GROUP_ORDER, closed))
+  } catch (err) {
+    dispatch(reject(CLOSE_GROUP_ORDER, err))
   }
 }
 

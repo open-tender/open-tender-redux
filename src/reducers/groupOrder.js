@@ -25,6 +25,7 @@ export const START_GROUP_ORDER = `${NAME}/startGroupOrder`
 export const REOPEN_GROUP_ORDER = `${NAME}/reopenGroupOrder`
 export const FETCH_GROUP_ORDER = `${NAME}/fetchGroupOrder`
 export const UPDATE_GROUP_ORDER = `${NAME}/updateGroupOrder`
+export const CLOSE_GROUP_ORDER = `${NAME}/closeGroupOrder`
 export const DELETE_GROUP_ORDER = `${NAME}/deleteGroupOrder`
 export const JOIN_GROUP_ORDER = `${NAME}/joinGroupOrder`
 export const RELOAD_GUEST_ORDER = `${NAME}/reloadGuestOrder`
@@ -80,6 +81,18 @@ export default (state = initState, action) => {
         error: null,
       }
     case `${UPDATE_GROUP_ORDER}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
+
+    case `${CLOSE_GROUP_ORDER}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${CLOSE_GROUP_ORDER}/fulfilled`:
+      return {
+        ...state,
+        closed: action.payload,
+        loading: 'idle',
+        error: null,
+      }
+    case `${CLOSE_GROUP_ORDER}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
 
     case `${DELETE_GROUP_ORDER}/pending`:
