@@ -215,12 +215,22 @@ class OpenTenderAPI {
     return this.request(`/customer/orders/${orderId}`, 'GET', null, null, token)
   }
 
+  postCustomerGroupOrder(token, data) {
+    return this.request(`/customer/carts`, 'POST', data, null, token)
+  }
+
   getCustomerGroupOrders(token) {
     return this.request(`/customer/carts?expand=true`, 'GET', null, null, token)
   }
 
   getCustomerGroupOrder(token, cartId) {
-    return this.request(`/customer/carts/${cartId}`, 'GET', null, null, token)
+    return this.request(
+      `/customer/carts/${cartId}?expand=customer&with_related=true`,
+      'GET',
+      null,
+      null,
+      token
+    )
   }
 
   putCustomerGroupOrder(token, cartId, data) {

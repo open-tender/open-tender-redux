@@ -75,6 +75,7 @@ export default (state = initState, action) => {
     case `${UPDATE_GROUP_ORDER}/fulfilled`:
       return {
         ...state,
+        ...action.payload,
         loading: 'idle',
         error: null,
       }
