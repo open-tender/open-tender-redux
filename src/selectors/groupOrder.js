@@ -24,3 +24,14 @@ export const selectGroupOrderTests = state => {
   const atCapacity = spotsRemaining !== null && spotsRemaining <= 0
   return { closed, pastCutoff, atCapacity }
 }
+
+export const selectGroupOrderPrepTimes = state => {
+  const { revenueCenter, serviceType } = state.data.order
+  if (!revenueCenter || !serviceType) return {}
+  const { wait_times, group_ordering } = revenueCenter.settings
+  const { prep_time, lead_time: leadTime } = group_ordering
+  const st = serviceType === 'WALKIN' ? 'PICKUP' : serviceType
+  const waitTime = wait_times && wait_times[st] ? wait_times[st] : 0
+  const prepTime = waitTime + prep_time
+  return { prepTime, leadTime }
+}
