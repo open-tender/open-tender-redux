@@ -125,7 +125,6 @@ export const updateCustomerGroupOrder = (cartId, data, callback) => async (
   dispatch(pending(UPDATE_GROUP_ORDER))
   try {
     const cartData = makeCartData(getState().data.order, data)
-    console.log(cartData)
     await api.putCustomerGroupOrder(token, cartId, cartData)
     const response = await api.getCustomerGroupOrder(token, cartId)
     const { requestedAt, revenueCenter } = getState().data.order
