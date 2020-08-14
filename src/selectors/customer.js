@@ -17,9 +17,16 @@ export const selectCustomerLoyalty = state => state.data.customer.loyalty
 export const selectCustomerHouseAccounts = state =>
   state.data.customer.houseAccounts
 export const selectCustomerOrders = state => state.data.customer.orders
+export const selectCustomerGroupOrders = state =>
+  state.data.customer.groupOrders
+
 export const selectCustomerOrder = state => {
   const { entity: order, loading, error } = state.data.customer.order
   return { order, loading, error }
 }
-export const selectCustomerGroupOrders = state =>
-  state.data.customer.groupOrders
+
+export const selectCustomerLevelUp = state => {
+  const { entities, loading, error } = state.data.customer.levelup
+  const levelup = entities.length ? entities[0] : null
+  return { levelup, loading, error }
+}

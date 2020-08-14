@@ -377,6 +377,24 @@ class OpenTenderAPI {
     return this.request(`/customer/loyalty`, 'GET', null, null, token)
   }
 
+  getCustomerLevelUp(token) {
+    return this.request(`/customer/levelup`, 'GET', null, null, token)
+  }
+
+  postCustomerLevelUp(token, data) {
+    return this.request(`/customer/levelup`, 'POST', data, null, token)
+  }
+
+  deleteCustomerLevelUp(token, levelupConnectId) {
+    return this.request(
+      `/customer/levelup/${levelupConnectId}`,
+      'DELETE',
+      null,
+      null,
+      token
+    )
+  }
+
   getCustomerHouseAccounts(token) {
     return this.request(`/customer/house-accounts`, 'GET', null, null, token)
   }

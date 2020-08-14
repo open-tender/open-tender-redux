@@ -30,6 +30,7 @@ import { resetCustomerLoyalty } from './loyalty'
 import { resetCustomerOrder } from './order'
 import { resetCustomerOrders } from './orders'
 import { resetGroupOrder } from '../groupOrder'
+import { setCustomerLevelUp, resetCustomerLevelUp } from './levelup'
 
 // action creators
 
@@ -71,6 +72,7 @@ export const logoutCustomer = isReset => async (dispatch, getState) => {
     dispatch(resetCustomerAllergens())
     dispatch(resetCustomerCreditCards())
     dispatch(resetCustomerFavorites())
+    dispatch(resetCustomerLevelUp())
     dispatch(resetCustomerGiftCards())
     dispatch(resetCustomerHouseAccounts())
     dispatch(resetCustomerLoyalty())
@@ -91,11 +93,12 @@ export const fetchCustomer = () => async (dispatch, getState) => {
   dispatch(pending(FETCH_CUSTOMER))
   try {
     const customer = await api.getCustomer(token)
-    const { allergens, gift_cards, favorites } = customer
+    const { allergens, gift_cards, favorites, levelup } = customer
     dispatch(setCustomerAllergens(allergens || []))
     dispatch(setSelectedAllergens(allergens || []))
     dispatch(setCustomerGiftCards(gift_cards || []))
     dispatch(setCustomerFavorites(favorites || []))
+    dispatch(setCustomerLevelUp(levelup || []))
     const lookup = makeFavoritesLookup(favorites)
     dispatch(setCustomerFavoritesLookup(lookup || {}))
     const profile = makeCustomerProfile(customer)

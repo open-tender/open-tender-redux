@@ -10,6 +10,7 @@ import loyalty from './loyalty'
 import orders from './orders'
 import order from './order'
 import groupOrders from './groupOrders'
+import levelup from './levelup'
 
 const customerReducer = combineReducers({
   account,
@@ -23,6 +24,7 @@ const customerReducer = combineReducers({
   orders,
   order,
   groupOrders,
+  levelup,
 })
 
 export default customerReducer
