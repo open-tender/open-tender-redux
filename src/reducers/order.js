@@ -58,6 +58,7 @@ export const REVERT_MENU = `${NAME}/revertMenu`
 export const REFRESH_REVENUE_CENTER = `${NAME}/refreshRevenueCenter`
 export const EDIT_ORDER = `${NAME}/editOrder`
 export const REORDER = `${NAME}/reorderPastOrder`
+export const CHECKOUT = `${NAME}/checkout`
 
 export default (state = initState, action) => {
   switch (action.type) {
@@ -158,21 +159,18 @@ export default (state = initState, action) => {
       return { ...state, cart, cartCounts }
     }
     case REMOVE_ITEM: {
-      const { cart, cartCounts } = removeItem([...state.cart], action.payload)
+      const { index } = action.payload
+      const { cart, cartCounts } = removeItem([...state.cart], index)
       return { ...state, cart, cartCounts }
     }
     case INCREMENT_ITEM: {
-      const { cart, cartCounts } = incrementItem(
-        [...state.cart],
-        action.payload
-      )
+      const { index } = action.payload
+      const { cart, cartCounts } = incrementItem([...state.cart], index)
       return { ...state, cart, cartCounts }
     }
     case DECREMENT_ITEM: {
-      const { cart, cartCounts } = decrementItem(
-        [...state.cart],
-        action.payload
-      )
+      const { index } = action.payload
+      const { cart, cartCounts } = decrementItem([...state.cart], index)
       return { ...state, cart, cartCounts }
     }
     case `${FETCH_REVENUE_CENTER}/pending`:
@@ -229,6 +227,8 @@ export default (state = initState, action) => {
       }
     case `${REORDER}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
+    case CHECKOUT:
+      return state
     default:
       return state
   }

@@ -66,7 +66,7 @@ export const addCustomerLevelUp = (data, callback) => async (
   try {
     const response = await api.postCustomerLevelUp(token, data)
     dispatch(fulfill(`${name}/add${entity}`, [response]))
-    dispatch(showNotification('Connection request submitted!'))
+    dispatch(showNotification('LevelUp connected!'))
     if (callback) callback()
   } catch (err) {
     dispatch(reject(`${name}/add${entity}`, makeFormErrors(err)))

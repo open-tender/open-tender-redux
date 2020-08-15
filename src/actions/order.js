@@ -32,6 +32,7 @@ import {
   REFRESH_REVENUE_CENTER,
   EDIT_ORDER,
   REORDER,
+  CHECKOUT,
 } from '../reducers/order'
 import { setMenuItems } from './menuItems'
 import { updateForm } from './checkout'
@@ -44,6 +45,10 @@ export const resetOrderType = () => ({ type: RESET_ORDER_TYPE })
 export const resetRevenueCenter = () => ({ type: RESET_REVENUE_CENTER })
 export const resetMessages = () => ({ type: RESET_MESSAGES })
 export const resetAlert = () => ({ type: RESET_ALERT })
+
+// no change to state, used purely to dispatch an action for
+// a Google Tag Manager event
+export const checkout = () => ({ type: CHECKOUT })
 
 export const updateOrder = data => ({
   type: SET_ALERT,
