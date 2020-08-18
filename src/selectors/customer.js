@@ -1,4 +1,5 @@
 export const selectSignUp = state => state.data.signUp
+export const selectLevelUp = state => state.data.levelup
 export const selectResetPassword = state => state.data.resetPassword
 export const selectCustomer = state => state.data.customer.account
 export const selectCustomerProfile = state =>

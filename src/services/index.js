@@ -166,6 +166,10 @@ class OpenTenderAPI {
     return this.request(`/customer`, 'POST', data)
   }
 
+  postLevelUp(data) {
+    return this.request(`/levelup`, 'POST', data)
+  }
+
   postLogin(email, password) {
     // let auth
     const data = {
