@@ -8,17 +8,17 @@ const requestException = (message, response, exception, extracted) => {
   this.extracted = extracted
 }
 
-const fiveHundredError = {
-  status: 500,
+const fiveHundredError = (status = 500, statusText = 'Unknown 500 error') => ({
+  status: status,
   code: 'errors.server.internal',
   title: 'Internal Server Error',
-  detail: 'Internal server error. Please contact support.',
-}
+  detail: statusText,
+})
 
 const handleReponse = response => {
   const { status, statusText } = response
   if (status >= 500) {
-    throw fiveHundredError
+    throw fiveHundredError(status, statusText)
   }
   if (statusText === 'NO CONTENT' || status === 204) {
     return true
@@ -72,7 +72,7 @@ class OpenTenderAPI {
         })
         .catch(err => {
           if (didTimeOut) return
-          err.code ? reject(err) : reject(fiveHundredError)
+          err.code ? reject(err) : reject(fiveHundredError())
         })
         .finally(() => {
           if (timeout) clearTimeout(timer)
@@ -98,6 +98,10 @@ class OpenTenderAPI {
           reject(err)
         })
     })
+  }
+
+  getHttpResponse(code) {
+    return this.request(`/${code}/cors`)
   }
 
   getConfig() {
