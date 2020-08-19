@@ -132,7 +132,9 @@ export const submitOrder = () => async (dispatch, getState) => {
         dispatch(fetchMenu(args))
       } else {
         const alert = { type: 'cartCounts', args: { errors: cartError } }
-        dispatch(setAlert(alert))
+        setTimeout(() => {
+          dispatch(setAlert(alert))
+        }, 500)
       }
       dispatch(reject(SUBMIT_ORDER, {}))
     } else {
