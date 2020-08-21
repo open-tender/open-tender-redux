@@ -138,7 +138,7 @@ export const submitOrder = () => async (dispatch, getState) => {
       }
       dispatch(reject(SUBMIT_ORDER, {}))
     } else {
-      window.scroll(0, 0)
+//      window.scroll(0, 0)
       dispatch(reject(SUBMIT_ORDER, errors))
     }
   }
