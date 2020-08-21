@@ -18,7 +18,7 @@ import {
   VALIDATE_ORDER,
   SUBMIT_ORDER,
 } from '../reducers/checkout'
-import { refreshRevenueCenter, setAlert, resetAlert } from './order'
+import { refreshRevenueCenter, setAlert } from './order'
 import { fetchMenu } from './menu'
 
 // action creators
@@ -138,7 +138,6 @@ export const submitOrder = () => async (dispatch, getState) => {
       }
       dispatch(reject(SUBMIT_ORDER, {}))
     } else {
-      window.scroll(0, 0)
       dispatch(reject(SUBMIT_ORDER, errors))
     }
   }
