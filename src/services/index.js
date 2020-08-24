@@ -138,6 +138,10 @@ class OpenTenderAPI {
     return this.request(`/menu-items?${params}`)
   }
 
+  getMenuPages() {
+    return this.request(`/menu-pages`)
+  }
+
   postOrderValidate(order) {
     return this.request(`/orders/validate`, 'POST', order)
   }
