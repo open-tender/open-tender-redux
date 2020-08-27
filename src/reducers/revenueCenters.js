@@ -7,12 +7,15 @@ const initState = {
 const NAME = 'revenueCenters'
 
 export const RESET_REVENUE_CENTERS = `${NAME}/resetRevenueCenters`
+export const SET_REVENUE_CENTERS = `${NAME}/setRevenueCenters`
 export const FETCH_REVENUE_CENTERS = `${NAME}/fetchRevenueCenters`
 
 export default (state = initState, action) => {
   switch (action.type) {
     case RESET_REVENUE_CENTERS:
       return { ...initState }
+    case SET_REVENUE_CENTERS:
+      return { ...state, revenueCenters: action.payload }
     case `${FETCH_REVENUE_CENTERS}/pending`:
       return { ...state, loading: 'pending' }
     case `${FETCH_REVENUE_CENTERS}/fulfilled`:

@@ -108,8 +108,14 @@ class OpenTenderAPI {
     return this.request(`/config`)
   }
 
+  getStore() {
+    return this.request(`/store`)
+  }
+
   getRevenueCenters(revenue_center_type, is_outpost, lat, lng) {
-    let params = `revenue_center_type=${revenue_center_type}`
+    let params = ''
+    if (revenue_center_type)
+      params += `revenue_center_type=${revenue_center_type}`
     if (is_outpost) params += '&is_outpost=true'
     if (lat && lng) params += `&lat=${lat}&lng=${lng}`
     return this.request(`/revenue-centers?${params}`)

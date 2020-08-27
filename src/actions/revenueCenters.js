@@ -2,12 +2,17 @@ import { addDistance } from '@open-tender/js'
 import { pending, fulfill, reject } from '../utils'
 import {
   RESET_REVENUE_CENTERS,
+  SET_REVENUE_CENTERS,
   FETCH_REVENUE_CENTERS,
 } from '../reducers/revenueCenters'
 
 // action creators
 
 export const resetRevenueCenters = () => ({ type: RESET_REVENUE_CENTERS })
+export const setRevenueCenters = revenueCenters => ({
+  type: SET_REVENUE_CENTERS,
+  payload: revenueCenters,
+})
 
 // async action creators
 
