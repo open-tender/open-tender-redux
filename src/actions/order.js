@@ -9,8 +9,10 @@ import {
   RESET_ORDER,
   RESET_ORDER_TYPE,
   RESET_REVENUE_CENTER,
+  RESET_CART,
   RESET_MESSAGES,
   RESET_ALERT,
+  SET_ORDER_ID,
   SET_ORDER_TYPE,
   SET_SERVICE_TYPE,
   SET_ORDER_SERVICE_TYPE,
@@ -43,6 +45,7 @@ import { resetMenuVars } from './menu'
 export const resetOrder = () => ({ type: RESET_ORDER })
 export const resetOrderType = () => ({ type: RESET_ORDER_TYPE })
 export const resetRevenueCenter = () => ({ type: RESET_REVENUE_CENTER })
+export const resetCart = () => ({ type: RESET_CART })
 export const resetMessages = () => ({ type: RESET_MESSAGES })
 export const resetAlert = () => ({ type: RESET_ALERT })
 
@@ -57,6 +60,10 @@ export const updateOrder = data => ({
 export const setAlert = alert => ({
   type: SET_ALERT,
   payload: alert,
+})
+export const setOrderId = orderId => ({
+  type: SET_ORDER_ID,
+  payload: orderId,
 })
 export const setOrderType = orderType => ({
   type: SET_ORDER_TYPE,

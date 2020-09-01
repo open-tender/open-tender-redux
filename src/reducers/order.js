@@ -32,11 +32,13 @@ const NAME = 'order'
 export const RESET_ORDER = `${NAME}/resetOrder`
 export const RESET_ORDER_TYPE = `${NAME}/resetOrderType`
 export const RESET_REVENUE_CENTER = `${NAME}/resetRevenueCenter`
+export const RESET_CART = `${NAME}/resetCart`
 export const RESET_MESSAGES = `${NAME}/resetMessages`
 export const RESET_ALERT = `${NAME}/resetAlert`
 
 export const UPDATE_ORDER = `${NAME}/updateOrder`
 export const SET_ALERT = `${NAME}/setAlert`
+export const SET_ORDER_ID = `${NAME}/setOrderId`
 export const SET_ORDER_TYPE = `${NAME}/setOrderType`
 export const SET_SERVICE_TYPE = `${NAME}/setServiceType`
 export const SET_ORDER_SERVICE_TYPE = `${NAME}/setOrderServiceType`
@@ -76,6 +78,12 @@ export default (state = initState, action) => {
       }
     case RESET_REVENUE_CENTER:
       return { ...state, revenueCenter: null }
+    case RESET_CART:
+      return {
+        ...state,
+        cart: [],
+        cartCounts: {},
+      }
     case RESET_MESSAGES:
       return { ...state, messages: [] }
     case RESET_ALERT:
@@ -100,6 +108,8 @@ export default (state = initState, action) => {
       }
     case UPDATE_ORDER:
       return { ...state, ...action.payload }
+    case SET_ORDER_ID:
+      return { ...state, orderId: action.payload }
     case SET_ORDER_TYPE:
       return { ...state, orderType: action.payload }
     case SET_SERVICE_TYPE:

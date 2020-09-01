@@ -100,12 +100,33 @@ class OpenTenderAPI {
     })
   }
 
+  post(endpoint, data) {
+    return this.request(`/${endpoint}`, 'POST', data)
+  }
+
   getHttpResponse(code) {
     return this.request(`/${code}/cors`)
   }
 
   getConfig() {
     return this.request(`/config`)
+  }
+
+  getSurcharges() {
+    return this.request(`/surcharges`)
+  }
+
+  getDiscounts(serviceType) {
+    const params = serviceType ? `?service_type=${serviceType}` : ''
+    return this.request(`/discounts${params}`)
+  }
+
+  getTaxes(serviceType, orderType) {
+    let params = []
+    if (serviceType) params.push(`service_type=${serviceType}`)
+    if (orderType) params.push(`order_type=${orderType}`)
+    params = params.length ? `?${params.join('&')}` : ''
+    return this.request(`/taxes${params}`)
   }
 
   getStore() {
@@ -146,6 +167,10 @@ class OpenTenderAPI {
 
   getMenuPages() {
     return this.request(`/menu-pages`)
+  }
+
+  postTender(orderId, tender) {
+    return this.request(`/orders/${orderId}/tenders`, 'POST', tender)
   }
 
   postOrderValidate(order) {
