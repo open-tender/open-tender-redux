@@ -14,6 +14,7 @@ import resetPassword from './resetPassword'
 import signUp from './signUp'
 import groupOrder from './groupOrder'
 import levelup from './levelup'
+import orders from './orders'
 
 const openTenderReducer = combineReducers({
   order,
@@ -31,6 +32,7 @@ const openTenderReducer = combineReducers({
   customer,
   groupOrder,
   levelup,
+  orders,
 })
 
 export default openTenderReducer

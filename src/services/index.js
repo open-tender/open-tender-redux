@@ -129,6 +129,34 @@ class OpenTenderAPI {
     return this.request(`/taxes${params}`)
   }
 
+  getItemTypes() {
+    return this.request(`/item-types`)
+  }
+
+  postTicketPrint(orderUuid, ticketNo) {
+    const endpoint = `/orders/${orderUuid}/tickets/${ticketNo}/print`
+    return this.request(endpoint, 'POST', {})
+  }
+
+  postTicketStatus(orderUuid, ticketNo, status) {
+    const endpoint = `/orders/${orderUuid}/tickets/${ticketNo}/${status}`
+    return this.request(endpoint, 'POST', {})
+  }
+
+  postTicketsPrint(orderUuid) {
+    const endpoint = `/orders/${orderUuid}/tickets/print`
+    return this.request(endpoint, 'POST', {})
+  }
+
+  postTicketsReset(orderUuid) {
+    const endpoint = `/orders/${orderUuid}/tickets/reset`
+    return this.request(endpoint, 'POST', {})
+  }
+
+  patchOrder(orderUuid, data) {
+    return this.request(`/orders/${orderUuid}`, 'PATCH', data)
+  }
+
   getStore() {
     return this.request(`/store`)
   }
@@ -179,6 +207,33 @@ class OpenTenderAPI {
 
   postOrder(order) {
     return this.request(`/orders`, 'POST', order)
+  }
+
+  getOrders(args) {
+    let params = []
+    if (!args) {
+      params = [`incomplete=true`, `sort_by=fire_at`, `sort_direction=ASC`]
+      // params = [`incomplete=true`]
+    } else {
+      const {
+        business_date,
+        prep_status,
+        sort_by,
+        sort_direction,
+        incomplete,
+      } = args
+      if (incomplete) {
+        params.push(`incomplete=true`)
+      } else if (prep_status) {
+        params.push(`prep_status=${prep_status}`)
+      }
+      if (business_date) params.push(`business_date=${business_date}`)
+      if (sort_by) params.push(`sort_by=${sort_by}`)
+      if (sort_direction) params.push(`sort_direction=${sort_direction}`)
+    }
+
+    params = params.length ? `?${params.join('&')}` : ''
+    return this.request(`/orders${params}`)
   }
 
   postCart(data) {
