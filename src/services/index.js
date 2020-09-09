@@ -218,9 +218,16 @@ class OpenTenderAPI {
         `sort_direction=ASC`,
       ]
     } else {
-      const { business_date, prep_status, sort_by, sort_direction } = args
-      if (prep_status) params.push(`prep_status=${prep_status}`)
+      const {
+        business_date,
+        channel_type,
+        prep_status,
+        sort_by,
+        sort_direction,
+      } = args
       if (business_date) params.push(`business_date=${business_date}`)
+      if (channel_type) params.push(`channel_type=${channel_type}`)
+      if (prep_status) params.push(`prep_status=${prep_status}`)
       if (sort_by) params.push(`sort_by=${sort_by}`)
       if (sort_direction) params.push(`sort_direction=${sort_direction}`)
     }

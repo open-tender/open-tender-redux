@@ -45,7 +45,6 @@ export const printTicket = (order_uuid, ticket_no, status) => async (
   try {
     const data = status ? { ticket_status: status } : {}
     const order = await api.postTicketPrint(order_uuid, ticket_no, data)
-    console.log(JSON.stringify(order.tickets, null, 2))
     dispatch(fulfill(PRINT_TICKET))
     dispatch(updateOrder(order))
   } catch (err) {
@@ -81,7 +80,6 @@ export const printTickets = (order_uuid, status) => async (
   try {
     const data = status ? { prep_status: status } : {}
     const order = await api.postTicketsPrint(order_uuid, data)
-    console.log(JSON.stringify(order.tickets, null, 2))
     dispatch(fulfill(PRINT_TICKETS))
     dispatch(updateOrder(order))
   } catch (err) {
