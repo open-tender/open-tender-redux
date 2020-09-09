@@ -133,9 +133,9 @@ class OpenTenderAPI {
     return this.request(`/item-types`)
   }
 
-  postTicketPrint(orderUuid, ticketNo) {
+  postTicketPrint(orderUuid, ticketNo, data) {
     const endpoint = `/orders/${orderUuid}/tickets/${ticketNo}/print`
-    return this.request(endpoint, 'POST', {})
+    return this.request(endpoint, 'POST', data)
   }
 
   postTicketStatus(orderUuid, ticketNo, status) {
@@ -143,9 +143,9 @@ class OpenTenderAPI {
     return this.request(endpoint, 'POST', {})
   }
 
-  postTicketsPrint(orderUuid) {
+  postTicketsPrint(orderUuid, data) {
     const endpoint = `/orders/${orderUuid}/tickets/print`
-    return this.request(endpoint, 'POST', {})
+    return this.request(endpoint, 'POST', data)
   }
 
   postTicketsReset(orderUuid) {
@@ -212,21 +212,14 @@ class OpenTenderAPI {
   getOrders(args) {
     let params = []
     if (!args) {
-      params = [`incomplete=true`, `sort_by=fire_at`, `sort_direction=ASC`]
-      // params = [`incomplete=true`]
+      params = [
+        `prep_status=TODO,IN_PROGRESS,DONE`,
+        `sort_by=fire_at`,
+        `sort_direction=ASC`,
+      ]
     } else {
-      const {
-        business_date,
-        prep_status,
-        sort_by,
-        sort_direction,
-        incomplete,
-      } = args
-      if (incomplete) {
-        params.push(`incomplete=true`)
-      } else if (prep_status) {
-        params.push(`prep_status=${prep_status}`)
-      }
+      const { business_date, prep_status, sort_by, sort_direction } = args
+      if (prep_status) params.push(`prep_status=${prep_status}`)
       if (business_date) params.push(`business_date=${business_date}`)
       if (sort_by) params.push(`sort_by=${sort_by}`)
       if (sort_direction) params.push(`sort_direction=${sort_direction}`)

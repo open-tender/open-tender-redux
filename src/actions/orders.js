@@ -1,5 +1,6 @@
 import { pending, fulfill, reject } from '../utils'
 import {
+  SET_CURRENT_ORDER,
   RESET_ORDERS,
   FETCH_ORDERS,
   UPDATE_ORDER,
@@ -13,6 +14,10 @@ import {
 // action creators
 
 export const resetOrders = () => ({ type: RESET_ORDERS })
+export const setCurrentOrder = order => ({
+  type: SET_CURRENT_ORDER,
+  payload: order,
+})
 export const updateOrder = order => ({ type: UPDATE_ORDER, payload: order })
 
 // async action creators
@@ -30,7 +35,7 @@ export const fetchOrders = args => async (dispatch, getState) => {
   }
 }
 
-export const printTicket = (order_uuid, ticket_no) => async (
+export const printTicket = (order_uuid, ticket_no, status) => async (
   dispatch,
   getState
 ) => {
@@ -38,7 +43,9 @@ export const printTicket = (order_uuid, ticket_no) => async (
   if (!api) return
   dispatch(pending(PRINT_TICKET))
   try {
-    const order = await api.postTicketPrint(order_uuid, ticket_no)
+    const data = status ? { ticket_status: status } : {}
+    const order = await api.postTicketPrint(order_uuid, ticket_no, data)
+    console.log(JSON.stringify(order.tickets, null, 2))
     dispatch(fulfill(PRINT_TICKET))
     dispatch(updateOrder(order))
   } catch (err) {
@@ -64,12 +71,17 @@ export const updateTicket = (order_uuid, ticket_no, status) => async (
   }
 }
 
-export const printTickets = order_uuid => async (dispatch, getState) => {
+export const printTickets = (order_uuid, status) => async (
+  dispatch,
+  getState
+) => {
   const { api } = getState().config
   if (!api) return
   dispatch(pending(PRINT_TICKETS))
   try {
-    const order = await api.postTicketsPrint(order_uuid)
+    const data = status ? { prep_status: status } : {}
+    const order = await api.postTicketsPrint(order_uuid, data)
+    console.log(JSON.stringify(order.tickets, null, 2))
     dispatch(fulfill(PRINT_TICKETS))
     dispatch(updateOrder(order))
   } catch (err) {
@@ -101,7 +113,6 @@ export const updateOrderPrep = (order_uuid, data) => async (
   dispatch(pending(UPDATE_ORDER_PREP))
   try {
     const order = await api.patchOrder(order_uuid, data)
-    console.log(order.expected_at)
     dispatch(fulfill(UPDATE_ORDER_PREP))
     dispatch(updateOrder(order))
   } catch (err) {

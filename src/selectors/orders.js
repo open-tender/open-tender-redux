@@ -15,6 +15,10 @@ export const selectOrders = state => {
   return { orders, loading, error }
 }
 
+export const selectCurrentOrder = state => {
+  return state.data.orders.currentOrder
+}
+
 export const selectCurrentOrders = state => {
   const { entities, loading, error } = state.data.orders
   const orders = entities.filter(i => {

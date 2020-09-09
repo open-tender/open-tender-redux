@@ -1,11 +1,15 @@
+import { parseIsoToDate } from '@open-tender/js'
+
 const initState = {
   entities: [],
   loading: 'idle',
   error: null,
+  currentOrder: null,
 }
 
 const NAME = 'orders'
 
+export const SET_CURRENT_ORDER = `${NAME}/setCurrentOrder`
 export const RESET_ORDERS = `${NAME}/resetOrders`
 export const UPDATE_ORDER = `${NAME}/updateOrder`
 export const FETCH_ORDERS = `${NAME}/fetchOrders`
@@ -20,11 +24,18 @@ export default (state = initState, action) => {
     case RESET_ORDERS:
       return { ...initState }
 
+    case SET_CURRENT_ORDER:
+      return { ...state, currentOrder: action.payload }
+
     case UPDATE_ORDER: {
-      const entities = state.entities.map(i => {
-        return i.order_uuid === action.payload.order_uuid ? action.payload : i
-      })
-      return { ...state, entities }
+      const entities = state.entities
+        .map(i => {
+          return i.order_uuid === action.payload.order_uuid ? action.payload : i
+        })
+        .map(i => ({ ...i, fireAt: parseIsoToDate(i.fire_at) }))
+        .sort((a, b) => a.fireAt - b.fireAt)
+      const currentOrder = state.currentOrder ? action.payload : null
+      return { ...state, entities, currentOrder }
     }
 
     // fetchOrders
