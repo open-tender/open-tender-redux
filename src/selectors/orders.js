@@ -2,13 +2,8 @@ import {
   isoToDate,
   timezoneMap,
   currentLocalDate,
-  prepStatus,
+  notDone,
 } from '@open-tender/js'
-
-const notDone = prep_status => {
-  const notDoneStates = [prepStatus.TODO, prepStatus.IN_PROGRESS]
-  return notDoneStates.includes(prep_status)
-}
 
 export const selectOrders = state => {
   const { entities: orders, loading, error } = state.data.orders
@@ -39,4 +34,9 @@ export const selectFutureOrders = state => {
     return notDone(i.prep_status) && fireDate > currentDate
   })
   return { orders, loading, error }
+}
+
+export const selectOrdersCounts = state => {
+  const { current, future } = state.data.orders.counts
+  return { current, future }
 }

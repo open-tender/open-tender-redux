@@ -1,10 +1,11 @@
-import { parseIsoToDate } from '@open-tender/js'
+import { parseIsoToDate, makeOrdersCounts } from '@open-tender/js'
 
 const initState = {
   entities: [],
   loading: 'idle',
   error: null,
   currentOrder: null,
+  counts: { current: null, future: null },
 }
 
 const NAME = 'orders'
@@ -28,26 +29,31 @@ export default (state = initState, action) => {
       return { ...state, currentOrder: action.payload }
 
     case UPDATE_ORDER: {
+      const { order, itemTypes } = action.payload
       const entities = state.entities
         .map(i => {
-          return i.order_uuid === action.payload.order_uuid ? action.payload : i
+          return i.order_uuid === order.order_uuid ? order : i
         })
         .map(i => ({ ...i, fireAt: parseIsoToDate(i.fire_at) }))
         .sort((a, b) => a.fireAt - b.fireAt)
-      const currentOrder = state.currentOrder ? action.payload : null
-      return { ...state, entities, currentOrder }
+      const counts = makeOrdersCounts(itemTypes, entities)
+      const currentOrder = state.currentOrder ? order : null
+      return { ...state, entities, currentOrder, counts }
     }
 
     // fetchOrders
     case `${FETCH_ORDERS}/pending`:
       return { ...state, loading: 'pending' }
-    case `${FETCH_ORDERS}/fulfilled`:
+    case `${FETCH_ORDERS}/fulfilled`: {
+      const { orders, counts } = action.payload
       return {
         ...state,
-        entities: action.payload,
+        entities: orders,
+        counts,
         loading: 'idle',
         error: null,
       }
+    }
     case `${FETCH_ORDERS}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
 
