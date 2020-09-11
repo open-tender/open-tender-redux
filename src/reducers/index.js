@@ -8,6 +8,7 @@ import menuPages from './menuPages'
 import allergens from './allergens'
 import checkout from './checkout'
 import notifications from './notifications'
+import alerts from './alerts'
 import confirmation from './confirmation'
 import customer from './customer'
 import resetPassword from './resetPassword'
@@ -27,6 +28,7 @@ const openTenderReducer = combineReducers({
   allergens,
   checkout,
   notifications,
+  alerts,
   confirmation,
   resetPassword,
   signUp,

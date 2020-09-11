@@ -55,7 +55,7 @@ export default (state = initState, action) => {
       }
     }
     case `${FETCH_ORDERS}/rejected`:
-      return { ...state, loading: 'idle', error: action.payload }
+      return { ...state, loading: 'idle' }
 
     // printTicket
     case `${PRINT_TICKET}/pending`:
@@ -63,7 +63,7 @@ export default (state = initState, action) => {
     case `${PRINT_TICKET}/fulfilled`:
       return { ...state, loading: 'idle', error: null }
     case `${PRINT_TICKET}/rejected`:
-      return { ...state, loading: 'idle', error: action.payload }
+      return { ...state, loading: 'idle' }
 
     // updateTicket
     case `${UPDATE_TICKET}/pending`:
@@ -71,7 +71,7 @@ export default (state = initState, action) => {
     case `${UPDATE_TICKET}/fulfilled`:
       return { ...state, loading: 'idle', error: null }
     case `${UPDATE_TICKET}/rejected`:
-      return { ...state, loading: 'idle', error: action.payload }
+      return { ...state, loading: 'idle' }
 
     // printTickets
     case `${PRINT_TICKETS}/pending`:
@@ -79,7 +79,7 @@ export default (state = initState, action) => {
     case `${PRINT_TICKETS}/fulfilled`:
       return { ...state, loading: 'idle', error: null }
     case `${PRINT_TICKETS}/rejected`:
-      return { ...state, loading: 'idle', error: action.payload }
+      return { ...state, loading: 'idle' }
 
     // resetTickets
     case `${RESET_TICKETS}/pending`:
@@ -87,7 +87,7 @@ export default (state = initState, action) => {
     case `${RESET_TICKETS}/fulfilled`:
       return { ...state, loading: 'idle', error: null }
     case `${RESET_TICKETS}/rejected`:
-      return { ...state, loading: 'idle', error: action.payload }
+      return { ...state, loading: 'idle' }
 
     // updateOrderPrep
     case `${UPDATE_ORDER_PREP}/pending`:
@@ -95,7 +95,7 @@ export default (state = initState, action) => {
     case `${UPDATE_ORDER_PREP}/fulfilled`:
       return { ...state, loading: 'idle', error: null }
     case `${UPDATE_ORDER_PREP}/rejected`:
-      return { ...state, loading: 'idle', error: action.payload }
+      return { ...state, loading: 'idle' }
 
     default:
       return state

@@ -11,6 +11,7 @@ import {
   RESET_TICKETS,
   UPDATE_ORDER_PREP,
 } from '../reducers/orders'
+import { addAlert } from './alerts'
 
 // action creators
 
@@ -36,7 +37,8 @@ export const fetchOrders = args => async (dispatch, getState) => {
     const counts = makeOrdersCounts(itemTypes, orders)
     dispatch(fulfill(FETCH_ORDERS, { orders, counts }))
   } catch (err) {
-    dispatch(reject(FETCH_ORDERS, err))
+    dispatch(addAlert(err.detail || err.message))
+    dispatch(reject(FETCH_ORDERS))
   }
 }
 
@@ -53,8 +55,8 @@ export const printTicket = (order_uuid, ticket_no, status) => async (
     dispatch(fulfill(PRINT_TICKET))
     dispatch(updateOrder(order, itemTypes))
   } catch (err) {
-    const error = { ...err, form: err.detail || err.message }
-    dispatch(reject(PRINT_TICKET, error))
+    dispatch(addAlert(err.detail || err.message))
+    dispatch(reject(PRINT_TICKET))
   }
 }
 
@@ -70,8 +72,8 @@ export const updateTicket = (order_uuid, ticket_no, status) => async (
     dispatch(fulfill(UPDATE_TICKET))
     dispatch(updateOrder(order, itemTypes))
   } catch (err) {
-    const error = { ...err, form: err.detail || err.message }
-    dispatch(reject(UPDATE_TICKET, error))
+    dispatch(addAlert(err.detail || err.message))
+    dispatch(reject(UPDATE_TICKET))
   }
 }
 
@@ -88,8 +90,8 @@ export const printTickets = (order_uuid, status) => async (
     dispatch(fulfill(PRINT_TICKETS))
     dispatch(updateOrder(order, itemTypes))
   } catch (err) {
-    const error = { ...err, form: err.detail || err.message }
-    dispatch(reject(PRINT_TICKETS, error))
+    dispatch(addAlert(err.detail || err.message))
+    dispatch(reject(PRINT_TICKETS))
   }
 }
 
@@ -102,8 +104,8 @@ export const resetTickets = order_uuid => async (dispatch, getState) => {
     dispatch(fulfill(RESET_TICKETS))
     dispatch(updateOrder(order, itemTypes))
   } catch (err) {
-    const error = { ...err, form: err.detail || err.message }
-    dispatch(reject(RESET_TICKETS, error))
+    dispatch(addAlert(err.detail || err.message))
+    dispatch(reject(RESET_TICKETS))
   }
 }
 
@@ -119,7 +121,7 @@ export const updateOrderPrep = (order_uuid, data) => async (
     dispatch(fulfill(UPDATE_ORDER_PREP))
     dispatch(updateOrder(order, itemTypes))
   } catch (err) {
-    const error = { ...err, form: err.detail || err.message }
-    dispatch(reject(UPDATE_ORDER_PREP, error))
+    dispatch(addAlert(err.detail || err.message))
+    dispatch(reject(UPDATE_ORDER_PREP))
   }
 }
