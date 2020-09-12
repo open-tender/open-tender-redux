@@ -157,6 +157,11 @@ class OpenTenderAPI {
     return this.request(`/orders/${orderUuid}`, 'PATCH', data)
   }
 
+  postReceipt(orderUuid) {
+    const endpoint = `/orders/${orderUuid}/print`
+    return this.request(endpoint, 'POST', {})
+  }
+
   getStore() {
     return this.request(`/store`)
   }

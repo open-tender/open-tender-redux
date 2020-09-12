@@ -10,6 +10,7 @@ import {
   PRINT_TICKETS,
   RESET_TICKETS,
   UPDATE_ORDER_PREP,
+  PRINT_RECEIPT,
 } from '../reducers/orders'
 import { addAlert } from './alerts'
 
@@ -123,5 +124,18 @@ export const updateOrderPrep = (order_uuid, data) => async (
   } catch (err) {
     dispatch(addAlert(err.detail || err.message))
     dispatch(reject(UPDATE_ORDER_PREP))
+  }
+}
+
+export const printReceipt = order_uuid => async (dispatch, getState) => {
+  const { api } = getState().config
+  if (!api) return
+  dispatch(pending(PRINT_RECEIPT))
+  try {
+    await api.postReceipt(order_uuid)
+    dispatch(fulfill(PRINT_RECEIPT))
+  } catch (err) {
+    dispatch(addAlert(err.detail || err.message))
+    dispatch(reject(PRINT_RECEIPT))
   }
 }

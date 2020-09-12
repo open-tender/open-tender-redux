@@ -18,6 +18,7 @@ export const PRINT_TICKET = `${NAME}/printTicket`
 export const UPDATE_TICKET = `${NAME}/updateTicket`
 export const PRINT_TICKETS = `${NAME}/printTickets`
 export const RESET_TICKETS = `${NAME}/resetTickets`
+export const PRINT_RECEIPT = `${NAME}/printReceipt`
 export const UPDATE_ORDER_PREP = `${NAME}/updateOrderPrep`
 
 export default (state = initState, action) => {
@@ -95,6 +96,14 @@ export default (state = initState, action) => {
     case `${UPDATE_ORDER_PREP}/fulfilled`:
       return { ...state, loading: 'idle', error: null }
     case `${UPDATE_ORDER_PREP}/rejected`:
+      return { ...state, loading: 'idle' }
+
+    // updateOrderPrep
+    case `${PRINT_RECEIPT}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${PRINT_RECEIPT}/fulfilled`:
+      return { ...state, loading: 'idle', error: null }
+    case `${PRINT_RECEIPT}/rejected`:
       return { ...state, loading: 'idle' }
 
     default:
