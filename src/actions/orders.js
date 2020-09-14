@@ -33,7 +33,6 @@ export const fetchOrders = args => async (dispatch, getState) => {
   if (!api) return
   dispatch(pending(FETCH_ORDERS))
   try {
-    // console.log('fetchOrders args:', args)
     const orders = await api.getOrders(args)
     const counts = makeOrdersCounts(itemTypes, orders)
     dispatch(fulfill(FETCH_ORDERS, { orders, counts }))

@@ -5,7 +5,7 @@ const initState = {
   loading: 'idle',
   error: null,
   currentOrder: null,
-  counts: { current: null, future: null },
+  counts: { current: null, future: null, qa: null },
 }
 
 const NAME = 'orders'

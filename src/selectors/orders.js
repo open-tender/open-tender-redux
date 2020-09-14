@@ -37,6 +37,6 @@ export const selectFutureOrders = state => {
 }
 
 export const selectOrdersCounts = state => {
-  const { current, future } = state.data.orders.counts
-  return { current, future }
+  const { current, future, qa } = state.data.orders.counts
+  return { current, future, qa }
 }
