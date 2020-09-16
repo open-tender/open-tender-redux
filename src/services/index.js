@@ -108,6 +108,11 @@ class OpenTenderAPI {
     return this.request(`/${code}/cors`)
   }
 
+  postSettings(entityType) {
+    const params = entityType ? `&entity_type=${entityType}` : ''
+    return this.request(`/settings/pull?force=true${params}`, 'POST', {})
+  }
+
   getConfig() {
     return this.request(`/config`)
   }
