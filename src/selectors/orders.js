@@ -10,6 +10,11 @@ export const selectOrders = state => {
   return { orders, loading, error }
 }
 
+export const selectOrdersUpdating = state => {
+  const { updatingOrder, skipped } = state.data.orders
+  return { updatingOrder, skipped }
+}
+
 export const selectCurrentOrder = state => {
   return state.data.orders.currentOrder
 }

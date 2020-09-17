@@ -4,6 +4,9 @@ import {
   SET_CURRENT_ORDER,
   RESET_ORDERS,
   FETCH_ORDERS,
+  INCREMENT_SKIPPED,
+  RESET_SKIPPED,
+  UPDATING_ORDER,
   UPDATE_ORDER,
   PRINT_TICKET,
   UPDATE_TICKET,
@@ -20,6 +23,12 @@ export const resetOrders = () => ({ type: RESET_ORDERS })
 export const setCurrentOrder = order => ({
   type: SET_CURRENT_ORDER,
   payload: order,
+})
+export const resetSkipped = () => ({ type: RESET_SKIPPED })
+export const incrementSkipped = () => ({ type: INCREMENT_SKIPPED })
+export const updatingOrder = bool => ({
+  type: UPDATING_ORDER,
+  payload: bool,
 })
 export const updateOrder = (order, itemTypes) => ({
   type: UPDATE_ORDER,
@@ -52,8 +61,8 @@ export const printTicket = (order_uuid, ticket_no, status) => async (
   try {
     const data = status ? { ticket_status: status } : {}
     const order = await api.postTicketPrint(order_uuid, ticket_no, data)
-    dispatch(fulfill(PRINT_TICKET))
     dispatch(updateOrder(order, itemTypes))
+    dispatch(fulfill(PRINT_TICKET))
   } catch (err) {
     dispatch(addAlert(err.detail || err.message))
     dispatch(reject(PRINT_TICKET))
@@ -69,8 +78,8 @@ export const updateTicket = (order_uuid, ticket_no, status) => async (
   dispatch(pending(UPDATE_TICKET))
   try {
     const order = await api.postTicketStatus(order_uuid, ticket_no, status)
-    dispatch(fulfill(UPDATE_TICKET))
     dispatch(updateOrder(order, itemTypes))
+    dispatch(fulfill(UPDATE_TICKET))
   } catch (err) {
     dispatch(addAlert(err.detail || err.message))
     dispatch(reject(UPDATE_TICKET))
@@ -87,8 +96,8 @@ export const printTickets = (order_uuid, status) => async (
   try {
     const data = status ? { prep_status: status } : {}
     const order = await api.postTicketsPrint(order_uuid, data)
-    dispatch(fulfill(PRINT_TICKETS))
     dispatch(updateOrder(order, itemTypes))
+    dispatch(fulfill(PRINT_TICKETS))
   } catch (err) {
     dispatch(addAlert(err.detail || err.message))
     dispatch(reject(PRINT_TICKETS))
@@ -101,8 +110,8 @@ export const resetTickets = order_uuid => async (dispatch, getState) => {
   dispatch(pending(RESET_TICKETS))
   try {
     const order = await api.postTicketsReset(order_uuid)
-    dispatch(fulfill(RESET_TICKETS))
     dispatch(updateOrder(order, itemTypes))
+    dispatch(fulfill(RESET_TICKETS))
   } catch (err) {
     dispatch(addAlert(err.detail || err.message))
     dispatch(reject(RESET_TICKETS))
@@ -118,8 +127,8 @@ export const updateOrderPrep = (order_uuid, data) => async (
   dispatch(pending(UPDATE_ORDER_PREP))
   try {
     const order = await api.patchOrder(order_uuid, data)
-    dispatch(fulfill(UPDATE_ORDER_PREP))
     dispatch(updateOrder(order, itemTypes))
+    dispatch(fulfill(UPDATE_ORDER_PREP))
   } catch (err) {
     dispatch(addAlert(err.detail || err.message))
     dispatch(reject(UPDATE_ORDER_PREP))
