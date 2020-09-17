@@ -5,7 +5,6 @@ const initState = {
   loading: 'idle',
   error: null,
   currentOrder: null,
-  updatingOrder: false,
   skipped: 0,
   counts: { current: null, future: null, qa: null },
 }
@@ -14,9 +13,6 @@ const NAME = 'orders'
 
 export const SET_CURRENT_ORDER = `${NAME}/setCurrentOrder`
 export const RESET_ORDERS = `${NAME}/resetOrders`
-export const UPDATING_ORDER = `${NAME}/updatingOrder`
-export const INCREMENT_SKIPPED = `${NAME}/incrementSkipped`
-export const RESET_SKIPPED = `${NAME}/resetSkipped`
 export const UPDATE_ORDER = `${NAME}/updateOrder`
 export const FETCH_ORDERS = `${NAME}/fetchOrders`
 export const PRINT_TICKET = `${NAME}/printTicket`
@@ -34,15 +30,6 @@ export default (state = initState, action) => {
     case SET_CURRENT_ORDER:
       return { ...state, currentOrder: action.payload }
 
-    case RESET_SKIPPED:
-      return { ...state, skipped: 0 }
-
-    case INCREMENT_SKIPPED:
-      return { ...state, skipped: state.skipped + 1 }
-
-    case UPDATING_ORDER:
-      return { ...state, updatingOrder: action.payload }
-
     case UPDATE_ORDER: {
       const { order, itemTypes } = action.payload
       const entities = state.entities
@@ -59,15 +46,16 @@ export default (state = initState, action) => {
     // fetchOrders
     case `${FETCH_ORDERS}/pending`:
       return { ...state, loading: 'pending' }
+    case `${FETCH_ORDERS}/skipped`:
+      return { ...state, skipped: state.skipped + 1 }
     case `${FETCH_ORDERS}/fulfilled`: {
       const { orders, counts } = action.payload
       return {
         ...state,
         entities: orders,
         counts,
-        skipped: 0,
         loading: 'idle',
-        error: null,
+        skipped: 0,
       }
     }
     case `${FETCH_ORDERS}/rejected`:
@@ -75,43 +63,43 @@ export default (state = initState, action) => {
 
     // printTicket
     case `${PRINT_TICKET}/pending`:
-      return { ...state, loading: 'pending', updatingOrder: true }
+      return { ...state, loading: 'pending' }
     case `${PRINT_TICKET}/fulfilled`:
-      return { ...state, loading: 'idle', updatingOrder: false }
+      return { ...state, loading: 'idle' }
     case `${PRINT_TICKET}/rejected`:
-      return { ...state, loading: 'idle', updatingOrder: false }
+      return { ...state, loading: 'idle' }
 
     // updateTicket
     case `${UPDATE_TICKET}/pending`:
-      return { ...state, loading: 'pending', updatingOrder: true }
+      return { ...state, loading: 'pending' }
     case `${UPDATE_TICKET}/fulfilled`:
-      return { ...state, loading: 'idle', updatingOrder: false }
+      return { ...state, loading: 'idle' }
     case `${UPDATE_TICKET}/rejected`:
-      return { ...state, loading: 'idle', updatingOrder: false }
+      return { ...state, loading: 'idle' }
 
     // printTickets
     case `${PRINT_TICKETS}/pending`:
-      return { ...state, loading: 'pending', updatingOrder: true }
+      return { ...state, loading: 'pending' }
     case `${PRINT_TICKETS}/fulfilled`:
-      return { ...state, loading: 'idle', updatingOrder: false }
+      return { ...state, loading: 'idle' }
     case `${PRINT_TICKETS}/rejected`:
-      return { ...state, loading: 'idle', updatingOrder: false }
+      return { ...state, loading: 'idle' }
 
     // resetTickets
     case `${RESET_TICKETS}/pending`:
-      return { ...state, loading: 'pending', updatingOrder: true }
+      return { ...state, loading: 'pending' }
     case `${RESET_TICKETS}/fulfilled`:
-      return { ...state, loading: 'idle', updatingOrder: false }
+      return { ...state, loading: 'idle' }
     case `${RESET_TICKETS}/rejected`:
-      return { ...state, loading: 'idle', updatingOrder: false }
+      return { ...state, loading: 'idle' }
 
     // updateOrderPrep
     case `${UPDATE_ORDER_PREP}/pending`:
-      return { ...state, loading: 'pending', updatingOrder: true }
+      return { ...state, loading: 'pending' }
     case `${UPDATE_ORDER_PREP}/fulfilled`:
-      return { ...state, loading: 'idle', updatingOrder: false }
+      return { ...state, loading: 'idle' }
     case `${UPDATE_ORDER_PREP}/rejected`:
-      return { ...state, loading: 'idle', updatingOrder: false }
+      return { ...state, loading: 'idle' }
 
     // printReceipt
     case `${PRINT_RECEIPT}/pending`:

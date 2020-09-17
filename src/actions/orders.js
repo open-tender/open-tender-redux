@@ -4,9 +4,6 @@ import {
   SET_CURRENT_ORDER,
   RESET_ORDERS,
   FETCH_ORDERS,
-  INCREMENT_SKIPPED,
-  RESET_SKIPPED,
-  UPDATING_ORDER,
   UPDATE_ORDER,
   PRINT_TICKET,
   UPDATE_TICKET,
@@ -24,22 +21,21 @@ export const setCurrentOrder = order => ({
   type: SET_CURRENT_ORDER,
   payload: order,
 })
-export const resetSkipped = () => ({ type: RESET_SKIPPED })
-export const incrementSkipped = () => ({ type: INCREMENT_SKIPPED })
-export const updatingOrder = bool => ({
-  type: UPDATING_ORDER,
-  payload: bool,
-})
 export const updateOrder = (order, itemTypes) => ({
   type: UPDATE_ORDER,
   payload: { order, itemTypes },
 })
+export const skipFetchOrders = () => ({ type: `${FETCH_ORDERS}/skipped` })
 
 // async action creators
 
 export const fetchOrders = args => async (dispatch, getState) => {
   const { api, itemTypes } = getState().config
   if (!api) return
+  const { loading, skipped } = getState().data.orders
+  if (loading === 'pending' && skipped < 3) {
+    return dispatch(skipFetchOrders())
+  }
   dispatch(pending(FETCH_ORDERS))
   try {
     const orders = await api.getOrders(args)
