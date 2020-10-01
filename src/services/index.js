@@ -117,6 +117,45 @@ class OpenTenderAPI {
     return this.request(`/config`)
   }
 
+  getCardRead() {
+    return this.request(`/devices/card/read`)
+  }
+
+  postCardCancel() {
+    return this.request(`/devices/card/cancel`, 'POST', {})
+  }
+
+  postCardAssign(employeeId, code) {
+    const data = { employee_id: employeeId, code }
+    return this.request(`/employee-cards/assign`, 'POST', data)
+  }
+
+  postCardUnassign(code) {
+    return this.request(`/employee-cards/unassign`, 'POST', { code })
+  }
+
+  // identifier can be either a timeclock ID as an integer
+  // or a swipe card code as a string
+  getEmployee(identifier) {
+    return this.request(`/employees/${identifier}`)
+  }
+
+  postTimePunch(data) {
+    return this.request(`/time-punches`, 'POST', data)
+  }
+
+  getTimePunchesReport(businessDate, employeeId) {
+    let params = []
+    if (businessDate) params.push(`business_date=${businessDate}`)
+    if (employeeId) params.push(`employee_id=${employeeId}`)
+    params = params.length ? `?${params.join('&')}` : ''
+    return this.request(`/time-punches-report${params}`)
+  }
+
+  postPrintShiftSummary(employeeId) {
+    return this.request(`/shift-summary/${employeeId}/print`, 'POST', {})
+  }
+
   getSurcharges() {
     return this.request(`/surcharges`)
   }
@@ -209,6 +248,10 @@ class OpenTenderAPI {
 
   postTender(orderId, tender) {
     return this.request(`/orders/${orderId}/tenders`, 'POST', tender)
+  }
+
+  postTenderVoid(orderId, index) {
+    return this.request(`/orders/${orderId}/tenders/${index}/void`, 'POST', {})
   }
 
   postOrderValidate(order) {
