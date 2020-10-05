@@ -117,6 +117,14 @@ class OpenTenderAPI {
     return this.request(`/config`)
   }
 
+  getBarcodeRead() {
+    return this.request(`/devices/qrcode/read`)
+  }
+
+  postBarcodeCancel() {
+    return this.request(`/devices/qrcode/cancel`, 'POST', {})
+  }
+
   getCardRead() {
     return this.request(`/devices/card/read`)
   }
@@ -156,6 +164,26 @@ class OpenTenderAPI {
     return this.request(`/shift-summary/${employeeId}/print`, 'POST', {})
   }
 
+  postCashEvent(data) {
+    return this.request(`/cash-events`, 'POST', data)
+  }
+
+  getCashSummary(employeeId) {
+    return this.request(`/cash-summary/${employeeId}`)
+  }
+
+  postPrintCashSummary(employeeId) {
+    return this.request(`/cash-summary/${employeeId}/print`, 'POST', {})
+  }
+
+  getOfflineTransactions() {
+    return this.request(`/credit/offline-transactions`)
+  }
+
+  postOfflineTransactions() {
+    return this.request(`/credit/offline-transactions/process`, 'POST', {})
+  }
+
   getSurcharges() {
     return this.request(`/surcharges`)
   }
@@ -163,6 +191,10 @@ class OpenTenderAPI {
   getDiscounts(serviceType) {
     const params = serviceType ? `?service_type=${serviceType}` : ''
     return this.request(`/discounts${params}`)
+  }
+
+  getDiscount(name) {
+    return this.request(`/discounts/${name}`)
   }
 
   getTaxes(serviceType, orderType) {
@@ -175,6 +207,14 @@ class OpenTenderAPI {
 
   getItemTypes() {
     return this.request(`/item-types`)
+  }
+
+  getSelectOptions() {
+    return this.request(`/select-options`)
+  }
+
+  postOpenCashDrawer() {
+    return this.request(`/devices/drawer/open`, 'POST', {})
   }
 
   postTicketPrint(orderUuid, ticketNo, data) {
@@ -204,6 +244,14 @@ class OpenTenderAPI {
   postReceipt(orderUuid) {
     const endpoint = `/orders/${orderUuid}/print`
     return this.request(endpoint, 'POST', {})
+  }
+
+  getInternalSettings() {
+    return this.request(`/internal-settings`)
+  }
+
+  postInternalSettings(data) {
+    return this.request(`/internal-settings`, 'POST', data)
   }
 
   getStore() {
@@ -262,6 +310,10 @@ class OpenTenderAPI {
     return this.request(`/orders`, 'POST', order)
   }
 
+  deleteOrder(order) {
+    return this.request(`/orders`, 'DELETE', order)
+  }
+
   getOrders(args) {
     let params = []
     if (!args) {
@@ -286,7 +338,6 @@ class OpenTenderAPI {
       if (sort_by) params.push(`sort_by=${sort_by}`)
       if (sort_direction) params.push(`sort_direction=${sort_direction}`)
     }
-
     params = params.length ? `?${params.join('&')}` : ''
     return this.request(`/orders${params}`)
   }

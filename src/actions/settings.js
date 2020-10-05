@@ -20,11 +20,10 @@ export const updateSettings = entityTypes => async (dispatch, getState) => {
   if (!api) return
   dispatch(pending(UPDATE_SETTINGS))
   try {
-    Promise.all(
-      entityTypes.forEach(async entityType => {
-        await api.postSettings(entityType)
-      })
-    )
+    const requests = entityTypes.map(async entityType => {
+      return await api.postSettings(entityType)
+    })
+    await Promise.all(requests)
     dispatch(fulfill(UPDATE_SETTINGS))
   } catch (err) {
     dispatch(reject(UPDATE_SETTINGS, err))
