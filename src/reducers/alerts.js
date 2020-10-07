@@ -14,7 +14,7 @@ export default (state = initState, action) => {
       return initState
     case ADD_ALERT:
       return [
-        ...state,
+        ...state.reverse().slice(0, 4).reverse(),
         { message: action.payload, id: makeRandomNumberString() },
       ]
     case DISMISS_ALERT:

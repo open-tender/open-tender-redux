@@ -246,6 +246,11 @@ class OpenTenderAPI {
     return this.request(endpoint, 'POST', {})
   }
 
+  postGiftCardCredit(data, checkOnly) {
+    const params = checkOnly ? '?check_only=true' : ''
+    return this.request(`/gift-cards/credit${params}`, 'POST', data)
+  }
+
   getInternalSettings() {
     return this.request(`/internal-settings`)
   }
