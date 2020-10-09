@@ -168,6 +168,10 @@ class OpenTenderAPI {
     return this.request(`/cash-events`, 'POST', data)
   }
 
+  getCashier() {
+    return this.request(`/cashier`)
+  }
+
   getCashSummary(employeeId) {
     return this.request(`/cash-summary/${employeeId}`)
   }
