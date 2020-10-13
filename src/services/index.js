@@ -188,8 +188,9 @@ class OpenTenderAPI {
     return this.request(`/credit/offline-transactions/process`, 'POST', {})
   }
 
-  getSurcharges() {
-    return this.request(`/surcharges`)
+  getSurcharges(serviceType) {
+    const params = serviceType ? `?service_type=${serviceType}` : ''
+    return this.request(`/surcharges${params}`)
   }
 
   getDiscounts(serviceType) {
