@@ -20,6 +20,7 @@ import {
 } from '../reducers/checkout'
 import { refreshRevenueCenter, setAlert } from './order'
 import { fetchMenu } from './menu'
+import { loginCustomer } from './customer/account'
 
 // action creators
 
@@ -116,6 +117,9 @@ export const submitOrder = () => async (dispatch, getState) => {
   // end order assembly
   try {
     const completedOrder = await api.postOrder(preparedOrder)
+    const auth = getState().data.customer.account.auth
+    const { email, password } = data.customer
+    if (password && !auth) await dispatch(loginCustomer(email, password))
     dispatch(setAlert({ type: 'close' }))
     dispatch(fulfill(SUBMIT_ORDER, completedOrder))
   } catch (err) {
