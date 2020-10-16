@@ -320,6 +320,14 @@ class OpenTenderAPI {
     return this.request(`/orders`, 'POST', order)
   }
 
+  getOrderFulfillment(orderId) {
+    return this.request(`/orders/${orderId}/fulfillment`)
+  }
+
+  putOrderFulfillment(orderId, data) {
+    return this.request(`/orders/${orderId}/fulfillment`, 'PUT', data)
+  }
+
   deleteOrder(order) {
     return this.request(`/orders`, 'DELETE', order)
   }

@@ -19,6 +19,7 @@ import orders from './orders'
 import completedOrders from './completedOrders'
 import ordersSearch from './ordersSearch'
 import settings from './settings'
+import orderFulfillment from './orderFulfillment'
 
 const openTenderReducer = combineReducers({
   order,
@@ -41,6 +42,7 @@ const openTenderReducer = combineReducers({
   completedOrders,
   ordersSearch,
   settings,
+  orderFulfillment,
 })
 
 export default openTenderReducer
