@@ -242,6 +242,14 @@ class OpenTenderAPI {
     return this.request(endpoint, 'POST', {})
   }
 
+  getArrivals() {
+    return this.request(`/arrivals`)
+  }
+
+  postAcknowledgeArrival(orderUuid) {
+    return this.request(`/orders/${orderUuid}/ack-arrival`, 'POST', {})
+  }
+
   patchOrder(orderUuid, data) {
     return this.request(`/orders/${orderUuid}`, 'PATCH', data)
   }
@@ -320,14 +328,6 @@ class OpenTenderAPI {
     return this.request(`/orders`, 'POST', order)
   }
 
-  getOrderFulfillment(orderId) {
-    return this.request(`/orders/${orderId}/fulfillment`)
-  }
-
-  putOrderFulfillment(orderId, data) {
-    return this.request(`/orders/${orderId}/fulfillment`, 'PUT', data)
-  }
-
   deleteOrder(order) {
     return this.request(`/orders`, 'DELETE', order)
   }
@@ -358,6 +358,14 @@ class OpenTenderAPI {
     }
     params = params.length ? `?${params.join('&')}` : ''
     return this.request(`/orders${params}`)
+  }
+
+  getOrderFulfillment(orderId) {
+    return this.request(`/orders/${orderId}/fulfillment`)
+  }
+
+  putOrderFulfillment(orderId, data) {
+    return this.request(`/orders/${orderId}/fulfillment`, 'PUT', data)
   }
 
   postCart(data) {

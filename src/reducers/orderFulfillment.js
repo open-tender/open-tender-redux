@@ -6,9 +6,9 @@ const initState = {
 
 const NAME = 'orderFulfillment'
 
-export const RESET_FULFILLMENT = `${NAME}/resetCustomer`
-export const FETCH_FULFILLMENT = `${NAME}/fetchCustomer`
-export const UPDATE_FULFILLMENT = `${NAME}/updateCustomer`
+export const RESET_FULFILLMENT = `${NAME}/resetOrderFulfillment`
+export const FETCH_FULFILLMENT = `${NAME}/fetchOrderFulfillment`
+export const UPDATE_FULFILLMENT = `${NAME}/updateOrderFulfillment`
 
 export default (state = initState, action) => {
   switch (action.type) {
