@@ -25,18 +25,16 @@ export const fetchOrderFulfillment = orderId => async (dispatch, getState) => {
   }
 }
 
-export const updateOrderFulfillment = (
-  orderId,
-  data,
-  msg = 'Be right out with your order!'
-) => async (dispatch, getState) => {
+export const updateOrderFulfillment = (orderId, data) => async (
+  dispatch,
+  getState
+) => {
   const { api } = getState().config
   if (!api) return
   dispatch(pending(UPDATE_FULFILLMENT))
   try {
     const response = await api.putOrderFulfillment(orderId, data)
     dispatch(fulfill(UPDATE_FULFILLMENT, response))
-    dispatch(showNotification(msg))
   } catch (err) {
     const errors = makeFormErrors(err)
     dispatch(reject(UPDATE_FULFILLMENT, errors))
