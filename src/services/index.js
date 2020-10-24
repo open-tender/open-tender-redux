@@ -345,6 +345,8 @@ class OpenTenderAPI {
         business_date,
         channel_type,
         prep_status,
+        receipt_type,
+        parent_receipt_uuid,
         search,
         sort_by,
         sort_direction,
@@ -352,12 +354,23 @@ class OpenTenderAPI {
       if (business_date) params.push(`business_date=${business_date}`)
       if (channel_type) params.push(`channel_type=${channel_type}`)
       if (prep_status) params.push(`prep_status=${prep_status}`)
+      if (receipt_type) params.push(`receipt_type=${receipt_type}`)
+      if (parent_receipt_uuid)
+        params.push(`parent_receipt_uuid=${parent_receipt_uuid}`)
       if (search) params.push(`search=${search}`)
       if (sort_by) params.push(`sort_by=${sort_by}`)
       if (sort_direction) params.push(`sort_direction=${sort_direction}`)
     }
     params = params.length ? `?${params.join('&')}` : ''
     return this.request(`/orders${params}`)
+  }
+
+  postRefundValidate(orderId, refund) {
+    return this.request(`/orders/${orderId}/refund/validate`, 'POST', refund)
+  }
+
+  postRefund(orderId, refund) {
+    return this.request(`/orders/${orderId}/refund`, 'POST', refund)
   }
 
   getOrderFulfillment(orderId) {

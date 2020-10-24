@@ -5,7 +5,6 @@ import {
   FETCH_FULFILLMENT,
   UPDATE_FULFILLMENT,
 } from '../reducers/orderFulfillment'
-import { showNotification } from './notifications'
 
 // action creators
 
