@@ -23,6 +23,13 @@ const handleReponse = response => {
   if (statusText === 'NO CONTENT' || status === 204) {
     return true
   }
+  if (status === 202) {
+    try {
+      return response.body
+    } catch (err) {
+      throw new requestException('Response could not be parsed', response, err)
+    }
+  }
   const requestWasSuccessful = status >= 200 && status < 300
   try {
     return response.json().then(parsed => {
@@ -115,6 +122,14 @@ class OpenTenderAPI {
 
   getConfig() {
     return this.request(`/config`)
+  }
+
+  postChipDNATender(orderId, data) {
+    return this.request(`/orders/${orderId}/tenders/chipdna`, 'POST', data)
+  }
+
+  postChipDNACancel() {
+    return this.request(`/chipdna/cancel`, 'POST', {})
   }
 
   getBarcodeRead() {
