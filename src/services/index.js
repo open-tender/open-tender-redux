@@ -124,12 +124,20 @@ class OpenTenderAPI {
     return this.request(`/config`)
   }
 
+  getLevelUpSettings() {
+    return this.request(`/levelup`)
+  }
+
   postChipDNATender(orderId, data) {
     return this.request(`/orders/${orderId}/tenders/chipdna`, 'POST', data)
   }
 
   postChipDNACancel() {
     return this.request(`/chipdna/cancel`, 'POST', {})
+  }
+
+  postChipDNATmsUpdate() {
+    return this.request(`/chipdna/tms-update`, 'POST', {})
   }
 
   getBarcodeRead() {

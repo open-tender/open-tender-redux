@@ -29,7 +29,6 @@ export default (state = initState, action) => {
         ...state,
         previous: action.payload,
         loading: 'idle',
-        error: null,
       }
     case `${FETCH_PREVIOUS_REFUNDS}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
