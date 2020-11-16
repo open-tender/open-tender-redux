@@ -27,8 +27,11 @@ export const fetchCompletedOrders = (business_date, channelTypes) => async (
   }
 }
 
-export const refreshCompletedOrders = () => async (dispatch, getState) => {
+export const refreshCompletedOrders = channelTypes => async (
+  dispatch,
+  getState
+) => {
   const businessDate = getState().kds.businessDate
   if (!businessDate) return
-  dispatch(fetchCompletedOrders(businessDate))
+  dispatch(fetchCompletedOrders(businessDate, channelTypes))
 }

@@ -339,8 +339,16 @@ class OpenTenderAPI {
     return this.request(`/orders/${orderId}/tenders`, 'POST', tender)
   }
 
+  patchTender(orderId, index, data) {
+    return this.request(`/orders/${orderId}/tenders/${index}`, 'PATCH', data)
+  }
+
   postTenderVoid(orderId, index) {
     return this.request(`/orders/${orderId}/tenders/${index}/void`, 'POST', {})
+  }
+
+  postIndentifyCustomer(data) {
+    return this.request(`/identify-customer`, 'POST', data)
   }
 
   postOrderValidate(order) {
