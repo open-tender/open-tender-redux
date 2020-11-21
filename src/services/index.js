@@ -622,6 +622,16 @@ class OpenTenderAPI {
     )
   }
 
+  deleteCustomerGiftCard(token, giftCardId) {
+    return this.request(
+      `/customer/gift-cards/${giftCardId}`,
+      'DELETE',
+      null,
+      null,
+      token
+    )
+  }
+
   getCustomerFavorites(token, limit) {
     const params = limit ? `?limit=${limit}` : ''
     return this.request(

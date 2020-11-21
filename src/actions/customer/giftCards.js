@@ -55,6 +55,27 @@ export const updateCustomerGiftCard = (giftCardId, data, callback) => async (
   }
 }
 
+export const removeCustomerGiftCard = (giftCardId, callback) => async (
+  dispatch,
+  getState
+) => {
+  const { api } = getState().config
+  if (!api) return
+  const token = selectToken(getState())
+  if (!token)
+    return dispatch(reject(`${name}/remove${entity}`, MISSING_CUSTOMER))
+  dispatch(pending(`${name}/remove${entity}`))
+  try {
+    await api.deleteCustomerGiftCard(token, giftCardId)
+    const giftCards = await api.getCustomerGiftCards(token)
+    dispatch(fulfill(`${name}/update${entity}`, giftCards))
+    dispatch(showNotification('Gift card removed!'))
+    if (callback) callback()
+  } catch (err) {
+    dispatch(reject(`${name}/remove${entity}`, err))
+  }
+}
+
 export const addCustomerGiftCard = (data, callback) => async (
   dispatch,
   getState
