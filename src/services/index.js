@@ -412,6 +412,10 @@ class OpenTenderAPI {
     return this.request(`/orders/${orderId}/fulfillment`, 'PUT', data)
   }
 
+  postPurchaseGiftCards(data) {
+    return this.request(`/gift-cards-purchase`, 'POST', data)
+  }
+
   postCart(data) {
     return this.request(`/carts`, 'POST', data)
   }

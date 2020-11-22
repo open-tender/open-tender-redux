@@ -2,6 +2,7 @@ const initState = {
   success: false,
   loading: 'idle',
   error: null,
+  giftCards: null,
 }
 
 const NAME = 'giftCards'
@@ -16,7 +17,12 @@ export default (state = initState, action) => {
     case `${PURCHASE_GIFT_CARDS}/pending`:
       return { ...state, loading: 'pending' }
     case `${PURCHASE_GIFT_CARDS}/fulfilled`:
-      return { ...initState, success: true }
+      return {
+        ...initState,
+        success: true,
+        error: null,
+        giftCards: action.payload,
+      }
     case `${PURCHASE_GIFT_CARDS}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
     default:

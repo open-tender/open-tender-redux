@@ -12,10 +12,8 @@ export const purchaseGiftCards = (data, callback) => async (
   if (!api) return
   dispatch(pending(PURCHASE_GIFT_CARDS))
   try {
-    // await api.postPurchaseGiftCards(data)
-    console.log('purchaseGiftCards')
-    console.log(data)
-    dispatch(fulfill(PURCHASE_GIFT_CARDS))
+    const giftCards = await api.postPurchaseGiftCards(data)
+    dispatch(fulfill(PURCHASE_GIFT_CARDS, giftCards))
     if (callback) callback()
   } catch (err) {
     const errors = makeFormErrors(err)
