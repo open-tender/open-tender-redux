@@ -22,6 +22,7 @@ import settings from './settings'
 import orderFulfillment from './orderFulfillment'
 import refund from './refund'
 import giftCards from './giftCards'
+import donations from './donations'
 
 const openTenderReducer = combineReducers({
   order,
@@ -47,6 +48,7 @@ const openTenderReducer = combineReducers({
   orderFulfillment,
   refund,
   giftCards,
+  donations,
 })
 
 export default openTenderReducer

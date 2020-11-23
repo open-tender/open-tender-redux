@@ -416,6 +416,10 @@ class OpenTenderAPI {
     return this.request(`/gift-cards-purchase`, 'POST', data)
   }
 
+  postPurchaseDonation(data) {
+    return this.request(`/donation-purchase`, 'POST', data)
+  }
+
   postCart(data) {
     return this.request(`/carts`, 'POST', data)
   }
