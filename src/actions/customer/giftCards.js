@@ -96,3 +96,46 @@ export const addCustomerGiftCard = (data, callback) => async (
     dispatch(reject(`${name}/update${entity}`, makeFormErrors(err)))
   }
 }
+
+export const assignCustomerGiftCard = (cardNumber, callback) => async (
+  dispatch,
+  getState
+) => {
+  const { api } = getState().config
+  if (!api) return
+  const token = selectToken(getState())
+  if (!token)
+    return dispatch(reject(`${name}/update${entity}`, MISSING_CUSTOMER))
+  dispatch(pending(`${name}/update${entity}`))
+  try {
+    await api.postCustomerGiftCardAssign(token, cardNumber)
+    const giftCards = await api.getCustomerGiftCards(token)
+    dispatch(fulfill(`${name}/update${entity}`, giftCards))
+    dispatch(showNotification('Gift card added to your account!'))
+    if (callback) callback()
+  } catch (err) {
+    dispatch(reject(`${name}/update${entity}`, makeFormErrors(err)))
+  }
+}
+
+export const assignCustomerGiftCardOther = (
+  giftCardId,
+  email,
+  callback
+) => async (dispatch, getState) => {
+  const { api } = getState().config
+  if (!api) return
+  const token = selectToken(getState())
+  if (!token)
+    return dispatch(reject(`${name}/update${entity}`, MISSING_CUSTOMER))
+  dispatch(pending(`${name}/update${entity}`))
+  try {
+    await api.postCustomerGiftCardAssignOther(token, giftCardId, email)
+    const giftCards = await api.getCustomerGiftCards(token)
+    dispatch(fulfill(`${name}/update${entity}`, giftCards))
+    dispatch(showNotification(`Gift card assigned to ${email}`))
+    if (callback) callback()
+  } catch (err) {
+    dispatch(reject(`${name}/update${entity}`, makeFormErrors(err)))
+  }
+}

@@ -616,6 +616,26 @@ class OpenTenderAPI {
     return this.request(`/customer/gift-cards`, 'POST', data, null, token)
   }
 
+  postCustomerGiftCardAssign(token, card_number) {
+    return this.request(
+      `/customer/gift-cards/assign`,
+      'POST',
+      { card_number },
+      null,
+      token
+    )
+  }
+
+  postCustomerGiftCardAssignOther(token, giftCardId, email) {
+    return this.request(
+      `/customer/gift-cards/${giftCardId}/assign`,
+      'POST',
+      { email },
+      null,
+      token
+    )
+  }
+
   putCustomerGiftCard(token, giftCardId, data) {
     return this.request(
       `/customer/gift-cards/${giftCardId}`,
