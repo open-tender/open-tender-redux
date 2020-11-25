@@ -8,7 +8,7 @@ const initState = {
 const NAME = 'customer'
 
 export const RESET_CUSTOMER = `${NAME}/resetCustomer`
-// export const SET_CUSTOMER = `${NAME}/setCustomer`
+export const RESET_LOGIN_ERROR = `${NAME}/resetLoginError`
 export const LOGIN_CUSTOMER = `${NAME}/loginCustomer`
 export const LOGOUT_CUSTOMER = `${NAME}/logoutCustomer`
 export const FETCH_CUSTOMER = `${NAME}/fetchCustomer`
@@ -18,8 +18,8 @@ export default (state = initState, action) => {
   switch (action.type) {
     case RESET_CUSTOMER:
       return { ...initState }
-    // case SET_CUSTOMER:
-    //   return { ...state, ...action.payload }
+    case RESET_LOGIN_ERROR:
+      return { ...state, loading: 'idle', error: null }
     case `${LOGIN_CUSTOMER}/pending`:
       return { ...state, loading: 'pending' }
     case `${LOGIN_CUSTOMER}/fulfilled`:

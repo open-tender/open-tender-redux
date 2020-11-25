@@ -448,19 +448,21 @@ class OpenTenderAPI {
     return this.request(`/levelup`, 'POST', data)
   }
 
+  postThanxLogin(email) {
+    return this.request('/thanx-login', 'POST', { email })
+  }
+
+  postThanxAuth(code) {
+    return this.request('/thanx-auth', 'POST', { code })
+  }
+
   postLogin(email, password) {
-    // let auth
     const data = {
       grant_type: 'password',
       username: email,
       password: password,
     }
     return this.authRequest('/token', data)
-    // .then((resp) {
-    //   auth = resp
-    //   return this.getCustomer(auth.access_token)
-    // })
-    // .then((customer) => ({ auth, customer }))
   }
 
   postLogout(token) {

@@ -6,6 +6,7 @@ import {
 import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import {
   RESET_CUSTOMER,
+  RESET_LOGIN_ERROR,
   LOGIN_CUSTOMER,
   LOGOUT_CUSTOMER,
   FETCH_CUSTOMER,
@@ -31,10 +32,12 @@ import { resetCustomerOrder } from './order'
 import { resetCustomerOrders } from './orders'
 import { resetGroupOrder } from '../groupOrder'
 import { setCustomerLevelUp, resetCustomerLevelUp } from './levelup'
+import { setAlert } from '../order'
 
 // action creators
 
 export const resetCustomer = () => ({ type: RESET_CUSTOMER })
+export const resetLoginError = () => ({ type: RESET_LOGIN_ERROR })
 
 // async action creators
 
@@ -47,6 +50,32 @@ export const loginCustomer = (email, password) => async (
   dispatch(pending(LOGIN_CUSTOMER))
   try {
     const auth = await api.postLogin(email, password)
+    dispatch(fulfill(LOGIN_CUSTOMER, auth))
+    dispatch(fetchCustomer())
+  } catch (err) {
+    dispatch(reject(LOGIN_CUSTOMER, err))
+  }
+}
+
+export const loginCustomerThanx = email => async (dispatch, getState) => {
+  const { api } = getState().config
+  if (!api) return
+  dispatch(pending(LOGIN_CUSTOMER))
+  try {
+    await api.postThanxLogin(email)
+    dispatch(setAlert({ type: 'close' }))
+    dispatch(fulfill(LOGIN_CUSTOMER, null))
+  } catch (err) {
+    dispatch(reject(LOGIN_CUSTOMER, err))
+  }
+}
+
+export const authCustomerThanx = code => async (dispatch, getState) => {
+  const { api } = getState().config
+  if (!api) return
+  dispatch(pending(LOGIN_CUSTOMER))
+  try {
+    const auth = await api.postThanxAuth(code)
     dispatch(fulfill(LOGIN_CUSTOMER, auth))
     dispatch(fetchCustomer())
   } catch (err) {
