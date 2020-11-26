@@ -695,6 +695,10 @@ class OpenTenderAPI {
     return this.request(`/customer/levelup`, 'GET', null, null, token)
   }
 
+  getCustomerThanx(token) {
+    return this.request(`/customer/thanx`, 'GET', null, null, token)
+  }
+
   postCustomerLevelUp(token, data) {
     return this.request(`/customer/levelup`, 'POST', data, null, token)
   }

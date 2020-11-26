@@ -31,3 +31,8 @@ export const selectCustomerLevelUp = state => {
   const levelup = entities.length ? entities[0] : null
   return { levelup, loading, error }
 }
+
+export const selectCustomerThanx = state => {
+  const { thanx, loading, error } = state.data.customer.thanx
+  return { thanx, loading, error }
+}
