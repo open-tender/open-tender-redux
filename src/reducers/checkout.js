@@ -85,13 +85,14 @@ export default (state = initState, action) => {
       return { ...state, loading: 'pending' }
     case `${SUBMIT_ORDER}/fulfilled`:
       return { ...initState, completedOrder: action.payload }
-    case `${SUBMIT_ORDER}/rejected`:
+    case `${SUBMIT_ORDER}/rejected`: {
       return {
         ...state,
         loading: 'idle',
         submitting: false,
         errors: action.payload,
       }
+    }
     default:
       return state
   }

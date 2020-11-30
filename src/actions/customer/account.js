@@ -66,6 +66,10 @@ export const loginCustomerThanx = email => async (dispatch, getState) => {
     dispatch(addMessage('Thanks! Please check your email.'))
     dispatch(fulfill(LOGIN_CUSTOMER, null))
   } catch (err) {
+    const error = err.params ? err.params['$.email'] : null
+    if (error && error.includes("'email'")) {
+      err.detail = 'Please enter a valid email address'
+    }
     dispatch(reject(LOGIN_CUSTOMER, err))
   }
 }
