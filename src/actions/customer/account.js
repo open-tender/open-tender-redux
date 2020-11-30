@@ -13,7 +13,7 @@ import {
   UPDATE_CUSTOMER,
 } from '../../reducers/customer/account'
 import { setSelectedAllergens } from '../allergens'
-import { resetOrder } from '../order'
+import { setAlert, addMessage, resetOrder } from '../order'
 import { resetCheckout, updateCheckoutCustomer } from '../checkout'
 import { showNotification } from '../notifications'
 import { selectToken } from '../../selectors/customer'
@@ -32,7 +32,6 @@ import { resetCustomerOrder } from './order'
 import { resetCustomerOrders } from './orders'
 import { resetGroupOrder } from '../groupOrder'
 import { setCustomerLevelUp, resetCustomerLevelUp } from './levelup'
-import { setAlert } from '../order'
 
 // action creators
 
@@ -64,6 +63,7 @@ export const loginCustomerThanx = email => async (dispatch, getState) => {
   try {
     await api.postThanxLogin(email)
     dispatch(setAlert({ type: 'close' }))
+    dispatch(addMessage('Thanks! Please check your email.'))
     dispatch(fulfill(LOGIN_CUSTOMER, null))
   } catch (err) {
     dispatch(reject(LOGIN_CUSTOMER, err))
