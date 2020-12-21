@@ -287,6 +287,11 @@ class OpenTenderAPI {
     return this.request(`/gift-cards/credit${params}`, 'POST', data)
   }
 
+  getGiftCardBalance(code, cardNumber) {
+    const params = code ? `code=${code}` : `card_number=${cardNumber || ''}`
+    return this.request(`/gift-cards/balance?${params}`)
+  }
+
   getInternalSettings() {
     return this.request(`/internal-settings`)
   }
