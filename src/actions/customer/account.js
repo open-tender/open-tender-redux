@@ -63,7 +63,7 @@ export const loginCustomerThanx = email => async (dispatch, getState) => {
   try {
     await api.postThanxLogin(email)
     dispatch(setAlert({ type: 'close' }))
-    dispatch(addMessage('Thanks! Please check your email.'))
+    dispatch(addMessage('Thanks! Please check your email on this device.'))
     dispatch(fulfill(LOGIN_CUSTOMER, null))
   } catch (err) {
     const error = err.params ? err.params['$.email'] : null
