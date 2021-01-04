@@ -188,7 +188,6 @@ export default (state = initState, action) => {
     case `${FETCH_REVENUE_CENTER}/fulfilled`:
       return {
         ...state,
-        // revenueCenter: action.payload,
         loading: 'idle',
         error: null,
       }

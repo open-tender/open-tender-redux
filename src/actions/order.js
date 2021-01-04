@@ -128,7 +128,7 @@ export const removeMessage = id => ({
 
 // async action creators
 
-export const fetchRevenueCenter = revenueCenterId => async (
+export const fetchRevenueCenter = (revenueCenterId, requestedAt) => async (
   dispatch,
   getState
 ) => {
@@ -136,9 +136,12 @@ export const fetchRevenueCenter = revenueCenterId => async (
   if (!api) return
   dispatch(pending(FETCH_REVENUE_CENTER))
   try {
-    const revenueCenter = await api.getRevenueCenter(revenueCenterId)
+    const revenueCenter = await api.getRevenueCenter(
+      revenueCenterId,
+      requestedAt
+    )
     dispatch(setRevenueCenter(revenueCenter))
-    dispatch(fulfill(FETCH_REVENUE_CENTER, revenueCenter))
+    dispatch(fulfill(FETCH_REVENUE_CENTER))
   } catch (err) {
     dispatch(reject(FETCH_REVENUE_CENTER, err))
   }

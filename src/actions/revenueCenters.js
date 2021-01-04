@@ -16,17 +16,26 @@ export const setRevenueCenters = revenueCenters => ({
 
 // async action creators
 
-export const fetchRevenueCenters = ({ type, is_outpost, lat, lng }) => async (
-  dispatch,
-  getState
-) => {
+export const fetchRevenueCenters = ({
+  type,
+  is_outpost,
+  lat,
+  lng,
+  requestedAt,
+}) => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   dispatch(pending(FETCH_REVENUE_CENTERS))
   try {
     if (lat) lat = parseFloat(lat).toFixed(7)
     if (lng) lng = parseFloat(lng).toFixed(7)
-    const { data } = await api.getRevenueCenters(type, is_outpost, lat, lng)
+    const { data } = await api.getRevenueCenters(
+      type,
+      is_outpost,
+      lat,
+      lng,
+      requestedAt
+    )
     const revenueCenters = lat && lng ? addDistance(data, { lat, lng }) : data
     dispatch(fulfill(FETCH_REVENUE_CENTERS, revenueCenters))
   } catch (err) {

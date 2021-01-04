@@ -304,17 +304,19 @@ class OpenTenderAPI {
     return this.request(`/store`)
   }
 
-  getRevenueCenters(revenue_center_type, is_outpost, lat, lng) {
+  getRevenueCenters(revenue_center_type, is_outpost, lat, lng, requestedAt) {
     let params = ''
     if (revenue_center_type)
       params += `revenue_center_type=${revenue_center_type}`
     if (is_outpost) params += '&is_outpost=true'
     if (lat && lng) params += `&lat=${lat}&lng=${lng}`
+    if (requestedAt) params += `&requested_at=${requestedAt}`
     return this.request(`/revenue-centers?${params}`)
   }
 
-  getRevenueCenter(revenue_center_id) {
-    return this.request(`/revenue-centers/${revenue_center_id}`)
+  getRevenueCenter(revenue_center_id, requestedAt) {
+    const params = requestedAt ? `?requested_at=${requestedAt}` : ''
+    return this.request(`/revenue-centers/${revenue_center_id}${params}`)
   }
 
   getValidTimes(revenueCenterType) {
