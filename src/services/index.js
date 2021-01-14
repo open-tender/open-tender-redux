@@ -358,6 +358,16 @@ class OpenTenderAPI {
     return this.request(`/identify-customer`, 'POST', data)
   }
 
+  postApplePayValidate(host, validationURL) {
+    const data = { host, validationURL }
+    return this.request(`/apple-pay/validate`, 'POST', data)
+  }
+
+  postApplePayToken(token) {
+    const data = { token }
+    return this.request(`/apple-pay/token`, 'POST', data)
+  }
+
   postOrderValidate(order) {
     return this.request(`/orders/validate`, 'POST', order)
   }
