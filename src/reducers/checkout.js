@@ -22,6 +22,7 @@ export const RESET_CHECKOUT = `${NAME}/resetCheckout`
 export const RESET_ERRORS = `${NAME}/resetErrors`
 export const RESET_TIP = `${NAME}/resetTip`
 export const RESET_COMPLETED_ORDER = `${NAME}/resetCompletedOrder`
+export const SET_COMPLETED_ORDER = `${NAME}/setCompletedOrder`
 export const SET_SUBMITTING = `${NAME}/setSubmitting`
 export const UPDATE_FORM = `${NAME}/updateForm`
 export const UPDATE_CUSTOMER = `${NAME}/updateCustomer`
@@ -38,6 +39,8 @@ export default (state = initState, action) => {
       return { ...state, tip: null }
     case RESET_COMPLETED_ORDER:
       return { ...state, completedOrder: null }
+    case SET_COMPLETED_ORDER:
+      return { ...initState, completedOrder: action.payload }
     case SET_SUBMITTING:
       return { ...state, submitting: action.payload }
     case UPDATE_FORM: {
