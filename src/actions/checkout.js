@@ -167,7 +167,6 @@ export const submitOrderPay = (showAlert = false) => async (
   if (!api) return
   dispatch(setSubmitting(true))
   dispatch(pending(SUBMIT_ORDER))
-  console.log(showAlert)
   if (showAlert) {
     const alert = {
       type: 'working',
