@@ -159,17 +159,29 @@ export const submitOrder = () => async (dispatch, getState) => {
   }
 }
 
-export const submitOrderApplePay = () => async (dispatch, getState) => {
+export const submitOrderPay = (showAlert = false) => async (
+  dispatch,
+  getState
+) => {
   const { api } = getState().config
   if (!api) return
   dispatch(setSubmitting(true))
   dispatch(pending(SUBMIT_ORDER))
+  console.log(showAlert)
+  if (showAlert) {
+    const alert = {
+      type: 'working',
+      args: { text: 'Submitting your order...' },
+    }
+    dispatch(setAlert(alert))
+  }
   const preparedOrder = assembleOrder(getState().data)
   try {
     const completedOrder = await api.postOrder(preparedOrder)
     const auth = getState().data.customer.account.auth
     const { email, password } = preparedOrder.customer
     if (password && !auth) await dispatch(loginCustomer(email, password))
+    dispatch(setAlert({ type: 'close' }))
     return completedOrder
   } catch (err) {
     dispatch(setAlert({ type: 'close' }))
