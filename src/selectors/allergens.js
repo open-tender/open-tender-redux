@@ -6,6 +6,6 @@ export const selectSelectedAllergenNames = state => {
   }
   return selectedAllergens.map(i => {
     const allergen = allergens.find(a => a.allergen_id === i.allergen_id)
-    return allergen.name
+    return allergen ? allergen.name : ''
   })
 }
