@@ -20,6 +20,7 @@ import completedOrders from './completedOrders'
 import ordersSearch from './ordersSearch'
 import settings from './settings'
 import orderFulfillment from './orderFulfillment'
+import orderRating from './orderRating'
 import refund from './refund'
 import giftCards from './giftCards'
 import donations from './donations'
@@ -46,6 +47,7 @@ const openTenderReducer = combineReducers({
   ordersSearch,
   settings,
   orderFulfillment,
+  orderRating,
   refund,
   giftCards,
   donations,
