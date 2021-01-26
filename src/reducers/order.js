@@ -90,7 +90,11 @@ export default (state = initState, action) => {
       return { ...state, alert: null }
     case SET_ALERT:
       return { ...state, alert: action.payload }
-    case ADD_MESSAGE:
+    case ADD_MESSAGE: {
+      const existing = state.messages.map(i => i.message)
+      if (existing.includes(action.payload)) {
+        return state
+      }
       return {
         ...state,
         messages: [
@@ -101,6 +105,7 @@ export default (state = initState, action) => {
           },
         ],
       }
+    }
     case REMOVE_MESSAGE:
       return {
         ...state,

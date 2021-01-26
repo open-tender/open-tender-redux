@@ -1,6 +1,7 @@
 import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import { name, entity } from '../../reducers/customer/houseAccounts'
 import { selectToken } from '../../selectors/customer'
+import { checkAuth } from './account'
 
 // action creators
 
@@ -28,6 +29,6 @@ export const fetchCustomerHouseAccounts = () => async (dispatch, getState) => {
     const houseAccounts = await api.getCustomerHouseAccounts(token)
     dispatch(fulfill(`${name}/fetch${entity}`, houseAccounts))
   } catch (err) {
-    dispatch(reject(`${name}/fetch${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/fetch${entity}`, err)))
   }
 }

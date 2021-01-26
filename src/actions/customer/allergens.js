@@ -3,6 +3,7 @@ import { name, entity } from '../../reducers/customer/allergens'
 import { selectToken } from '../../selectors/customer'
 import { showNotification } from '../notifications'
 import { setSelectedAllergens } from '../allergens'
+import { checkAuth } from './account'
 
 // action creators
 
@@ -25,7 +26,7 @@ export const fetchCustomerAllergens = () => async (dispatch, getState) => {
     const allergens = await api.getCustomerAllergens(token)
     dispatch(fulfill(`${name}/fetch${entity}`, allergens))
   } catch (err) {
-    dispatch(reject(`${name}/fetch${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/fetch${entity}`, err)))
   }
 }
 
@@ -42,6 +43,6 @@ export const updateCustomerAllergens = data => async (dispatch, getState) => {
     dispatch(setSelectedAllergens(allergens || []))
     dispatch(showNotification('Allergens updated!'))
   } catch (err) {
-    dispatch(reject(`${name}/update${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/update${entity}`, err)))
   }
 }

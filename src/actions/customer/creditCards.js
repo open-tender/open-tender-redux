@@ -3,6 +3,7 @@ import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import { name, entity } from '../../reducers/customer/creditCards'
 import { selectToken } from '../../selectors/customer'
 import { showNotification } from '../notifications'
+import { checkAuth } from './account'
 
 // action creators
 
@@ -30,7 +31,7 @@ export const fetchCustomerCreditCards = () => async (dispatch, getState) => {
     const creditCards = await api.getCustomerCreditCards(token)
     dispatch(fulfill(`${name}/fetch${entity}`, creditCards))
   } catch (err) {
-    dispatch(reject(`${name}/fetch${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/fetch${entity}`, err)))
   }
 }
 
@@ -51,7 +52,8 @@ export const updateCustomerCreditCard = (cardId, data, callback) => async (
     dispatch(showNotification('Credit card updated!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/update${entity}`, makeFormErrors(err)))
+    const errors = makeFormErrors(err)
+    dispatch(checkAuth(err, () => reject(`${name}/update${entity}`, errors)))
   }
 }
 
@@ -72,7 +74,7 @@ export const removeCustomerCreditCard = (cardId, callback) => async (
     dispatch(showNotification('Credit card removed!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/remove${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/remove${entity}`, err)))
   }
 }
 
@@ -92,6 +94,7 @@ export const addCustomerCreditCard = (data, callback) => async (
     dispatch(showNotification('Credit card added!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/add${entity}`, makeFormErrors(err)))
+    const errors = makeFormErrors(err)
+    dispatch(checkAuth(err, () => reject(`${name}/add${entity}`, errors)))
   }
 }

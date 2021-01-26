@@ -4,6 +4,7 @@ import {
   FETCH_CUSTOMER_THANX,
 } from '../../reducers/customer/thanx'
 import { selectToken } from '../../selectors/customer'
+import { checkAuth } from './account'
 
 // action creators
 
@@ -21,6 +22,6 @@ export const fetchCustomerThanx = () => async (dispatch, getState) => {
     const resp = await api.getCustomerThanx(token)
     dispatch(fulfill(FETCH_CUSTOMER_THANX, resp))
   } catch (err) {
-    dispatch(reject(FETCH_CUSTOMER_THANX, err))
+    dispatch(checkAuth(err, () => reject(FETCH_CUSTOMER_THANX, err)))
   }
 }

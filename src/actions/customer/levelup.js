@@ -3,6 +3,7 @@ import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import { name, entity } from '../../reducers/customer/levelup'
 import { selectToken } from '../../selectors/customer'
 import { showNotification } from '../notifications'
+import { checkAuth } from './account'
 
 // action creators
 
@@ -30,7 +31,7 @@ export const fetchCustomerLevelUp = () => async (dispatch, getState) => {
     const levelup = await api.getCustomerLevelUp(token)
     dispatch(fulfill(`${name}/fetch${entity}`, levelup))
   } catch (err) {
-    dispatch(reject(`${name}/fetch${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/fetch${entity}`, err)))
   }
 }
 
@@ -50,7 +51,7 @@ export const removeCustomerLevelUp = (levelupConnectId, callback) => async (
     dispatch(showNotification('LevelUp disconnected!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/remove${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/remove${entity}`, err)))
   }
 }
 
@@ -69,6 +70,7 @@ export const addCustomerLevelUp = (data, callback) => async (
     dispatch(showNotification('LevelUp connected!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/add${entity}`, makeFormErrors(err)))
+    const errors = makeFormErrors(err)
+    dispatch(checkAuth(err, () => reject(`${name}/add${entity}`, errors)))
   }
 }

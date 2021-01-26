@@ -3,6 +3,7 @@ import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import { name, entity } from '../../reducers/customer/addresses'
 import { selectToken } from '../../selectors/customer'
 import { showNotification } from '../notifications'
+import { checkAuth } from './account'
 
 // action creators
 
@@ -28,7 +29,7 @@ export const fetchCustomerAddresses = limit => async (dispatch, getState) => {
     const { data: addresses } = await api.getCustomerAddresses(token, limit)
     dispatch(fulfill(`${name}/fetch${entity}`, addresses))
   } catch (err) {
-    dispatch(reject(`${name}/fetch${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/fetch${entity}`, err)))
   }
 }
 
@@ -50,7 +51,8 @@ export const updateCustomerAddress = (addressId, data, callback) => async (
     dispatch(showNotification('Address updated!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/update${entity}`, makeFormErrors(err)))
+    const errors = makeFormErrors(err)
+    dispatch(checkAuth(err, () => reject(`${name}/update${entity}`, errors)))
   }
 }
 
@@ -72,6 +74,6 @@ export const removeCustomerAddress = (addressId, callback) => async (
     dispatch(showNotification('Address removed!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/remove${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/remove${entity}`, err)))
   }
 }

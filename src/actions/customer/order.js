@@ -7,6 +7,7 @@ import {
 } from '../../reducers/customer/order'
 import { selectToken } from '../../selectors/customer'
 import { showNotification } from '../notifications'
+import { checkAuth } from './account'
 
 // action creators
 
@@ -28,7 +29,7 @@ export const fetchCustomerOrder = orderId => async (dispatch, getState) => {
     const order = await api.getCustomerOrder(token, orderId)
     dispatch(fulfill(FETCH_CUSTOMER_ORDER, order))
   } catch (err) {
-    dispatch(reject(FETCH_CUSTOMER_ORDER, err))
+    dispatch(checkAuth(err, () => reject(FETCH_CUSTOMER_ORDER, err)))
   }
 }
 
@@ -46,6 +47,6 @@ export const updateCustomerOrderRating = (orderId, data) => async (
     dispatch(fetchCustomerOrder(orderId))
     dispatch(showNotification('Rating updated!'))
   } catch (err) {
-    dispatch(showNotification('Rating not updated'))
+    dispatch(checkAuth(err, () => showNotification('Rating not updated')))
   }
 }

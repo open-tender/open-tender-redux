@@ -1,6 +1,7 @@
 import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import { name, entity } from '../../reducers/customer/orders'
 import { selectToken } from '../../selectors/customer'
+import { checkAuth } from './account'
 
 // action creators
 
@@ -26,6 +27,6 @@ export const fetchCustomerOrders = limit => async (dispatch, getState) => {
     const { data: orders } = await api.getCustomerOrders(token, limit)
     dispatch(fulfill(`${name}/fetch${entity}`, orders))
   } catch (err) {
-    dispatch(reject(`${name}/fetch${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/fetch${entity}`, err)))
   }
 }

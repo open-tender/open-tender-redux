@@ -15,11 +15,17 @@ const fiveHundredError = (status = 500, statusText = 'Unknown 500 error') => ({
   detail: statusText,
 })
 
+const unauthorizedError = {
+  status: 401,
+  code: 'errors.unauthorized',
+  title: 'Unauthorized',
+  detail: 'Provided token is not valid',
+}
+
 const handleReponse = response => {
   const { status, statusText } = response
-  if (status >= 500) {
-    throw fiveHundredError(status, statusText)
-  }
+  if (status >= 500) throw fiveHundredError(status, statusText)
+  if (status === 401) throw unauthorizedError
   if (statusText === 'NO CONTENT' || status === 204) {
     return true
   }

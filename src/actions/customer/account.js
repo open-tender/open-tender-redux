@@ -118,6 +118,15 @@ export const logoutCustomer = isReset => async (dispatch, getState) => {
   }
 }
 
+export const checkAuth = (err, reject) => async dispatch => {
+  if (err.status === 401) {
+    await dispatch(logoutCustomer())
+    dispatch(addMessage('Please login to reauthenticate your account'))
+  } else {
+    dispatch(reject())
+  }
+}
+
 export const fetchCustomer = () => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
@@ -137,7 +146,7 @@ export const fetchCustomer = () => async (dispatch, getState) => {
     const profile = makeCustomerProfile(customer)
     dispatch(fulfill(FETCH_CUSTOMER, profile))
   } catch (err) {
-    dispatch(reject(FETCH_CUSTOMER, err))
+    dispatch(checkAuth(err, () => reject(FETCH_CUSTOMER, err)))
   }
 }
 
@@ -154,6 +163,6 @@ export const updateCustomer = data => async (dispatch, getState) => {
     dispatch(showNotification('Account updated!'))
   } catch (err) {
     const errors = makeFormErrors(err)
-    dispatch(reject(UPDATE_CUSTOMER, errors))
+    dispatch(checkAuth(err, () => reject(UPDATE_CUSTOMER, errors)))
   }
 }

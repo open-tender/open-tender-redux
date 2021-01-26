@@ -24,6 +24,7 @@ import {
   resetAlert,
   addMessage,
 } from '../order'
+import { checkAuth } from './account'
 
 // action creators
 
@@ -51,7 +52,7 @@ export const fetchCustomerGroupOrders = () => async (dispatch, getState) => {
     const orders = await api.getCustomerGroupOrders(token)
     dispatch(fulfill(`${name}/fetch${entity}`, orders))
   } catch (err) {
-    dispatch(reject(`${name}/fetch${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/fetch${entity}`, err)))
   }
 }
 
@@ -66,7 +67,7 @@ export const fetchCustomerGroupOrder = cartId => async (dispatch, getState) => {
     const payload = { ...makeCartPayload(response), isCartOwner: true }
     dispatch(fulfill(FETCH_GROUP_ORDER, payload))
   } catch (err) {
-    dispatch(reject(FETCH_GROUP_ORDER, err))
+    dispatch(checkAuth(err, () => reject(FETCH_GROUP_ORDER, err)))
   }
 }
 
@@ -110,7 +111,7 @@ export const addCustomerGroupOrder = (data, callback) => async (
     dispatch(fulfill(START_GROUP_ORDER, payload))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(START_GROUP_ORDER, err))
+    dispatch(checkAuth(err, () => reject(START_GROUP_ORDER, err)))
   }
 }
 
@@ -138,7 +139,7 @@ export const updateCustomerGroupOrder = (cartId, data, callback) => async (
     dispatch(fulfill(UPDATE_GROUP_ORDER, payload))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(UPDATE_GROUP_ORDER, err))
+    dispatch(checkAuth(err, () => reject(UPDATE_GROUP_ORDER, err)))
   }
 }
 
@@ -155,7 +156,7 @@ export const closeGroupOrder = (cartId, closed) => async (
     await api.putCustomerGroupOrderStatus(token, cartId, { closed })
     dispatch(fulfill(CLOSE_GROUP_ORDER, closed))
   } catch (err) {
-    dispatch(reject(CLOSE_GROUP_ORDER, err))
+    dispatch(checkAuth(err, () => reject(CLOSE_GROUP_ORDER, err)))
   }
 }
 
@@ -177,7 +178,7 @@ export const removeCustomerGroupOrder = (cartId, callback) => async (
     dispatch(showNotification('Group order deleted!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/remove${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/remove${entity}`, err)))
   }
 }
 
@@ -214,6 +215,6 @@ export const reopenGroupOrder = cart => async (dispatch, getState) => {
   } catch (err) {
     dispatch(resetAlert())
     dispatch(addMessage('Something went wrong. Please contact support.'))
-    dispatch(reject(REOPEN_GROUP_ORDER, null))
+    dispatch(checkAuth(err, () => reject(REOPEN_GROUP_ORDER, null)))
   }
 }

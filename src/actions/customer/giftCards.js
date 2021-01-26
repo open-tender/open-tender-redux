@@ -3,6 +3,7 @@ import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
 import { name, entity } from '../../reducers/customer/giftCards'
 import { selectToken } from '../../selectors/customer'
 import { showNotification } from '../notifications'
+import { checkAuth } from './account'
 
 // action creators
 
@@ -30,7 +31,7 @@ export const fetchCustomerGiftCards = () => async (dispatch, getState) => {
     const giftCards = await api.getCustomerGiftCards(token)
     dispatch(fulfill(`${name}/fetch${entity}`, giftCards))
   } catch (err) {
-    dispatch(reject(`${name}/fetch${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/fetch${entity}`, err)))
   }
 }
 
@@ -51,7 +52,8 @@ export const updateCustomerGiftCard = (giftCardId, data, callback) => async (
     dispatch(showNotification('Gift card balance updated!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/update${entity}`, makeFormErrors(err)))
+    const errors = makeFormErrors(err)
+    dispatch(checkAuth(err, () => reject(`${name}/update${entity}`, errors)))
   }
 }
 
@@ -72,7 +74,7 @@ export const removeCustomerGiftCard = (giftCardId, callback) => async (
     dispatch(showNotification('Gift card removed!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/remove${entity}`, err))
+    dispatch(checkAuth(err, () => reject(`${name}/remove${entity}`, err)))
   }
 }
 
@@ -93,7 +95,8 @@ export const addCustomerGiftCard = (data, callback) => async (
     dispatch(showNotification('Gift card added!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/update${entity}`, makeFormErrors(err)))
+    const errors = makeFormErrors(err)
+    dispatch(checkAuth(err, () => reject(`${name}/update${entity}`, errors)))
   }
 }
 
@@ -114,7 +117,8 @@ export const assignCustomerGiftCard = (cardNumber, callback) => async (
     dispatch(showNotification('Gift card added to your account!'))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/update${entity}`, makeFormErrors(err)))
+    const errors = makeFormErrors(err)
+    dispatch(checkAuth(err, () => reject(`${name}/update${entity}`, errors)))
   }
 }
 
@@ -136,6 +140,7 @@ export const assignCustomerGiftCardOther = (
     dispatch(showNotification(`Gift card assigned to ${email}`))
     if (callback) callback()
   } catch (err) {
-    dispatch(reject(`${name}/update${entity}`, makeFormErrors(err)))
+    const errors = makeFormErrors(err)
+    dispatch(checkAuth(err, () => reject(`${name}/update${entity}`, errors)))
   }
 }
