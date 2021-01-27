@@ -369,9 +369,12 @@ class OpenTenderAPI {
     return this.request(`/apple-pay/validate`, 'POST', data)
   }
 
-  postApplePayToken(token) {
-    const data = { token }
-    return this.request(`/apple-pay/token`, 'POST', data)
+  postApplePayPayment(token, amount, customerId) {
+    let data = { token, amount }
+    if (customerId) {
+      data = { ...data, customer_id: customerId }
+    }
+    return this.request(`/apple-pay/payment`, 'POST', data)
   }
 
   postOrderValidate(order) {
