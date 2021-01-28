@@ -620,8 +620,15 @@ class OpenTenderAPI {
     )
   }
 
-  getCustomerCreditCards(token) {
-    return this.request(`/customer/credit-cards`, 'GET', null, null, token)
+  getCustomerCreditCards(token, includeLinked = false) {
+    const params = includeLinked ? `?include_linked=true` : ''
+    return this.request(
+      `/customer/credit-cards${params}`,
+      'GET',
+      null,
+      null,
+      token
+    )
   }
 
   postCustomerCreditCard(token, data) {

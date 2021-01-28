@@ -20,7 +20,10 @@ export const setCustomerCreditCards = creditCards => ({
 
 // async action creators
 
-export const fetchCustomerCreditCards = () => async (dispatch, getState) => {
+export const fetchCustomerCreditCards = includeLinked => async (
+  dispatch,
+  getState
+) => {
   const { api } = getState().config
   if (!api) return
   const token = selectToken(getState())
@@ -28,7 +31,7 @@ export const fetchCustomerCreditCards = () => async (dispatch, getState) => {
     return dispatch(reject(`${name}/fetch${entity}`, MISSING_CUSTOMER))
   dispatch(pending(`${name}/fetch${entity}`))
   try {
-    const creditCards = await api.getCustomerCreditCards(token)
+    const creditCards = await api.getCustomerCreditCards(token, includeLinked)
     dispatch(fulfill(`${name}/fetch${entity}`, creditCards))
   } catch (err) {
     dispatch(checkAuth(err, () => reject(`${name}/fetch${entity}`, err)))
@@ -47,7 +50,8 @@ export const updateCustomerCreditCard = (cardId, data, callback) => async (
   dispatch(pending(`${name}/update${entity}`))
   try {
     await api.putCustomerCreditCard(token, cardId, data)
-    const creditCards = await api.getCustomerCreditCards(token)
+    const includeLinked = true
+    const creditCards = await api.getCustomerCreditCards(token, includeLinked)
     dispatch(fulfill(`${name}/update${entity}`, creditCards))
     dispatch(showNotification('Credit card updated!'))
     if (callback) callback()
@@ -69,7 +73,8 @@ export const removeCustomerCreditCard = (cardId, callback) => async (
   dispatch(pending(`${name}/remove${entity}`))
   try {
     await api.deleteCustomerCreditCard(token, cardId)
-    const creditCards = await api.getCustomerCreditCards(token)
+    const includeLinked = true
+    const creditCards = await api.getCustomerCreditCards(token, includeLinked)
     dispatch(fulfill(`${name}/remove${entity}`, creditCards))
     dispatch(showNotification('Credit card removed!'))
     if (callback) callback()
@@ -89,7 +94,8 @@ export const addCustomerCreditCard = (data, callback) => async (
   dispatch(pending(`${name}/add${entity}`))
   try {
     await api.postCustomerCreditCard(token, data)
-    const creditCards = await api.getCustomerCreditCards(token)
+    const includeLinked = true
+    const creditCards = await api.getCustomerCreditCards(token, includeLinked)
     dispatch(fulfill(`${name}/add${entity}`, creditCards))
     dispatch(showNotification('Credit card added!'))
     if (callback) callback()

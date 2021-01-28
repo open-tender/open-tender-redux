@@ -13,6 +13,11 @@ export const selectCustomerAddresses = state => state.data.customer.addresses
 export const selectCustomerGiftCards = state => state.data.customer.giftCards
 export const selectCustomerCreditCards = state =>
   state.data.customer.creditCards
+export const selectCustomerCreditCardsForPayment = state => {
+  const creditCards = state.data.customer.creditCards.entities
+  return creditCards.filter(i => i.has_profile)
+}
+
 export const selectCustomerFavorites = state => state.data.customer.favorites
 export const selectCustomerLoyalty = state => state.data.customer.loyalty
 export const selectCustomerHouseAccounts = state =>
