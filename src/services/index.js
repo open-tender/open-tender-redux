@@ -521,6 +521,11 @@ class OpenTenderAPI {
     return this.request(`/customer`, 'PUT', data, null, token)
   }
 
+  postCustomerPosToken(token, posToken) {
+    const data = { pos_token: posToken }
+    return this.request(`/customer/pos-token`, 'POST', data, null, token)
+  }
+
   getCustomerOrders(token, limit, timing) {
     let params = []
     if (limit) params.push(`limit=${limit}`)

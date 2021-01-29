@@ -40,7 +40,7 @@ export const resetLoginError = () => ({ type: RESET_LOGIN_ERROR })
 
 // async action creators
 
-export const loginCustomer = (email, password) => async (
+export const loginCustomer = (email, password, posToken) => async (
   dispatch,
   getState
 ) => {
@@ -50,7 +50,7 @@ export const loginCustomer = (email, password) => async (
   try {
     const auth = await api.postLogin(email, password)
     dispatch(fulfill(LOGIN_CUSTOMER, auth))
-    dispatch(fetchCustomer())
+    dispatch(fetchCustomer(posToken))
   } catch (err) {
     dispatch(reject(LOGIN_CUSTOMER, err))
   }
@@ -127,7 +127,7 @@ export const checkAuth = (err, reject) => async dispatch => {
   }
 }
 
-export const fetchCustomer = () => async (dispatch, getState) => {
+export const fetchCustomer = posToken => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   const token = selectToken(getState())
@@ -145,6 +145,11 @@ export const fetchCustomer = () => async (dispatch, getState) => {
     dispatch(setCustomerFavoritesLookup(lookup || {}))
     const profile = makeCustomerProfile(customer)
     dispatch(fulfill(FETCH_CUSTOMER, profile))
+    if (posToken) {
+      api.postCustomerPosToken(token, posToken).catch(err => {
+        dispatch(addMessage(err.detail || err.message))
+      })
+    }
   } catch (err) {
     dispatch(checkAuth(err, () => reject(FETCH_CUSTOMER, err)))
   }

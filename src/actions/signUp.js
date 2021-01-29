@@ -14,7 +14,7 @@ export const signUpCustomer = (data, callback) => async (
   dispatch(pending(SIGN_UP))
   try {
     await api.postSignUp(data)
-    dispatch(loginCustomer(data.email, data.password))
+    dispatch(loginCustomer(data.email, data.password, data.posToken))
     dispatch(fulfill(SIGN_UP))
     if (callback) callback()
   } catch (err) {
