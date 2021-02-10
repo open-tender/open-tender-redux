@@ -446,6 +446,10 @@ class OpenTenderAPI {
     return this.request(`/ratings/${ratingUuid}`, 'PUT', data)
   }
 
+  postOrderRatingUnsubscribe(ratingUuid) {
+    return this.request(`/ratings/${ratingUuid}/unsubscribe`, 'POST', {})
+  }
+
   postPurchaseGiftCards(data) {
     return this.request(`/gift-cards-purchase`, 'POST', data)
   }

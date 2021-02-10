@@ -4,6 +4,7 @@ import {
   RESET_ORDER_RATING,
   FETCH_ORDER_RATING,
   UPDATE_ORDER_RATING,
+  UNSUBSCRIBE_ORDER_RATING,
 } from '../reducers/orderRating'
 
 // action creators
@@ -37,5 +38,20 @@ export const updateOrderRating = (orderId, data) => async (
   } catch (err) {
     const errors = makeFormErrors(err)
     dispatch(reject(UPDATE_ORDER_RATING, errors))
+  }
+}
+
+export const unsubscribeOrderRating = ratingUuid => async (
+  dispatch,
+  getState
+) => {
+  const { api } = getState().config
+  if (!api) return
+  dispatch(pending(UNSUBSCRIBE_ORDER_RATING))
+  try {
+    await api.postOrderRatingUnsubscribe(ratingUuid)
+    dispatch(fulfill(UNSUBSCRIBE_ORDER_RATING))
+  } catch (err) {
+    dispatch(reject(UNSUBSCRIBE_ORDER_RATING, err))
   }
 }
