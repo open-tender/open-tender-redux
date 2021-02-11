@@ -25,7 +25,11 @@ export default (state = initState, action) => {
         error: null,
       }
     case `${FETCH_ORDER_RATING}/rejected`:
-      return { ...state, loading: 'idle', error: action.payload }
+      return {
+        orderRating: null,
+        loading: 'idle',
+        error: action.payload,
+      }
 
     case `${UPDATE_ORDER_RATING}/pending`:
       return { ...state, loading: 'pending' }
