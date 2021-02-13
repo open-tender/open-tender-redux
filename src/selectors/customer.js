@@ -41,3 +41,8 @@ export const selectCustomerThanx = state => {
   const { thanx, loading, error } = state.data.customer.thanx
   return { thanx, loading, error }
 }
+
+export const selectCustomerQRCode = state => {
+  const { qrcode, loading, error } = state.data.customer.qrcode
+  return { qrcode, loading, error }
+}

@@ -530,6 +530,10 @@ class OpenTenderAPI {
     return this.request(`/customer/pos-token`, 'POST', data, null, token)
   }
 
+  getCustomerQRCode(token) {
+    return this.request(`/customer/qrcode`, 'GET', null, null, token)
+  }
+
   getCustomerOrders(token, limit, timing) {
     let params = []
     if (limit) params.push(`limit=${limit}`)

@@ -12,6 +12,7 @@ import order from './order'
 import groupOrders from './groupOrders'
 import levelup from './levelup'
 import thanx from './thanx'
+import qrcode from './qrcode'
 
 const customerReducer = combineReducers({
   account,
@@ -27,6 +28,7 @@ const customerReducer = combineReducers({
   groupOrders,
   levelup,
   thanx,
+  qrcode,
 })
 
 export default customerReducer
