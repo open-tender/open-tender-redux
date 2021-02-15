@@ -360,7 +360,7 @@ class OpenTenderAPI {
     return this.request(`/orders/${orderId}/tenders/${index}/void`, 'POST', {})
   }
 
-  postIndentifyCustomer(data) {
+  postIdentifyCustomer(data) {
     return this.request(`/identify-customer`, 'POST', data)
   }
 
