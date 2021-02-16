@@ -1,3 +1,5 @@
+import { loyaltyType, isEmpty } from '@open-tender/js'
+
 export const selectSignUp = state => state.data.signUp
 export const selectLevelUp = state => state.data.levelup
 export const selectResetPassword = state => state.data.resetPassword
@@ -45,4 +47,46 @@ export const selectCustomerThanx = state => {
 export const selectCustomerQRCode = state => {
   const { qrcode, loading, error } = state.data.customer.qrcode
   return { qrcode, loading, error }
+}
+
+export const makeOpenTenderRewards = program => {
+  const { name, description, spend, redemption, credit } = program
+  const currentSpend = parseFloat(spend.current)
+  const threshold = parseFloat(redemption.threshold)
+  const remaining = threshold - currentSpend
+  const progress = parseInt((currentSpend / threshold) * 100)
+  const currentCredit = parseFloat(credit.current)
+  return {
+    name,
+    description,
+    progress,
+    spend: currentSpend.toFixed(2),
+    remaining: remaining.toFixed(2),
+    threshold: threshold.toFixed(2),
+    credit: currentCredit.toFixed(2),
+    reward: `your next $${redemption.reward} off!`,
+  }
+}
+
+export const makeThanxRewards = program => {
+  const { progress, rewards } = program
+  return {
+    name: 'Your Progress',
+    progress: !isEmpty(progress) ? parseInt(progress.percentage) : null,
+    reward: !isEmpty(progress) ? progress.towards : null,
+  }
+}
+
+export const selectCustomerRewards = state => {
+  const { loyalty, thanx, levelup } = state.data.customer
+  const programs = loyalty.entities.filter(
+    i =>
+      i.loyalty_type === loyaltyType.CREDIT &&
+      (i.spend.order_type === null || i.spend.order_type == 'OLO')
+  )
+  if (programs.length) return makeOpenTenderRewards(programs[0])
+  const { thanx: program } = thanx
+  if (program) return makeThanxRewards(program)
+
+  return loyalty
 }
