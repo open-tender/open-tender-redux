@@ -13,6 +13,7 @@ export const LOGIN_CUSTOMER = `${NAME}/loginCustomer`
 export const LOGOUT_CUSTOMER = `${NAME}/logoutCustomer`
 export const FETCH_CUSTOMER = `${NAME}/fetchCustomer`
 export const UPDATE_CUSTOMER = `${NAME}/updateCustomer`
+export const VERIFY_CUSTOMER = `${NAME}/verifyCustomer`
 
 export default (state = initState, action) => {
   switch (action.type) {
@@ -59,6 +60,14 @@ export default (state = initState, action) => {
       }
     case `${UPDATE_CUSTOMER}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
+
+    case `${VERIFY_CUSTOMER}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${VERIFY_CUSTOMER}/fulfilled`:
+      return { ...state, loading: 'idle' }
+    case `${VERIFY_CUSTOMER}/rejected`:
+      return { ...state, loading: 'idle' }
+
     default:
       return state
   }

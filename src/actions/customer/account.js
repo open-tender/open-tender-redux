@@ -11,6 +11,7 @@ import {
   LOGOUT_CUSTOMER,
   FETCH_CUSTOMER,
   UPDATE_CUSTOMER,
+  VERIFY_CUSTOMER,
 } from '../../reducers/customer/account'
 import { setSelectedAllergens } from '../allergens'
 import { setAlert, addMessage, resetOrder } from '../order'
@@ -169,5 +170,28 @@ export const updateCustomer = data => async (dispatch, getState) => {
   } catch (err) {
     const errors = makeFormErrors(err)
     dispatch(checkAuth(err, () => reject(UPDATE_CUSTOMER, errors)))
+  }
+}
+
+export const sendCustomerVerificationEmail = linkUrl => async (
+  dispatch,
+  getState
+) => {
+  const { api } = getState().config
+  if (!api) return
+  const token = selectToken(getState())
+  if (!token) {
+    dispatch(addMessage('Missing customer token'))
+    return dispatch(reject(VERIFY_CUSTOMER))
+  }
+  dispatch(pending(VERIFY_CUSTOMER))
+  try {
+    await api.postSendVerificationEmail(token, linkUrl)
+    dispatch(showNotification('Verification email sent!'))
+    dispatch(fulfill(VERIFY_CUSTOMER))
+  } catch (err) {
+    console.log(err)
+    dispatch(addMessage(err.detail || err.message))
+    dispatch(reject(VERIFY_CUSTOMER))
   }
 }

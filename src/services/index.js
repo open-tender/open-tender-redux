@@ -353,6 +353,11 @@ class OpenTenderAPI {
     return this.request(`/deals?with_related=true${params}`)
   }
 
+  getDiscountQRCode(discountId, customerId) {
+    const params = customerId ? `?customer_id=${customerId}` : ''
+    return this.request(`/discounts/${discountId}/qrcode${params}`)
+  }
+
   postTender(orderId, tender) {
     return this.request(`/orders/${orderId}/tenders`, 'POST', tender)
   }
@@ -533,6 +538,17 @@ class OpenTenderAPI {
   postCustomerPosToken(token, posToken) {
     const data = { pos_token: posToken }
     return this.request(`/customer/pos-token`, 'POST', data, null, token)
+  }
+
+  postSendVerificationEmail(token, linkUrl) {
+    const data = { link_url: linkUrl }
+    return this.request(
+      `/customer/send-verification-email`,
+      'POST',
+      data,
+      null,
+      token
+    )
   }
 
   getCustomerQRCode(token) {
