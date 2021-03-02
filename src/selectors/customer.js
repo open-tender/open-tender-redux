@@ -21,7 +21,6 @@ export const selectCustomerCreditCardsForPayment = state => {
 }
 
 export const selectCustomerFavorites = state => state.data.customer.favorites
-export const selectCustomerLoyalty = state => state.data.customer.loyalty
 export const selectCustomerHouseAccounts = state =>
   state.data.customer.houseAccounts
 export const selectCustomerOrders = state => state.data.customer.orders
@@ -32,6 +31,8 @@ export const selectCustomerOrder = state => {
   const { entity: order, loading, error } = state.data.customer.order
   return { order, loading, error }
 }
+
+export const selectCustomerLoyalty = state => state.data.customer.loyalty
 
 export const selectCustomerLevelUp = state => {
   const { entities, loading, error } = state.data.customer.levelup
@@ -64,7 +65,8 @@ export const makeOpenTenderRewards = program => {
     remaining: remaining.toFixed(2),
     threshold: threshold.toFixed(2),
     credit: currentCredit.toFixed(2),
-    reward: `your next $${redemption.reward} off!`,
+    towards: `$${redemption.reward} off your order`,
+    rewards: [],
   }
 }
 
@@ -73,7 +75,29 @@ export const makeThanxRewards = program => {
   return {
     name: 'Your Progress',
     progress: !isEmpty(progress) ? parseInt(progress.percentage) : null,
-    reward: !isEmpty(progress) ? progress.towards : null,
+    towards: !isEmpty(progress) ? progress.towards : null,
+    rewards,
+  }
+}
+
+export const makeLevelUpRewards = user => {
+  if (!user.program) return null
+  let { name, description, spend, credit, reward, threshold } = user.program
+  credit = parseFloat(credit)
+  spend = parseFloat(spend)
+  threshold = parseFloat(threshold)
+  const remaining = threshold - spend
+  const progress = parseInt((spend / threshold) * 100)
+  return {
+    name,
+    description,
+    progress,
+    spend: spend.toFixed(2),
+    remaining: remaining.toFixed(2),
+    threshold: threshold.toFixed(2),
+    credit: credit.toFixed(2),
+    towards: `$${reward} off your order`,
+    rewards: [],
   }
 }
 
@@ -84,9 +108,21 @@ export const selectCustomerRewards = state => {
       i.loyalty_type === loyaltyType.CREDIT &&
       (i.spend.order_type === null || i.spend.order_type == 'OLO')
   )
-  if (programs.length) return makeOpenTenderRewards(programs[0])
+  // if (programs.length) return makeOpenTenderRewards(programs[0])
+  if (programs.length) return programs[0]
   const { thanx: program } = thanx
   if (program) return makeThanxRewards(program)
+  if (levelup.entities.length) {
+    return makeLevelUpRewards(levelup.entities[0])
+  }
+  return null
+}
 
-  return loyalty
+export const selectCustomerRewardsLoading = state => {
+  const { loyalty, thanx, levelup } = state.data.customer
+  return (
+    loyalty.loading === 'pending' ||
+    thanx.loading === 'pending' ||
+    levelup.loading === 'pending'
+  )
 }

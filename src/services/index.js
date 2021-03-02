@@ -22,7 +22,7 @@ const unauthorizedError = {
   detail: 'Provided token is not valid',
 }
 
-const handleReponse = response => {
+const handleResponse = response => {
   const { status, statusText } = response
   if (status >= 500) throw fiveHundredError(status, statusText)
   if (status === 401) throw unauthorizedError
@@ -78,7 +78,7 @@ class OpenTenderAPI {
       }
       if (data) options.body = JSON.stringify(data)
       fetch(`${this.baseUrl}${endpoint}`, options)
-        .then(handleReponse)
+        .then(handleResponse)
         .then(json => {
           if (didTimeOut) return
           resolve(json)
@@ -346,6 +346,11 @@ class OpenTenderAPI {
 
   getMenuPages() {
     return this.request(`/menu-pages`)
+  }
+
+  getDeals(customerId) {
+    const params = customerId ? `&customer_id=${customerId}` : ''
+    return this.request(`/deals?with_related=true${params}`)
   }
 
   postTender(orderId, tender) {
