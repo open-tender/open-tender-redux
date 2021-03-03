@@ -145,6 +145,7 @@ export const fetchCustomer = posToken => async (dispatch, getState) => {
     const lookup = makeFavoritesLookup(favorites)
     dispatch(setCustomerFavoritesLookup(lookup || {}))
     const profile = makeCustomerProfile(customer)
+    console.log(profile)
     dispatch(fulfill(FETCH_CUSTOMER, profile))
     if (posToken) {
       api.postCustomerPosToken(token, posToken).catch(err => {

@@ -551,6 +551,11 @@ class OpenTenderAPI {
     )
   }
 
+  postVerifyAccount(verifyToken) {
+    const data = { token: verifyToken }
+    return this.request(`/verify-account`, 'POST', data)
+  }
+
   getCustomerQRCode(token) {
     return this.request(`/customer/qrcode`, 'GET', null, null, token)
   }
