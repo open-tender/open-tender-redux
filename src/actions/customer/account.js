@@ -145,7 +145,6 @@ export const fetchCustomer = posToken => async (dispatch, getState) => {
     const lookup = makeFavoritesLookup(favorites)
     dispatch(setCustomerFavoritesLookup(lookup || {}))
     const profile = makeCustomerProfile(customer)
-    console.log(profile)
     dispatch(fulfill(FETCH_CUSTOMER, profile))
     if (posToken) {
       api.postCustomerPosToken(token, posToken).catch(err => {
@@ -191,7 +190,6 @@ export const sendCustomerVerificationEmail = linkUrl => async (
     dispatch(showNotification('Verification email sent!'))
     dispatch(fulfill(VERIFY_CUSTOMER))
   } catch (err) {
-    console.log(err)
     dispatch(addMessage(err.detail || err.message))
     dispatch(reject(VERIFY_CUSTOMER))
   }
