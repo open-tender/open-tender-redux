@@ -16,6 +16,7 @@ import {
   SET_ORDER_TYPE,
   SET_SERVICE_TYPE,
   SET_ORDER_SERVICE_TYPE,
+  SET_DEVICE_TYPE,
   SET_MENU_VARS,
   SET_REVENUE_CENTER,
   SET_ADDRESS,
@@ -76,6 +77,10 @@ export const setServiceType = serviceType => ({
 export const setOrderServiceType = (orderType, serviceType, isOutpost) => ({
   type: SET_ORDER_SERVICE_TYPE,
   payload: { orderType, serviceType, isOutpost: isOutpost || false },
+})
+export const setDeviceType = deviceType => ({
+  type: SET_DEVICE_TYPE,
+  payload: deviceType,
 })
 export const setMenuVars = (revenueCenter, serviceType, requestedAt) => ({
   type: SET_MENU_VARS,

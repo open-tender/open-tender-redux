@@ -14,6 +14,7 @@ const initState = {
   orderId: null,
   orderType: null,
   serviceType: null,
+  deviceType: null,
   isOutpost: false,
   revenueCenter: null,
   requestedAt: 'asap',
@@ -42,6 +43,7 @@ export const SET_ORDER_ID = `${NAME}/setOrderId`
 export const SET_ORDER_TYPE = `${NAME}/setOrderType`
 export const SET_SERVICE_TYPE = `${NAME}/setServiceType`
 export const SET_ORDER_SERVICE_TYPE = `${NAME}/setOrderServiceType`
+export const SET_DEVICE_TYPE = `${NAME}/setDeviceType`
 export const SET_MENU_VARS = `${NAME}/setMenuVars`
 export const SET_REVENUE_CENTER = `${NAME}/setRevenueCenter`
 export const SET_ADDRESS = `${NAME}/setAddress`
@@ -121,6 +123,8 @@ export default (state = initState, action) => {
       return { ...state, serviceType: action.payload }
     case SET_ORDER_SERVICE_TYPE:
       return { ...state, ...action.payload }
+    case SET_DEVICE_TYPE:
+      return { ...state, deviceType: action.payload }
     case SET_MENU_VARS: {
       const { revenueCenter } = action.payload
       return {

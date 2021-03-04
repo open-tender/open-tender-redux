@@ -81,7 +81,14 @@ export const validateOrder = order => async (dispatch, getState) => {
 
 const assembleOrder = orderData => {
   const { order, checkout, groupOrder } = orderData
-  const { orderId, revenueCenter, serviceType, requestedAt, cart } = order
+  const {
+    orderId,
+    revenueCenter,
+    serviceType,
+    requestedAt,
+    cart,
+    deviceType,
+  } = order
   const { revenue_center_id: revenueCenterId } = revenueCenter || {}
   const { check, form } = checkout
   const {
@@ -111,6 +118,7 @@ const assembleOrder = orderData => {
     tip: tip === null ? defaultTip : tip,
     tenders,
     cartId: groupOrder.cartId || null,
+    deviceType,
   }
   const preparedOrder = prepareOrder(data)
   return preparedOrder
