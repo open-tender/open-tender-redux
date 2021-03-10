@@ -12,6 +12,7 @@ import {
   FETCH_CUSTOMER,
   UPDATE_CUSTOMER,
   VERIFY_CUSTOMER,
+  LINK_POS_TOKEN,
 } from '../../reducers/customer/account'
 import { setSelectedAllergens } from '../allergens'
 import { setAlert, addMessage, resetOrder } from '../order'
@@ -41,7 +42,7 @@ export const resetLoginError = () => ({ type: RESET_LOGIN_ERROR })
 
 // async action creators
 
-export const loginCustomer = (email, password, posToken) => async (
+export const loginCustomer = (email, password) => async (
   dispatch,
   getState
 ) => {
@@ -50,37 +51,6 @@ export const loginCustomer = (email, password, posToken) => async (
   dispatch(pending(LOGIN_CUSTOMER))
   try {
     const auth = await api.postLogin(email, password)
-    dispatch(fulfill(LOGIN_CUSTOMER, auth))
-    dispatch(fetchCustomer(posToken))
-  } catch (err) {
-    dispatch(reject(LOGIN_CUSTOMER, err))
-  }
-}
-
-export const loginCustomerThanx = email => async (dispatch, getState) => {
-  const { api } = getState().config
-  if (!api) return
-  dispatch(pending(LOGIN_CUSTOMER))
-  try {
-    await api.postThanxLogin(email)
-    dispatch(setAlert({ type: 'close' }))
-    dispatch(addMessage('Thanks! Please check your email on this device.'))
-    dispatch(fulfill(LOGIN_CUSTOMER, null))
-  } catch (err) {
-    const error = err.params ? err.params['$.email'] : null
-    if (error && error.includes("'email'")) {
-      err.detail = 'Please enter a valid email address'
-    }
-    dispatch(reject(LOGIN_CUSTOMER, err))
-  }
-}
-
-export const authCustomerThanx = code => async (dispatch, getState) => {
-  const { api } = getState().config
-  if (!api) return
-  dispatch(pending(LOGIN_CUSTOMER))
-  try {
-    const auth = await api.postThanxAuth(code)
     dispatch(fulfill(LOGIN_CUSTOMER, auth))
     dispatch(fetchCustomer())
   } catch (err) {
@@ -128,7 +98,23 @@ export const checkAuth = (err, reject) => async dispatch => {
   }
 }
 
-export const fetchCustomer = posToken => async (dispatch, getState) => {
+export const linkPosToken = posToken => async (dispatch, getState) => {
+  const { api } = getState().config
+  if (!api) return
+  const token = selectToken(getState())
+  if (!token) return dispatch(reject(LINK_POS_TOKEN, MISSING_CUSTOMER))
+  dispatch(pending(LINK_POS_TOKEN))
+  try {
+    await api.postCustomerPosToken(token, posToken)
+    dispatch(showNotification('Order successfully linked!'))
+    dispatch(fulfill(LINK_POS_TOKEN))
+  } catch (err) {
+    dispatch(addMessage(err.detail || err.message))
+    dispatch(reject(LINK_POS_TOKEN))
+  }
+}
+
+export const fetchCustomer = () => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   const token = selectToken(getState())
@@ -146,11 +132,6 @@ export const fetchCustomer = posToken => async (dispatch, getState) => {
     dispatch(setCustomerFavoritesLookup(lookup || {}))
     const profile = makeCustomerProfile(customer)
     dispatch(fulfill(FETCH_CUSTOMER, profile))
-    if (posToken) {
-      api.postCustomerPosToken(token, posToken).catch(err => {
-        dispatch(addMessage(err.detail || err.message))
-      })
-    }
   } catch (err) {
     dispatch(checkAuth(err, () => reject(FETCH_CUSTOMER, err)))
   }
@@ -192,5 +173,36 @@ export const sendCustomerVerificationEmail = linkUrl => async (
   } catch (err) {
     dispatch(addMessage(err.detail || err.message))
     dispatch(reject(VERIFY_CUSTOMER))
+  }
+}
+
+export const loginCustomerThanx = email => async (dispatch, getState) => {
+  const { api } = getState().config
+  if (!api) return
+  dispatch(pending(LOGIN_CUSTOMER))
+  try {
+    await api.postThanxLogin(email)
+    dispatch(setAlert({ type: 'close' }))
+    dispatch(addMessage('Thanks! Please check your email on this device.'))
+    dispatch(fulfill(LOGIN_CUSTOMER, null))
+  } catch (err) {
+    const error = err.params ? err.params['$.email'] : null
+    if (error && error.includes("'email'")) {
+      err.detail = 'Please enter a valid email address'
+    }
+    dispatch(reject(LOGIN_CUSTOMER, err))
+  }
+}
+
+export const authCustomerThanx = code => async (dispatch, getState) => {
+  const { api } = getState().config
+  if (!api) return
+  dispatch(pending(LOGIN_CUSTOMER))
+  try {
+    const auth = await api.postThanxAuth(code)
+    dispatch(fulfill(LOGIN_CUSTOMER, auth))
+    dispatch(fetchCustomer())
+  } catch (err) {
+    dispatch(reject(LOGIN_CUSTOMER, err))
   }
 }
