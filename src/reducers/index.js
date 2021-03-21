@@ -4,6 +4,7 @@ import revenueCenters from './revenueCenters'
 import validTimes from './validTimes'
 import menu from './menu'
 import menuItems from './menuItems'
+import menuDisplay from './menuDisplay'
 import menuPages from './menuPages'
 import allergens from './allergens'
 import checkout from './checkout'
@@ -34,6 +35,7 @@ const openTenderReducer = combineReducers({
   validTimes,
   menu,
   menuItems,
+  menuDisplay,
   menuPages,
   allergens,
   checkout,

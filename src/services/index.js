@@ -344,6 +344,11 @@ class OpenTenderAPI {
     return this.request(`/menu-items?${params}`)
   }
 
+  getMenuDisplay(revenueCenterId, serviceType, weekday, minutes) {
+    const params = `service_type=${serviceType}&weekday=${weekday}&minutes=${minutes}`
+    return this.request(`/menus/${revenueCenterId}/display?${params}`)
+  }
+
   getMenuPages() {
     return this.request(`/menu-pages`)
   }

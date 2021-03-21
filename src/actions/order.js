@@ -16,6 +16,7 @@ import {
   SET_ORDER_TYPE,
   SET_SERVICE_TYPE,
   SET_ORDER_SERVICE_TYPE,
+  SET_CURBSIDE,
   SET_DEVICE_TYPE,
   SET_MENU_VARS,
   SET_REVENUE_CENTER,
@@ -74,9 +75,23 @@ export const setServiceType = serviceType => ({
   type: SET_SERVICE_TYPE,
   payload: serviceType,
 })
-export const setOrderServiceType = (orderType, serviceType, isOutpost) => ({
+export const setOrderServiceType = (
+  orderType,
+  serviceType,
+  isOutpost,
+  isCurbside
+) => ({
   type: SET_ORDER_SERVICE_TYPE,
-  payload: { orderType, serviceType, isOutpost: isOutpost || false },
+  payload: {
+    orderType,
+    serviceType,
+    isOutpost: isOutpost || false,
+    isCurbside: isCurbside || false,
+  },
+})
+export const setCurbside = bool => ({
+  type: SET_CURBSIDE,
+  payload: bool,
 })
 export const setDeviceType = deviceType => ({
   type: SET_DEVICE_TYPE,

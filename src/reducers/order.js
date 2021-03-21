@@ -16,6 +16,7 @@ const initState = {
   serviceType: null,
   deviceType: null,
   isOutpost: false,
+  isCurbside: false,
   revenueCenter: null,
   requestedAt: 'asap',
   address: null,
@@ -43,6 +44,7 @@ export const SET_ORDER_ID = `${NAME}/setOrderId`
 export const SET_ORDER_TYPE = `${NAME}/setOrderType`
 export const SET_SERVICE_TYPE = `${NAME}/setServiceType`
 export const SET_ORDER_SERVICE_TYPE = `${NAME}/setOrderServiceType`
+export const SET_CURBSIDE = `${NAME}/setCurbside`
 export const SET_DEVICE_TYPE = `${NAME}/setDeviceType`
 export const SET_MENU_VARS = `${NAME}/setMenuVars`
 export const SET_REVENUE_CENTER = `${NAME}/setRevenueCenter`
@@ -74,7 +76,8 @@ export default (state = initState, action) => {
         orderId: null,
         orderType: null,
         serviceType: null,
-        isOutpost: null,
+        isOutpost: false,
+        isCurbside: false,
         revenueCenter: null,
         requestedAt: null,
       }
@@ -123,6 +126,8 @@ export default (state = initState, action) => {
       return { ...state, serviceType: action.payload }
     case SET_ORDER_SERVICE_TYPE:
       return { ...state, ...action.payload }
+    case SET_CURBSIDE:
+      return { ...state, isCurbside: action.payload }
     case SET_DEVICE_TYPE:
       return { ...state, deviceType: action.payload }
     case SET_MENU_VARS: {
