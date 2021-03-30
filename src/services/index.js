@@ -368,6 +368,22 @@ class OpenTenderAPI {
     return this.request(`/announcement-pages/${page}`)
   }
 
+  getPages() {
+    return this.request(`/pages`)
+  }
+
+  getPage(slug) {
+    return this.request(`/pages/${slug}`)
+  }
+
+  getPosts() {
+    return this.request(`/posts`)
+  }
+
+  getPost(slug) {
+    return this.request(`/posts/${slug}`)
+  }
+
   getDiscountQRCode(discountId, customerId) {
     const params = customerId ? `?customer_id=${customerId}` : ''
     return this.request(`/discounts/${discountId}/qrcode${params}`)
