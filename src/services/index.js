@@ -331,7 +331,7 @@ class OpenTenderAPI {
   }
 
   getAllergens() {
-    return this.request(`/allergens`)
+    return this.request(`/allergens?with_related=true`)
   }
 
   getMenu(revenueCenterId, serviceType, requestedAt) {
