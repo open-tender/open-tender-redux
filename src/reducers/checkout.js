@@ -11,6 +11,7 @@ const initState = {
     tip: null,
   },
   submitting: false,
+  isGuest: false,
   completedOrder: null,
   errors: {},
   loading: 'idle',
@@ -24,6 +25,7 @@ export const RESET_TIP = `${NAME}/resetTip`
 export const RESET_COMPLETED_ORDER = `${NAME}/resetCompletedOrder`
 export const SET_COMPLETED_ORDER = `${NAME}/setCompletedOrder`
 export const SET_SUBMITTING = `${NAME}/setSubmitting`
+export const SET_GUEST = `${NAME}/setGuest`
 export const UPDATE_FORM = `${NAME}/updateForm`
 export const UPDATE_CUSTOMER = `${NAME}/updateCustomer`
 export const VALIDATE_ORDER = `${NAME}/validateOrder`
@@ -43,6 +45,8 @@ export default (state = initState, action) => {
       return { ...initState, completedOrder: action.payload }
     case SET_SUBMITTING:
       return { ...state, submitting: action.payload }
+    case SET_GUEST:
+      return { ...state, isGuest: action.payload }
     case UPDATE_FORM: {
       let errors = { ...state.errors }
       const { tenders } = action.payload

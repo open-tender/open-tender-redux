@@ -14,6 +14,7 @@ import {
   RESET_COMPLETED_ORDER,
   SET_COMPLETED_ORDER,
   SET_SUBMITTING,
+  SET_GUEST,
   UPDATE_FORM,
   UPDATE_CUSTOMER,
   VALIDATE_ORDER,
@@ -34,6 +35,7 @@ export const setCompletedOrder = order => ({
   payload: order,
 })
 export const setSubmitting = bool => ({ type: SET_SUBMITTING, payload: bool })
+export const setGuest = bool => ({ type: SET_GUEST, payload: bool })
 export const updateForm = form => ({ type: UPDATE_FORM, payload: form })
 export const updateCheckoutCustomer = account => ({
   type: UPDATE_CUSTOMER,
@@ -55,6 +57,7 @@ export const validateOrder = order => async (dispatch, getState) => {
   if (!api) return
   dispatch(pending(VALIDATE_ORDER))
   try {
+    if (!order) order = assembleOrder(getState().data)
     const check = await api.postOrderValidate(order)
     const errMessages = handleCheckoutErrors({ params: check.errors })
     let errors = {}
