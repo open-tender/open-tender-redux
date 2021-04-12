@@ -20,6 +20,7 @@ const initState = {
   revenueCenter: null,
   requestedAt: 'asap',
   address: null,
+  currentCategory: null,
   currentItem: null,
   cart: [],
   cartCounts: {},
@@ -51,6 +52,7 @@ export const SET_REVENUE_CENTER = `${NAME}/setRevenueCenter`
 export const SET_ADDRESS = `${NAME}/setAddress`
 export const SET_REQUESTED_AT = `${NAME}/setRequestedAt`
 export const SET_CART = `${NAME}/setCart`
+export const SET_CURRENT_CATEGORY = `${NAME}/setCurrentCategory`
 export const SET_CURRENT_ITEM = `${NAME}/setCurrentItem`
 export const ADD_ITEM = `${NAME}/addItemToCart`
 export const REMOVE_ITEM = `${NAME}/removeItemFromCart`
@@ -176,6 +178,8 @@ export default (state = initState, action) => {
       const cartCounts = calcCartCounts(action.payload)
       return { ...state, cart: action.payload, cartCounts }
     }
+    case SET_CURRENT_CATEGORY:
+      return { ...state, currentCategory: action.payload }
     case SET_CURRENT_ITEM:
       return { ...state, currentItem: action.payload }
     case ADD_ITEM: {
