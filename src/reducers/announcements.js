@@ -1,6 +1,6 @@
 const initState = {
-  settings: null,
   entities: [],
+  pages: [],
   loading: 'idle',
   error: null,
 }
@@ -33,29 +33,30 @@ export default (state = initState, action) => {
     case `${FETCH_ANNOUNCEMENT_PAGE}/pending`:
       return {
         ...state,
-        settings: null,
-        entities: [],
         loading: 'pending',
         error: null,
       }
+    case `${FETCH_ANNOUNCEMENT_PAGE}/cached`:
+      return { ...state, loading: 'idle' }
     case `${FETCH_ANNOUNCEMENT_PAGE}/fulfilled`: {
-      const { settings, entities } = action.payload
+      const { page } = action.payload
+      const pages = state.pages ? state.pages.filter(i => i.page !== page) : []
       return {
         ...state,
-        settings,
-        entities,
+        pages: [...pages, action.payload],
         loading: 'idle',
         error: null,
       }
     }
-    case `${FETCH_ANNOUNCEMENT_PAGE}/rejected`:
+    case `${FETCH_ANNOUNCEMENT_PAGE}/rejected`: {
+      const { error, page } = action.payload
       return {
         ...state,
-        settings: null,
-        entities: [],
+        pages: state.pages.filter(i => i.page !== page),
         loading: 'idle',
-        error: action.payload,
+        error,
       }
+    }
 
     default:
       return state

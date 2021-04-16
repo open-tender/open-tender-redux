@@ -1,6 +1,6 @@
 import { isEmpty, isObject } from '@open-tender/js'
 
-const handleError = err => {
+export const handleError = err => {
   if (isObject(err) && isEmpty(err)) return err
   return !err ? null : err.form ? err : err.detail || err.message
 }
