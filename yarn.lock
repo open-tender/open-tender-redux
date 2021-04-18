@@ -789,10 +789,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@open-tender/js@^1.4.4":
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/@open-tender/js/-/js-1.4.4.tgz#b48c553f1364bc99f063a4bac17fcd28ac723218"
-  integrity sha512-O0o9mVxIRaFh2npJWLp2+uljKfX06igOKQnls1g1dPpupR2gsgJ1vwFvazRuAD/1gXtcVBI0+xPV4fpYv5iDGA==
+"@open-tender/js@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@open-tender/js/-/js-1.5.1.tgz#bc0460ad59b610676b08c661937688c4b093e62c"
+  integrity sha512-a2EmSooQlrctiUnEclu3RrePqwfmCv/igeqApIoDjO/JE9a2xDzi8kgdkcoA/z++4BQ9BtnKX2dzy9yNvR7tgw==
 
 "@types/color-name@^1.1.1":
   version "1.1.1"
