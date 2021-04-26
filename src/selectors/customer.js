@@ -105,8 +105,9 @@ export const selectCustomerRewards = state => {
   const { loyalty, thanx, levelup } = state.data.customer
   const programs = loyalty.entities.filter(
     i =>
-      i.loyalty_type === loyaltyType.CREDIT &&
-      (i.spend.order_type === null || i.spend.order_type == 'OLO')
+      (i.loyalty_type === loyaltyType.CREDIT ||
+        i.loyalty_type === loyaltyType.POINTS) &&
+      (i.spend.order_type === null || i.spend.order_type === 'OLO')
   )
   // if (programs.length) return makeOpenTenderRewards(programs[0])
   if (programs.length) return programs[0]
@@ -125,4 +126,19 @@ export const selectCustomerRewardsLoading = state => {
     thanx.loading === 'pending' ||
     levelup.loading === 'pending'
   )
+}
+
+export const selectCustomerPointsProgram = orderType => state => {
+  const { loyalty } = state.data.customer
+  const programs = loyalty.entities.filter(
+    i =>
+      i.loyalty_type === loyaltyType.POINTS &&
+      (i.spend.order_type === null || i.spend.order_type === orderType)
+  )
+  return programs.length ? programs[0] : null
+}
+
+export const selectCustomerPoints = orderType => state => {
+  const program = selectCustomerPointsProgram(orderType)(state)
+  return program ? program.points : null
 }

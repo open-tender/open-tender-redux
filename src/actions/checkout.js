@@ -101,6 +101,7 @@ const assembleOrder = orderData => {
     surcharges,
     discounts,
     promoCodes,
+    points,
     tenders,
     tip,
   } = form
@@ -118,6 +119,7 @@ const assembleOrder = orderData => {
     surcharges,
     discounts,
     promoCodes,
+    points,
     tip: tip === null ? defaultTip : tip,
     tenders,
     cartId: groupOrder.cartId || null,

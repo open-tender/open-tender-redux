@@ -7,6 +7,7 @@ const initState = {
     surcharges: [],
     discounts: [],
     promoCodes: [],
+    points: [],
     tenders: [],
     tip: null,
   },
