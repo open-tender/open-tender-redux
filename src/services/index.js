@@ -222,13 +222,20 @@ class OpenTenderAPI {
     return this.request(`/surcharges${params}`)
   }
 
-  getDiscounts(serviceType) {
-    const params = serviceType ? `?service_type=${serviceType}` : ''
+  getDiscounts(serviceType, orderType) {
+    let params = []
+    if (serviceType) params.push(`service_type=${serviceType}`)
+    if (orderType) params.push(`order_type=${orderType}`)
+    params = params.length ? `?${params.join('&')}` : ''
     return this.request(`/discounts${params}`)
   }
 
   getDiscount(name) {
     return this.request(`/discounts/${name}`)
+  }
+
+  getDiscountViaQRCode(code) {
+    return this.request(`/qrcodes/${code}`)
   }
 
   getTaxes(serviceType, orderType) {
