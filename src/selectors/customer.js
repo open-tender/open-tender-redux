@@ -32,7 +32,31 @@ export const selectCustomerOrder = state => {
   return { order, loading, error }
 }
 
-export const selectCustomerLoyalty = state => state.data.customer.loyalty
+export const selectCustomerQRCode = state => {
+  const { qrcode, loading, error } = state.data.customer.qrcode
+  return { qrcode, loading, error }
+}
+
+export const makeLevelUpProgram = user => {
+  if (!user.program) return null
+  let { name, description, spend, credit, reward, threshold } = user.program
+  credit = parseFloat(credit)
+  spend = parseFloat(spend)
+  threshold = parseFloat(threshold)
+  const remaining = threshold - spend
+  const progress = parseInt((spend / threshold) * 100)
+  return {
+    name,
+    description,
+    progress,
+    spend: spend.toFixed(2),
+    remaining: remaining.toFixed(2),
+    threshold: threshold.toFixed(2),
+    credit: credit.toFixed(2),
+    towards: `$${reward} off your order`,
+    rewards: [],
+  }
+}
 
 export const selectCustomerLevelUp = state => {
   const { entities, loading, error } = state.data.customer.levelup
@@ -40,14 +64,31 @@ export const selectCustomerLevelUp = state => {
   return { levelup, loading, error }
 }
 
+export const selectCustomerLevelUpProgram = state => {
+  const { entities, loading, error } = state.data.customer.levelup
+  const program = entities.length ? makeLevelUpProgram(entities[0]) : null
+  return { program, loading, error }
+}
+
+export const makeThanxProgram = program => {
+  const { progress, rewards } = program
+  return {
+    name: 'Your Progress',
+    progress: !isEmpty(progress) ? parseInt(progress.percentage) : null,
+    towards: !isEmpty(progress) ? progress.towards : null,
+    rewards,
+  }
+}
+
 export const selectCustomerThanx = state => {
   const { thanx, loading, error } = state.data.customer.thanx
   return { thanx, loading, error }
 }
 
-export const selectCustomerQRCode = state => {
-  const { qrcode, loading, error } = state.data.customer.qrcode
-  return { qrcode, loading, error }
+export const selectCustomerThanxProgram = state => {
+  const { thanx, loading, error } = state.data.customer.thanx
+  const program = thanx ? makeThanxProgram(thanx) : null
+  return { program, loading, error }
 }
 
 export const makeOpenTenderRewards = program => {
@@ -70,62 +111,20 @@ export const makeOpenTenderRewards = program => {
   }
 }
 
-export const makeThanxRewards = program => {
-  const { progress, rewards } = program
-  return {
-    name: 'Your Progress',
-    progress: !isEmpty(progress) ? parseInt(progress.percentage) : null,
-    towards: !isEmpty(progress) ? progress.towards : null,
-    rewards,
-  }
-}
+export const selectCustomerRewards = state => state.data.customer.rewards
 
-export const makeLevelUpRewards = user => {
-  if (!user.program) return null
-  let { name, description, spend, credit, reward, threshold } = user.program
-  credit = parseFloat(credit)
-  spend = parseFloat(spend)
-  threshold = parseFloat(threshold)
-  const remaining = threshold - spend
-  const progress = parseInt((spend / threshold) * 100)
-  return {
-    name,
-    description,
-    progress,
-    spend: spend.toFixed(2),
-    remaining: remaining.toFixed(2),
-    threshold: threshold.toFixed(2),
-    credit: credit.toFixed(2),
-    towards: `$${reward} off your order`,
-    rewards: [],
-  }
-}
+export const selectCustomerLoyalty = state => state.data.customer.loyalty
 
-export const selectCustomerRewards = state => {
-  const { loyalty, thanx, levelup } = state.data.customer
-  const programs = loyalty.entities.filter(
+export const selectCustomerLoyaltyProgram = state => {
+  const { entities, loading, error } = state.data.customer.loyalty
+  const programs = entities.filter(
     i =>
       (i.loyalty_type === loyaltyType.CREDIT ||
         i.loyalty_type === loyaltyType.POINTS) &&
       (i.spend.order_type === null || i.spend.order_type === 'OLO')
   )
-  // if (programs.length) return makeOpenTenderRewards(programs[0])
-  if (programs.length) return programs[0]
-  const { thanx: program } = thanx
-  if (program) return makeThanxRewards(program)
-  if (levelup.entities.length) {
-    return makeLevelUpRewards(levelup.entities[0])
-  }
-  return null
-}
-
-export const selectCustomerRewardsLoading = state => {
-  const { loyalty, thanx, levelup } = state.data.customer
-  return (
-    loyalty.loading === 'pending' ||
-    thanx.loading === 'pending' ||
-    levelup.loading === 'pending'
-  )
+  const program = programs.length ? programs[0] : null
+  return { program, loading, error }
 }
 
 export const selectCustomerPointsProgram = orderType => state => {

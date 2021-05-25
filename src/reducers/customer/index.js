@@ -6,10 +6,11 @@ import creditCards from './creditCards'
 import giftCards from './giftCards'
 import favorites from './favorites'
 import houseAccounts from './houseAccounts'
-import loyalty from './loyalty'
 import orders from './orders'
 import order from './order'
 import groupOrders from './groupOrders'
+import rewards from './rewards'
+import loyalty from './loyalty'
 import levelup from './levelup'
 import thanx from './thanx'
 import qrcode from './qrcode'
@@ -22,10 +23,11 @@ const customerReducer = combineReducers({
   giftCards,
   favorites,
   houseAccounts,
-  loyalty,
   orders,
   order,
   groupOrders,
+  rewards,
+  loyalty,
   levelup,
   thanx,
   qrcode,

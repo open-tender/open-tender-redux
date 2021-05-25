@@ -598,6 +598,16 @@ class OpenTenderAPI {
     return this.request(`/customer/qrcode`, 'GET', null, null, token)
   }
 
+  getCustomerRewards(token) {
+    return this.request(
+      `/customer/rewards?with_related=true`,
+      'GET',
+      null,
+      null,
+      token
+    )
+  }
+
   getCustomerOrders(token, limit, timing) {
     let params = []
     if (limit) params.push(`limit=${limit}`)

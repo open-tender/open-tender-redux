@@ -1,24 +1,24 @@
 import { pending, fulfill, reject, MISSING_CUSTOMER } from '../../utils'
-import { name, entity } from '../../reducers/customer/loyalty'
+import { name, entity } from '../../reducers/customer/rewards'
 import { selectToken } from '../../selectors/customer'
 import { checkAuth } from './account'
 
 // action creators
 
-export const resetCustomerLoyalty = () => ({
+export const resetCustomerRewards = () => ({
   type: `${name}/reset${entity}`,
 })
-export const resetCustomerLoyaltyError = () => ({
+export const resetCustomerRewardsError = () => ({
   type: `${name}/reset${entity}Error`,
 })
-export const setCustomerLoyalty = loyalty => ({
+export const setCustomerRewards = rewards => ({
   type: `${name}/set${entity}`,
-  payload: loyalty,
+  payload: rewards,
 })
 
 // async action creators
 
-export const fetchCustomerLoyalty = () => async (dispatch, getState) => {
+export const fetchCustomerRewards = () => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   const token = selectToken(getState())
@@ -26,8 +26,8 @@ export const fetchCustomerLoyalty = () => async (dispatch, getState) => {
     return dispatch(reject(`${name}/fetch${entity}`, MISSING_CUSTOMER))
   dispatch(pending(`${name}/fetch${entity}`))
   try {
-    const loyalty = await api.getCustomerLoyalty(token)
-    dispatch(fulfill(`${name}/fetch${entity}`, loyalty))
+    const rewards = await api.getCustomerRewards(token)
+    dispatch(fulfill(`${name}/fetch${entity}`, rewards))
   } catch (err) {
     dispatch(checkAuth(err, () => reject(`${name}/fetch${entity}`, err)))
   }
