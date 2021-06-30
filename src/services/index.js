@@ -383,8 +383,9 @@ class OpenTenderAPI {
     return this.request(`/pages/${slug}`)
   }
 
-  getPosts() {
-    return this.request(`/posts`)
+  getPosts(slug) {
+    const params = slug ? `?post_category_slug=${slug}` : ''
+    return this.request(`/posts${params}`)
   }
 
   getPost(slug) {
