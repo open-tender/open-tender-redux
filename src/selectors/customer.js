@@ -141,3 +141,8 @@ export const selectCustomerPoints = orderType => state => {
   const program = selectCustomerPointsProgram(orderType)(state)
   return program ? program.points : null
 }
+
+export const selectPointsProgram = state => {
+  const { orderType } = state.data.order
+  return orderType ? selectCustomerPointsProgram(orderType)(state) : null
+}
