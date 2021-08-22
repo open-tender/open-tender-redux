@@ -28,6 +28,7 @@ import donations from './donations'
 import deals from './deals'
 import verifyAccount from './verifyAccount'
 import announcements from './announcements'
+import guest from './guest'
 
 const openTenderReducer = combineReducers({
   order,
@@ -59,6 +60,7 @@ const openTenderReducer = combineReducers({
   deals,
   verifyAccount,
   announcements,
+  guest,
 })
 
 export default openTenderReducer

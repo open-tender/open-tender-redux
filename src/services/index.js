@@ -527,6 +527,10 @@ class OpenTenderAPI {
     return this.request(`/cart-guests`, 'POST', data)
   }
 
+  getGuest(email) {
+    return this.request(`/guest?email=${encodeURIComponent(email)}`)
+  }
+
   postSignUp(data) {
     return this.request(`/customer`, 'POST', data)
   }
