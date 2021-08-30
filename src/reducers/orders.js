@@ -15,6 +15,7 @@ export const SET_CURRENT_ORDER = `${NAME}/setCurrentOrder`
 export const RESET_ORDERS = `${NAME}/resetOrders`
 export const UPDATE_ORDER = `${NAME}/updateOrder`
 export const FETCH_ORDERS = `${NAME}/fetchOrders`
+export const FETCH_ORDERS_TODAY = `${NAME}/fetchOrdersToday`
 export const PRINT_TICKET = `${NAME}/printTicket`
 export const UPDATE_TICKET = `${NAME}/updateTicket`
 export const PRINT_TICKETS = `${NAME}/printTickets`
@@ -59,6 +60,21 @@ export default (state = initState, action) => {
       }
     }
     case `${FETCH_ORDERS}/rejected`:
+      return { ...state, loading: 'idle' }
+
+    // fetchOrdersToday
+    case `${FETCH_ORDERS_TODAY}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${FETCH_ORDERS_TODAY}/fulfilled`: {
+      const { orders, counts } = action.payload
+      return {
+        ...state,
+        entities: orders,
+        counts,
+        loading: 'idle',
+      }
+    }
+    case `${FETCH_ORDERS_TODAY}/rejected`:
       return { ...state, loading: 'idle' }
 
     // printTicket
