@@ -22,6 +22,7 @@ const NAME = 'checkout'
 
 export const RESET_CHECKOUT = `${NAME}/resetCheckout`
 export const RESET_ERRORS = `${NAME}/resetErrors`
+export const RESET_CHECK = `${NAME}/resetCheck`
 export const RESET_TIP = `${NAME}/resetTip`
 export const RESET_COMPLETED_ORDER = `${NAME}/resetCompletedOrder`
 export const SET_COMPLETED_ORDER = `${NAME}/setCompletedOrder`
@@ -36,10 +37,12 @@ export default (state = initState, action) => {
   switch (action.type) {
     case RESET_CHECKOUT:
       return { ...initState }
+    case RESET_CHECK:
+      return { ...state, check: null }
+    case RESET_TIP:
+      return { ...state, form: { ...state.form, tip: null } }
     case RESET_ERRORS:
       return { ...state, errors: {} }
-    case RESET_TIP:
-      return { ...state, tip: null }
     case RESET_COMPLETED_ORDER:
       return { ...state, completedOrder: null }
     case SET_COMPLETED_ORDER:

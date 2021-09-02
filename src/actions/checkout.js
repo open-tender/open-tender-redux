@@ -10,6 +10,7 @@ import { pending, fulfill, reject } from '../utils'
 import {
   RESET_CHECKOUT,
   RESET_ERRORS,
+  RESET_CHECK,
   RESET_TIP,
   RESET_COMPLETED_ORDER,
   SET_COMPLETED_ORDER,
@@ -27,8 +28,9 @@ import { loginCustomer } from './customer/account'
 // action creators
 
 export const resetCheckout = () => ({ type: RESET_CHECKOUT })
-export const resetErrors = () => ({ type: RESET_ERRORS })
+export const resetCheck = () => ({ type: RESET_CHECK })
 export const resetTip = () => ({ type: RESET_TIP })
+export const resetErrors = () => ({ type: RESET_ERRORS })
 export const resetCompletedOrder = () => ({ type: RESET_COMPLETED_ORDER })
 export const setCompletedOrder = order => ({
   type: SET_COMPLETED_ORDER,
@@ -84,14 +86,8 @@ export const validateOrder = order => async (dispatch, getState) => {
 
 const assembleOrder = orderData => {
   const { order, checkout, groupOrder } = orderData
-  const {
-    orderId,
-    revenueCenter,
-    serviceType,
-    requestedAt,
-    cart,
-    deviceType,
-  } = order
+  const { orderId, revenueCenter, serviceType, requestedAt, cart, deviceType } =
+    order
   const { revenue_center_id: revenueCenterId } = revenueCenter || {}
   const { check, form } = checkout
   const {
@@ -172,31 +168,30 @@ export const submitOrder = () => async (dispatch, getState) => {
   }
 }
 
-export const submitOrderPay = (showAlert = false) => async (
-  dispatch,
-  getState
-) => {
-  const { api } = getState().config
-  if (!api) return
-  dispatch(setSubmitting(true))
-  dispatch(pending(SUBMIT_ORDER))
-  if (showAlert) {
-    const alert = {
-      type: 'working',
-      args: { text: 'Submitting your order...' },
+export const submitOrderPay =
+  (showAlert = false) =>
+  async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    dispatch(setSubmitting(true))
+    dispatch(pending(SUBMIT_ORDER))
+    if (showAlert) {
+      const alert = {
+        type: 'working',
+        args: { text: 'Submitting your order...' },
+      }
+      dispatch(setAlert(alert))
     }
-    dispatch(setAlert(alert))
+    const preparedOrder = assembleOrder(getState().data)
+    try {
+      const completedOrder = await api.postOrder(preparedOrder)
+      const auth = getState().data.customer.account.auth
+      const { email, password } = preparedOrder.customer
+      if (password && !auth) await dispatch(loginCustomer(email, password))
+      dispatch(setAlert({ type: 'close' }))
+      return completedOrder
+    } catch (err) {
+      dispatch(setAlert({ type: 'close' }))
+      handleOrderErrors(err, preparedOrder, dispatch)
+    }
   }
-  const preparedOrder = assembleOrder(getState().data)
-  try {
-    const completedOrder = await api.postOrder(preparedOrder)
-    const auth = getState().data.customer.account.auth
-    const { email, password } = preparedOrder.customer
-    if (password && !auth) await dispatch(loginCustomer(email, password))
-    dispatch(setAlert({ type: 'close' }))
-    return completedOrder
-  } catch (err) {
-    dispatch(setAlert({ type: 'close' }))
-    handleOrderErrors(err, preparedOrder, dispatch)
-  }
-}
