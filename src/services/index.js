@@ -832,6 +832,16 @@ class OpenTenderAPI {
     return this.request(`/customer/thanx`, 'GET', null, null, token)
   }
 
+  getThanxCardSignature(token, acct) {
+    return this.request(
+      `/customer/thanx-card-signature?acct=${acct}`,
+      'GET',
+      null,
+      null,
+      token
+    )
+  }
+
   postCustomerLevelUp(token, data) {
     return this.request(`/customer/levelup`, 'POST', data, null, token)
   }
