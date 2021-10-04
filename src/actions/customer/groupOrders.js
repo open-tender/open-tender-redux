@@ -90,97 +90,91 @@ const makeCartData = (order, data = {}) => {
   return { ...orderData, ...data }
 }
 
-export const addCustomerGroupOrder = (data, callback) => async (
-  dispatch,
-  getState
-) => {
-  const { api } = getState().config
-  if (!api) return
-  const token = selectToken(getState())
-  if (!token) return dispatch(reject(START_GROUP_ORDER, MISSING_CUSTOMER))
-  dispatch(pending(START_GROUP_ORDER))
-  try {
-    const cartData = makeCartData(getState().data.order, data)
-    const response = await api.postCustomerGroupOrder(token, cartData)
-    const customer = getState().data.customer.account.profile
-    const payload = {
-      ...makeCartPayload(response),
-      isCartOwner: true,
-      cartOwner: customer,
+export const addCustomerGroupOrder =
+  (data, callback) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    const token = selectToken(getState())
+    if (!token) return dispatch(reject(START_GROUP_ORDER, MISSING_CUSTOMER))
+    dispatch(pending(START_GROUP_ORDER))
+    try {
+      const cartData = makeCartData(getState().data.order, data)
+      const response = await api.postCustomerGroupOrder(token, cartData)
+      const customer = getState().data.customer.account.profile
+      const payload = {
+        ...makeCartPayload(response),
+        isCartOwner: true,
+        cartOwner: customer,
+      }
+      dispatch(fulfill(START_GROUP_ORDER, payload))
+      if (callback) callback()
+    } catch (err) {
+      dispatch(checkAuth(err, () => reject(START_GROUP_ORDER, err)))
     }
-    dispatch(fulfill(START_GROUP_ORDER, payload))
-    if (callback) callback()
-  } catch (err) {
-    dispatch(checkAuth(err, () => reject(START_GROUP_ORDER, err)))
   }
-}
 
-export const updateCustomerGroupOrder = (cartId, data, callback) => async (
-  dispatch,
-  getState
-) => {
-  const { api } = getState().config
-  if (!api) return
-  const token = selectToken(getState())
-  if (!token) return dispatch(reject(UPDATE_GROUP_ORDER, MISSING_CUSTOMER))
-  dispatch(pending(UPDATE_GROUP_ORDER))
-  try {
-    const cartData = makeCartData(getState().data.order, data)
-    await api.putCustomerGroupOrder(token, cartId, cartData)
-    const response = await api.getCustomerGroupOrder(token, cartId)
-    const { requestedAt, revenueCenter } = getState().data.order
-    if (response.requested_at !== requestedAt) {
-      dispatch(setRequestedAt(response.requested_at))
-      const tz = timezoneMap[revenueCenter.timezone]
-      const requestedAtText = makeRequestedAtStr(response.requested_at, tz)
-      dispatch(addMessage(`Requested time updated to ${requestedAtText}`))
+export const updateCustomerGroupOrder =
+  (cartId, data, callback) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    const token = selectToken(getState())
+    if (!token) return dispatch(reject(UPDATE_GROUP_ORDER, MISSING_CUSTOMER))
+    dispatch(pending(UPDATE_GROUP_ORDER))
+    try {
+      const cartData = makeCartData(getState().data.order, data)
+      await api.putCustomerGroupOrder(token, cartId, cartData)
+      const response = await api.getCustomerGroupOrder(token, cartId)
+      const { requestedAt, revenueCenter } = getState().data.order
+      if (response.requested_at !== requestedAt) {
+        dispatch(setRequestedAt(response.requested_at))
+        const tz = timezoneMap[revenueCenter.timezone]
+        const requestedAtText = makeRequestedAtStr(response.requested_at, tz)
+        dispatch(addMessage(`Requested time updated to ${requestedAtText}`))
+      }
+      const payload = { ...makeCartPayload(response), isCartOwner: true }
+      dispatch(fulfill(UPDATE_GROUP_ORDER, payload))
+      if (callback) callback()
+    } catch (err) {
+      dispatch(checkAuth(err, () => reject(UPDATE_GROUP_ORDER, err)))
     }
-    const payload = { ...makeCartPayload(response), isCartOwner: true }
-    dispatch(fulfill(UPDATE_GROUP_ORDER, payload))
-    if (callback) callback()
-  } catch (err) {
-    dispatch(checkAuth(err, () => reject(UPDATE_GROUP_ORDER, err)))
   }
-}
 
-export const closeGroupOrder = (cartId, closed) => async (
-  dispatch,
-  getState
-) => {
-  const { api } = getState().config
-  if (!api) return
-  const token = selectToken(getState())
-  if (!token) return dispatch(reject(CLOSE_GROUP_ORDER, MISSING_CUSTOMER))
-  dispatch(pending(CLOSE_GROUP_ORDER))
-  try {
-    await api.putCustomerGroupOrderStatus(token, cartId, { closed })
-    dispatch(fulfill(CLOSE_GROUP_ORDER, closed))
-  } catch (err) {
-    dispatch(checkAuth(err, () => reject(CLOSE_GROUP_ORDER, err)))
+export const closeGroupOrder =
+  (cartId, closed) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    const token = selectToken(getState())
+    if (!token) return dispatch(reject(CLOSE_GROUP_ORDER, MISSING_CUSTOMER))
+    dispatch(pending(CLOSE_GROUP_ORDER))
+    try {
+      await api.putCustomerGroupOrderStatus(token, cartId, { closed })
+      dispatch(fulfill(CLOSE_GROUP_ORDER, closed))
+    } catch (err) {
+      dispatch(checkAuth(err, () => reject(CLOSE_GROUP_ORDER, err)))
+    }
   }
-}
 
-export const removeCustomerGroupOrder = (cartId, callback) => async (
-  dispatch,
-  getState
-) => {
-  const { api } = getState().config
-  if (!api) return
-  const token = selectToken(getState())
-  if (!token)
-    return dispatch(reject(`${name}/remove${entity}`, MISSING_CUSTOMER))
-  dispatch(pending(`${name}/remove${entity}`))
-  try {
-    await api.deleteCustomerGroupOrder(token, cartId)
-    dispatch(resetGroupOrder())
-    const orders = await api.getCustomerGroupOrders(token)
-    dispatch(fulfill(`${name}/remove${entity}`, orders))
-    dispatch(showNotification('Group order deleted!'))
-    if (callback) callback()
-  } catch (err) {
-    dispatch(checkAuth(err, () => reject(`${name}/remove${entity}`, err)))
+export const removeCustomerGroupOrder =
+  (cartId, callback) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    const token = selectToken(getState())
+    if (!token)
+      return dispatch(reject(`${name}/remove${entity}`, MISSING_CUSTOMER))
+    dispatch(pending(`${name}/remove${entity}`))
+    try {
+      await api.deleteCustomerGroupOrder(token, cartId)
+      dispatch(resetGroupOrder())
+      const orders = await api.getCustomerGroupOrders(token)
+      dispatch(fulfill(`${name}/remove${entity}`, orders))
+      dispatch(showNotification('Group order deleted!'))
+      if (callback) callback()
+    } catch (err) {
+      dispatch(resetGroupOrder())
+      dispatch(showNotification('Group order deleted!'))
+      dispatch(checkAuth(err, () => reject(`${name}/remove${entity}`, err)))
+    }
   }
-}
 
 export const reopenGroupOrder = cart => async (dispatch, getState) => {
   const { api } = getState().config
