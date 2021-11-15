@@ -531,6 +531,14 @@ class OpenTenderAPI {
     return this.request(`/guest?email=${encodeURIComponent(email)}`)
   }
 
+  getSubscriber(email) {
+    return this.request(`/subscribers/${encodeURIComponent(email)}`)
+  }
+
+  postSubscriber(email) {
+    return this.request(`/subscribers`, 'POST', { email })
+  }
+
   postSignUp(data) {
     return this.request(`/customer`, 'POST', data)
   }
