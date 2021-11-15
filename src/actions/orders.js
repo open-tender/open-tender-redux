@@ -28,11 +28,13 @@ export const setCurrentOrder = order => ({
   type: SET_CURRENT_ORDER,
   payload: order,
 })
-export const updateOrder = (order, itemTypes) => ({
+export const skipFetchOrders = () => ({ type: `${FETCH_ORDERS}/skipped` })
+
+// don't export this because it conflicts with updateOrder() from actions/order.js
+const updateOrder = (order, itemTypes) => ({
   type: UPDATE_ORDER,
   payload: { order, itemTypes },
 })
-export const skipFetchOrders = () => ({ type: `${FETCH_ORDERS}/skipped` })
 
 // async action creators
 
