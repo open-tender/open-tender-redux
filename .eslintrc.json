@@ -11,6 +11,8 @@
   },
   "rules": {
     "no-console": "error",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "no-nonoctal-decimal-escape": "off",
+    "no-unsafe-optional-chaining": "off"
   }
 }
