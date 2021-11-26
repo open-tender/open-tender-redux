@@ -342,6 +342,10 @@ class OpenTenderAPI {
     return this.request(`/locations?${params}`)
   }
 
+  getLocation(revenue_center_id) {
+    return this.request(`/locations/${revenue_center_id}`)
+  }
+
   getValidTimes(revenueCenterType) {
     const params = `revenue_center_type=${revenueCenterType}`
     return this.request(`/valid-times?${params}`)
