@@ -62,6 +62,7 @@ export const ADD_MESSAGE = `${NAME}/addMessage`
 export const REMOVE_MESSAGE = `${NAME}/removeMessage`
 
 export const FETCH_REVENUE_CENTER = `${NAME}/fetchRevenueCenter`
+export const FETCH_LOCATION = `${NAME}/fetchLocation`
 export const REVERT_MENU = `${NAME}/revertMenu`
 export const REFRESH_REVENUE_CENTER = `${NAME}/refreshRevenueCenter`
 export const EDIT_ORDER = `${NAME}/editOrder`

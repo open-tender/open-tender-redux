@@ -187,7 +187,7 @@ export const reopenGroupOrder = cart => async (dispatch, getState) => {
   try {
     // await dispatch(fetchRevenueCenter(revenue_center_id))
     const { revenue_center_id, service_type, requested_at, cart_id } = cart
-    const revenueCenter = await api.getRevenueCenter(revenue_center_id)
+    const revenueCenter = await api.getLocation(revenue_center_id)
     dispatch(setRevenueCenter(revenueCenter))
     const menuItems = await api.getMenuItems(revenue_center_id, service_type)
     const data = { revenue_center_id, requested_at, service_type }

@@ -33,6 +33,7 @@ import {
   INCREMENT_ITEM,
   DECREMENT_ITEM,
   FETCH_REVENUE_CENTER,
+  FETCH_LOCATION,
   REVERT_MENU,
   REFRESH_REVENUE_CENTER,
   EDIT_ORDER,
@@ -173,13 +174,13 @@ export const fetchRevenueCenter =
 export const fetchLocation = revenueCenterId => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
-  dispatch(pending(FETCH_REVENUE_CENTER))
+  dispatch(pending(FETCH_LOCATION))
   try {
     const revenueCenter = await api.getLocation(revenueCenterId)
     dispatch(setRevenueCenter(revenueCenter))
-    dispatch(fulfill(FETCH_REVENUE_CENTER))
+    dispatch(fulfill(FETCH_LOCATION))
   } catch (err) {
-    dispatch(reject(FETCH_REVENUE_CENTER, err))
+    dispatch(reject(FETCH_LOCATION, err))
   }
 }
 
@@ -190,7 +191,7 @@ export const revertMenu =
     if (!api) return
     dispatch(pending(REVERT_MENU))
     try {
-      const revenueCenter = await api.getRevenueCenter(revenueCenterId)
+      const revenueCenter = await api.getLocation(revenueCenterId)
       dispatch(setMenuVars(revenueCenter, serviceType, requestedAt))
       dispatch(fulfill(REVERT_MENU, revenueCenter))
     } catch (err) {
@@ -205,7 +206,7 @@ export const refreshRevenueCenter =
     if (!api) return
     dispatch(pending(REFRESH_REVENUE_CENTER))
     try {
-      const revenueCenter = await api.getRevenueCenter(revenueCenterId)
+      const revenueCenter = await api.getLocation(revenueCenterId)
       if (reset) requestedAt = null
       const firstTimes = makeFirstTimes(revenueCenter, serviceType, requestedAt)
       const { status } = revenueCenter
@@ -240,7 +241,7 @@ export const editOrder = order => async (dispatch, getState) => {
       address,
     } = order
     const revenueCenterId = revenue_center.revenue_center_id
-    const revenueCenter = await api.getRevenueCenter(revenueCenterId)
+    const revenueCenter = await api.getLocation(revenueCenterId)
     const menuItems = await api.getMenuItems(revenueCenterId, serviceType)
     const { cart, cartCounts } = rehydrateCart(menuItems, order.cart)
     dispatch(setMenuItems(menuItems))
@@ -278,7 +279,7 @@ export const reorderPastOrder =
     dispatch(setAlert(alert))
     dispatch(pending(REORDER))
     try {
-      const revenueCenter = await api.getRevenueCenter(revenueCenterId)
+      const revenueCenter = await api.getLocation(revenueCenterId)
       const requestedAt = makeFirstRequestedAt(revenueCenter, serviceType)
       if (!requestedAt) {
         const { status } = revenueCenter
@@ -291,6 +292,7 @@ export const reorderPastOrder =
         const menuItems = await api.getMenuItems(revenueCenterId, serviceType)
         const { cart, cartCounts } = rehydrateCart(menuItems, items)
         dispatch(setMenuItems(menuItems))
+        const orderType = revenueCenter.revenue_center_type
         const payload = {
           revenueCenter,
           requestedAt,
@@ -301,7 +303,16 @@ export const reorderPastOrder =
         dispatch(fulfill(REORDER, payload))
         const alert = {
           type: 'requestedAt',
-          args: { openSidebar: true },
+          args: {
+            openSidebar: true,
+            focusFirst: true,
+            skipClose: true,
+            isReorder: true,
+            revenueCenter,
+            serviceType,
+            orderType,
+            requestedAt,
+          },
         }
         dispatch(setAlert(alert))
       }
