@@ -50,7 +50,8 @@ export const selectOrderLimits = state => {
     return { orderMinimum: null, orderMaximum: null }
   }
   const { cartGuest, spendingLimit } = state.data.groupOrder
-  const { order_maximum, order_minimum } = revenueCenter.settings
+  const { order_maximum, order_minimum } =
+    revenueCenter.settings || revenueCenter
   const orderMax =
     cartGuest && spendingLimit ? spendingLimit : order_maximum[serviceType]
   let orderMaximum = parseFloat(orderMax)
