@@ -18,6 +18,8 @@ const initState = {
   isOutpost: false,
   isCurbside: false,
   revenueCenter: null,
+  table: null,
+  prepType: null,
   requestedAt: 'asap',
   address: null,
   currentCategory: null,
@@ -49,6 +51,8 @@ export const SET_CURBSIDE = `${NAME}/setCurbside`
 export const SET_DEVICE_TYPE = `${NAME}/setDeviceType`
 export const SET_MENU_VARS = `${NAME}/setMenuVars`
 export const SET_REVENUE_CENTER = `${NAME}/setRevenueCenter`
+export const SET_TABLE = `${NAME}/setTable`
+export const SET_PREP_TYPE = `${NAME}/setPrepType`
 export const SET_ADDRESS = `${NAME}/setAddress`
 export const SET_REQUESTED_AT = `${NAME}/setRequestedAt`
 export const SET_CART = `${NAME}/setCart`
@@ -79,9 +83,11 @@ export default (state = initState, action) => {
         orderId: null,
         orderType: null,
         serviceType: null,
+        prepType: null,
         isOutpost: false,
         isCurbside: false,
         revenueCenter: null,
+        table: null,
         requestedAt: null,
       }
     case RESET_REVENUE_CENTER:
@@ -133,6 +139,10 @@ export default (state = initState, action) => {
       return { ...state, isCurbside: action.payload }
     case SET_DEVICE_TYPE:
       return { ...state, deviceType: action.payload }
+    case SET_TABLE:
+      return { ...state, table: action.payload }
+    case SET_PREP_TYPE:
+      return { ...state, prepType: action.payload }
     case SET_MENU_VARS: {
       const { revenueCenter } = action.payload
       return {
@@ -211,6 +221,16 @@ export default (state = initState, action) => {
         error: null,
       }
     case `${FETCH_REVENUE_CENTER}/rejected`:
+      return { ...state, loading: 'idle', error: action.payload }
+    case `${FETCH_LOCATION}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${FETCH_LOCATION}/fulfilled`:
+      return {
+        ...state,
+        loading: 'idle',
+        error: null,
+      }
+    case `${FETCH_LOCATION}/rejected`:
       return { ...state, loading: 'idle', error: action.payload }
     case `${REVERT_MENU}/pending`:
       return { ...state, loading: 'pending' }

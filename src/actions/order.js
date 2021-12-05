@@ -39,6 +39,8 @@ import {
   EDIT_ORDER,
   REORDER,
   CHECKOUT,
+  SET_TABLE,
+  SET_PREP_TYPE,
 } from '../reducers/order'
 import { setMenuItems } from './menuItems'
 import { updateForm } from './checkout'
@@ -49,6 +51,7 @@ import { resetMenuVars } from './menu'
 export const resetOrder = () => ({ type: RESET_ORDER })
 export const resetOrderType = () => ({ type: RESET_ORDER_TYPE })
 export const resetRevenueCenter = () => ({ type: RESET_REVENUE_CENTER })
+export const resetLocation = () => ({ type: RESET_REVENUE_CENTER })
 export const resetCart = () => ({ type: RESET_CART })
 export const resetMessages = () => ({ type: RESET_MESSAGES })
 export const resetAlert = () => ({ type: RESET_ALERT })
@@ -114,6 +117,14 @@ export const setRequestedAt = requestedAt => ({
 export const setRevenueCenter = revenueCenter => ({
   type: SET_REVENUE_CENTER,
   payload: revenueCenter,
+})
+export const setTable = table => ({
+  type: SET_TABLE,
+  payload: table,
+})
+export const setPrepType = prepType => ({
+  type: SET_PREP_TYPE,
+  payload: prepType,
 })
 export const setCart = cart => ({
   type: SET_CART,
