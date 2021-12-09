@@ -209,6 +209,22 @@ class OpenTenderAPI {
     return this.request(`/cash-summary/${employeeId}/print`, 'POST', {})
   }
 
+  getAlerts() {
+    return this.request(`/alerts`)
+  }
+
+  getAlert(alertId) {
+    return this.request(`/alerts/${alertId}`)
+  }
+
+  putAlert(alertId, data) {
+    return this.request(`/alerts/${alertId}`, 'PUT', data)
+  }
+
+  deleteAlert(alertId) {
+    return this.request(`/alerts/${alertId}`, 'DELETE')
+  }
+
   getOfflineTransactions() {
     return this.request(`/credit/offline-transactions`)
   }
