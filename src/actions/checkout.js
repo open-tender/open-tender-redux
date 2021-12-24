@@ -2,7 +2,7 @@ import {
   isEmpty,
   contains,
   isString,
-  getDefaultTip,
+  // getDefaultTip,
   prepareOrder,
   handleCheckoutErrors,
 } from '@open-tender/js'
@@ -97,7 +97,7 @@ const assembleOrder = orderData => {
     table,
   } = order
   const { revenue_center_id: revenueCenterId } = revenueCenter || {}
-  const { check, form } = checkout
+  const { form } = checkout
   const {
     customer,
     address,
@@ -109,7 +109,7 @@ const assembleOrder = orderData => {
     tenders,
     tip,
   } = form
-  const defaultTip = check ? getDefaultTip(check.config) : null
+  // const defaultTip = check ? getDefaultTip(check.config) : null
   const fullAddress = { ...order.address, ...address }
   const data = {
     orderId,
@@ -124,7 +124,8 @@ const assembleOrder = orderData => {
     discounts,
     promoCodes,
     points,
-    tip: tip === null ? defaultTip : tip,
+    tip,
+    // tip: tip === null ? defaultTip : tip,
     tenders,
     cartId: groupOrder.cartId || null,
     deviceType,

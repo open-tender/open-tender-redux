@@ -42,21 +42,19 @@ export const resetLoginError = () => ({ type: RESET_LOGIN_ERROR })
 
 // async action creators
 
-export const loginCustomer = (email, password) => async (
-  dispatch,
-  getState
-) => {
-  const { api } = getState().config
-  if (!api) return
-  dispatch(pending(LOGIN_CUSTOMER))
-  try {
-    const auth = await api.postLogin(email, password)
-    dispatch(fulfill(LOGIN_CUSTOMER, auth))
-    dispatch(fetchCustomer())
-  } catch (err) {
-    dispatch(reject(LOGIN_CUSTOMER, err))
+export const loginCustomer =
+  (email, password) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    dispatch(pending(LOGIN_CUSTOMER))
+    try {
+      const auth = await api.postLogin(email, password)
+      dispatch(fulfill(LOGIN_CUSTOMER, auth))
+      dispatch(fetchCustomer())
+    } catch (err) {
+      dispatch(reject(LOGIN_CUSTOMER, err))
+    }
   }
-}
 
 export const logoutCustomer = isReset => async (dispatch, getState) => {
   const { api } = getState().config
@@ -137,44 +135,44 @@ export const fetchCustomer = () => async (dispatch, getState) => {
   }
 }
 
-export const updateCustomer = data => async (dispatch, getState) => {
-  const { api } = getState().config
-  if (!api) return
-  const token = selectToken(getState())
-  if (!token) return dispatch(reject(UPDATE_CUSTOMER, MISSING_CUSTOMER))
-  dispatch(pending(UPDATE_CUSTOMER))
-  try {
-    const customer = await api.putCustomer(token, data)
-    const profile = makeCustomerProfile(customer)
-    dispatch(fulfill(UPDATE_CUSTOMER, profile))
-    dispatch(showNotification('Account updated!'))
-  } catch (err) {
-    const errors = makeFormErrors(err)
-    dispatch(checkAuth(err, () => reject(UPDATE_CUSTOMER, errors)))
+export const updateCustomer =
+  (data, callback) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    const token = selectToken(getState())
+    if (!token) return dispatch(reject(UPDATE_CUSTOMER, MISSING_CUSTOMER))
+    dispatch(pending(UPDATE_CUSTOMER))
+    try {
+      const customer = await api.putCustomer(token, data)
+      const profile = makeCustomerProfile(customer)
+      dispatch(fulfill(UPDATE_CUSTOMER, profile))
+      dispatch(showNotification('Account updated!'))
+      if (callback) callback(data)
+    } catch (err) {
+      const errors = makeFormErrors(err)
+      dispatch(checkAuth(err, () => reject(UPDATE_CUSTOMER, errors)))
+    }
   }
-}
 
-export const sendCustomerVerificationEmail = linkUrl => async (
-  dispatch,
-  getState
-) => {
-  const { api } = getState().config
-  if (!api) return
-  const token = selectToken(getState())
-  if (!token) {
-    dispatch(addMessage('Missing customer token'))
-    return dispatch(reject(VERIFY_CUSTOMER))
+export const sendCustomerVerificationEmail =
+  linkUrl => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    const token = selectToken(getState())
+    if (!token) {
+      dispatch(addMessage('Missing customer token'))
+      return dispatch(reject(VERIFY_CUSTOMER))
+    }
+    dispatch(pending(VERIFY_CUSTOMER))
+    try {
+      await api.postSendVerificationEmail(token, linkUrl)
+      dispatch(showNotification('Verification email sent!'))
+      dispatch(fulfill(VERIFY_CUSTOMER))
+    } catch (err) {
+      dispatch(addMessage(err.detail || err.message))
+      dispatch(reject(VERIFY_CUSTOMER))
+    }
   }
-  dispatch(pending(VERIFY_CUSTOMER))
-  try {
-    await api.postSendVerificationEmail(token, linkUrl)
-    dispatch(showNotification('Verification email sent!'))
-    dispatch(fulfill(VERIFY_CUSTOMER))
-  } catch (err) {
-    dispatch(addMessage(err.detail || err.message))
-    dispatch(reject(VERIFY_CUSTOMER))
-  }
-}
 
 export const loginCustomerThanx = email => async (dispatch, getState) => {
   const { api } = getState().config
