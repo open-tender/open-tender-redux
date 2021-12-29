@@ -41,73 +41,66 @@ export const fetchCustomerFavorites = () => async (dispatch, getState) => {
   }
 }
 
-export const updateCustomerFavorite = (favoriteId, data, callback) => async (
-  dispatch,
-  getState
-) => {
-  const { api } = getState().config
-  if (!api) return
-  const token = selectToken(getState())
-  if (!token)
-    return dispatch(reject(`${name}/update${entity}`, MISSING_CUSTOMER))
-  dispatch(pending(`${name}/update${entity}`))
-  try {
-    await api.putCustomerFavorite(token, favoriteId, data)
-    const { data: favorites } = await api.getCustomerFavorites(token)
-    const lookup = makeFavoritesLookup(favorites)
-    dispatch(setCustomerFavoritesLookup(lookup))
-    dispatch(fulfill(`${name}/update${entity}`, favorites))
-    dispatch(showNotification('Favorite updated!'))
-    if (callback) callback()
-  } catch (err) {
-    const errors = makeFormErrors(err)
-    dispatch(checkAuth(err, () => reject(`${name}/update${entity}`, errors)))
+export const updateCustomerFavorite =
+  (favoriteId, data, callback) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    const token = selectToken(getState())
+    if (!token)
+      return dispatch(reject(`${name}/update${entity}`, MISSING_CUSTOMER))
+    dispatch(pending(`${name}/update${entity}`))
+    try {
+      await api.putCustomerFavorite(token, favoriteId, data)
+      const { data: favorites } = await api.getCustomerFavorites(token)
+      const lookup = makeFavoritesLookup(favorites)
+      dispatch(setCustomerFavoritesLookup(lookup))
+      dispatch(fulfill(`${name}/update${entity}`, favorites))
+      dispatch(showNotification('Favorite updated!'))
+      if (callback) callback()
+    } catch (err) {
+      const errors = makeFormErrors(err)
+      dispatch(checkAuth(err, () => reject(`${name}/update${entity}`, errors)))
+    }
   }
-}
 
-export const removeCustomerFavorite = (favoriteId, callback) => async (
-  dispatch,
-  getState
-) => {
-  const { api } = getState().config
-  if (!api) return
-  const token = selectToken(getState())
-  if (!token)
-    return dispatch(reject(`${name}/remove${entity}`, MISSING_CUSTOMER))
-  dispatch(pending(`${name}/remove${entity}`))
-  try {
-    await api.deleteCustomerFavorite(token, favoriteId)
-    const { data: favorites } = await api.getCustomerFavorites(token)
-    const lookup = makeFavoritesLookup(favorites)
-    dispatch(setCustomerFavoritesLookup(lookup))
-    dispatch(fulfill(`${name}/remove${entity}`, favorites))
-    dispatch(showNotification('Favorite removed!'))
-    if (callback) callback()
-  } catch (err) {
-    dispatch(checkAuth(err, () => reject(`${name}/remove${entity}`, err)))
+export const removeCustomerFavorite =
+  (favoriteId, callback) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    const token = selectToken(getState())
+    if (!token)
+      return dispatch(reject(`${name}/remove${entity}`, MISSING_CUSTOMER))
+    dispatch(pending(`${name}/remove${entity}`))
+    try {
+      await api.deleteCustomerFavorite(token, favoriteId)
+      const { data: favorites } = await api.getCustomerFavorites(token)
+      const lookup = makeFavoritesLookup(favorites)
+      dispatch(setCustomerFavoritesLookup(lookup))
+      dispatch(fulfill(`${name}/remove${entity}`, favorites))
+      if (callback) callback()
+    } catch (err) {
+      dispatch(checkAuth(err, () => reject(`${name}/remove${entity}`, err)))
+    }
   }
-}
 
-export const addCustomerFavorite = (data, callback) => async (
-  dispatch,
-  getState
-) => {
-  const { api } = getState().config
-  if (!api) return
-  const token = selectToken(getState())
-  if (!token) return dispatch(reject(`${name}/add${entity}`, MISSING_CUSTOMER))
-  dispatch(pending(`${name}/add${entity}`))
-  try {
-    if (!data.name) data.name = ''
-    await api.postCustomerFavorite(token, data)
-    const { data: favorites } = await api.getCustomerFavorites(token)
-    const lookup = makeFavoritesLookup(favorites)
-    dispatch(setCustomerFavoritesLookup(lookup))
-    dispatch(fulfill(`${name}/add${entity}`, favorites))
-    dispatch(showNotification('Favorite added!'))
-    if (callback) callback()
-  } catch (err) {
-    const errors = makeFormErrors(err)
-    dispatch(checkAuth(err, () => reject(`${name}/add${entity}`, errors)))
+export const addCustomerFavorite =
+  (data, callback) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    const token = selectToken(getState())
+    if (!token)
+      return dispatch(reject(`${name}/add${entity}`, MISSING_CUSTOMER))
+    dispatch(pending(`${name}/add${entity}`))
+    try {
+      if (!data.name) data.name = ''
+      await api.postCustomerFavorite(token, data)
+      const { data: favorites } = await api.getCustomerFavorites(token)
+      const lookup = makeFavoritesLookup(favorites)
+      dispatch(setCustomerFavoritesLookup(lookup))
+      dispatch(fulfill(`${name}/add${entity}`, favorites))
+      if (callback) callback()
+    } catch (err) {
+      const errors = makeFormErrors(err)
+      dispatch(checkAuth(err, () => reject(`${name}/add${entity}`, errors)))
+    }
   }
-}
