@@ -192,12 +192,12 @@ export const loginCustomerThanx = email => async (dispatch, getState) => {
   }
 }
 
-export const authCustomerThanx = code => async (dispatch, getState) => {
+export const authCustomerThanx = (code, path) => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   dispatch(pending(LOGIN_CUSTOMER))
   try {
-    const auth = await api.postThanxAuth(code)
+    const auth = await api.postThanxAuth(code, path)
     dispatch(fulfill(LOGIN_CUSTOMER, auth))
     dispatch(fetchCustomer())
   } catch (err) {

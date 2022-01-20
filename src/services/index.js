@@ -581,8 +581,9 @@ class OpenTenderAPI {
     return this.request('/thanx-login', 'POST', { email })
   }
 
-  postThanxAuth(code) {
-    return this.request('/thanx-auth', 'POST', { code })
+  postThanxAuth(code, path) {
+    const data = path ? { code, path } : { code }
+    return this.request('/thanx-auth', 'POST', data)
   }
 
   postLogin(email, password) {
