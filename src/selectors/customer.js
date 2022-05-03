@@ -21,6 +21,8 @@ export const selectCustomerCreditCardsForPayment = state => {
 }
 
 export const selectCustomerFavorites = state => state.data.customer.favorites
+export const selectCustomerCommunicationPreferences = state =>
+  state.data.customer.communicationPreferences
 export const selectCustomerHouseAccounts = state =>
   state.data.customer.houseAccounts
 export const selectCustomerOrders = state => state.data.customer.orders

@@ -859,6 +859,36 @@ class OpenTenderAPI {
     )
   }
 
+  getCustomerCommunicationPreferences(token) {
+    return this.request(
+      `/customer/notification-preferences`,
+      'GET',
+      null,
+      null,
+      token
+    )
+  }
+
+  postCustomerCommunicationPreference(token, data) {
+    return this.request(
+      `/customer/notification-preferences`,
+      'POST',
+      data,
+      null,
+      token
+    )
+  }
+
+  deleteCustomerCommunicationPreference(token, communicationPreferenceId) {
+    return this.request(
+      `/customer/notification-preferences/${communicationPreferenceId}`,
+      'DELETE',
+      null,
+      null,
+      token
+    )
+  }
+
   getCustomerLoyalty(token) {
     return this.request(`/customer/loyalty`, 'GET', null, null, token)
   }

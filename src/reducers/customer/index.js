@@ -14,6 +14,7 @@ import loyalty from './loyalty'
 import levelup from './levelup'
 import thanx from './thanx'
 import qrcode from './qrcode'
+import communicationPreferences from './communicationPreferences'
 
 const customerReducer = combineReducers({
   account,
@@ -31,6 +32,7 @@ const customerReducer = combineReducers({
   levelup,
   thanx,
   qrcode,
+  communicationPreferences,
 })
 
 export default customerReducer
