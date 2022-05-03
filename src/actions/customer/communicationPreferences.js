@@ -38,8 +38,8 @@ export const fetchCustomerCommunicationPreferences =
     }
   }
 
-export const addCustomerCommunicationPreferences =
-  (data, callback) => async (dispatch, getState) => {
+export const addCustomerCommunicationPreference =
+  (area, channel, callback) => async (dispatch, getState) => {
     const { api } = getState().config
     if (!api) return
     const token = selectToken(getState())
@@ -47,7 +47,8 @@ export const addCustomerCommunicationPreferences =
       return dispatch(reject(`${name}/add${entity}`, MISSING_CUSTOMER))
     dispatch(pending(`${name}/add${entity}`))
     try {
-      await api.postCustomerCommunicationPreferences(token, data)
+      const data = { notification_area: area, notification_channel: channel }
+      await api.postCustomerCommunicationPreference(token, data)
       const { data: communicationPreferences } =
         await api.getCustomerCommunicationPreferences(token)
       dispatch(fulfill(`${name}/add${entity}`, communicationPreferences))
@@ -59,8 +60,8 @@ export const addCustomerCommunicationPreferences =
     }
   }
 
-export const removeCustomerCommunicationPreferences =
-  (communicationPreferenceId, callback) => async (dispatch, getState) => {
+export const removeCustomerCommunicationPreference =
+  (prefId, callback) => async (dispatch, getState) => {
     const { api } = getState().config
     if (!api) return
     const token = selectToken(getState())
@@ -68,10 +69,7 @@ export const removeCustomerCommunicationPreferences =
       return dispatch(reject(`${name}/remove${entity}`, MISSING_CUSTOMER))
     dispatch(pending(`${name}/remove${entity}`))
     try {
-      await api.deleteCustomerCommunicationPreference(
-        token,
-        communicationPreferenceId
-      )
+      await api.deleteCustomerCommunicationPreference(token, prefId)
       const { data: communicationPreferences } =
         await api.getCustomerCommunicationPreferences(token)
       dispatch(fulfill(`${name}/remove${entity}`, communicationPreferences))
