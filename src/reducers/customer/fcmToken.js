@@ -1,5 +1,4 @@
 const initState = {
-  fcmToken: null,
   loading: 'idle',
   error: null,
 }
@@ -20,7 +19,6 @@ export default (state = initState, action) => {
       return { ...state, loading: 'pending' }
     case `${ADD_CUSTOMER_FCM_TOKEN}/fulfilled`:
       return {
-        fcmToken: action.payload,
         loading: 'idle',
         error: null,
       }
@@ -31,7 +29,6 @@ export default (state = initState, action) => {
       return { ...state, loading: 'pending' }
     case `${FETCH_CUSTOMER_FCM_TOKEN}/fulfilled`:
       return {
-        fcmToken: action.payload,
         loading: 'idle',
         error: null,
       }
@@ -42,7 +39,6 @@ export default (state = initState, action) => {
       return { ...state, loading: 'pending' }
     case `${REMOVE_CUSTOMER_FCM_TOKEN}/fulfilled`:
       return {
-        fcmToken: null,
         loading: 'idle',
         error: null,
       }
