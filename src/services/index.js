@@ -889,6 +889,24 @@ class OpenTenderAPI {
     )
   }
 
+  putCustomerFcmToken(token, fcmToken) {
+    return this.request(
+      `/customer/fcm-token`,
+      'PUT',
+      { fcm_token: fcmToken },
+      null,
+      token
+    )
+  }
+
+  getCustomerFcmToken(token) {
+    return this.request(`/customer/fcm-token`, 'GET', null, null, token)
+  }
+
+  deleteCustomerFcmToken(token) {
+    return this.request(`/customer/fcm-token`, 'DELETE', null, null, token)
+  }
+
   getCustomerLoyalty(token) {
     return this.request(`/customer/loyalty`, 'GET', null, null, token)
   }

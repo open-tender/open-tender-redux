@@ -10,6 +10,8 @@ export const selectToken = state =>
   state.data.customer.account.auth
     ? state.data.customer.account.auth.access_token
     : null
+export const selectCustomerFcmToken = state => state.data.customer.fcmToken
+
 export const selectCustomerAllergens = state => state.data.customer.allergens
 export const selectCustomerAddresses = state => state.data.customer.addresses
 export const selectCustomerGiftCards = state => state.data.customer.giftCards
