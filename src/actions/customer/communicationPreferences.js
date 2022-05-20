@@ -79,3 +79,27 @@ export const removeCustomerCommunicationPreference =
       dispatch(checkAuth(err, () => reject(`${name}/remove${entity}`, err)))
     }
   }
+
+export const setCustomerCommunicationDefaultPreferences =
+  prefs => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    const token = selectToken(getState())
+    if (!token)
+      return dispatch(reject(`${name}/add${entity}`, MISSING_CUSTOMER))
+    dispatch(pending(`${name}/add${entity}`))
+    try {
+      const setAllPrefs = async () => {
+        for (let data of prefs) {
+          await api.postCustomerCommunicationPreference(token, data)
+        }
+      }
+      await setAllPrefs()
+      const { data: communicationPreferences } =
+        await api.getCustomerCommunicationPreferences(token)
+      dispatch(fulfill(`${name}/add${entity}`, communicationPreferences))
+    } catch (err) {
+      const errors = makeFormErrors(err)
+      dispatch(checkAuth(err, () => reject(`${name}/add${entity}`, errors)))
+    }
+  }
