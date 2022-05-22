@@ -35,6 +35,7 @@ import { resetCustomerOrders } from './orders'
 import { resetGroupOrder } from '../groupOrder'
 import { resetCustomerCommunicationPreferences } from './communicationPreferences'
 import { setCustomerLevelUp, resetCustomerLevelUp } from './levelup'
+import { resetCustomerRewards } from './rewards'
 
 // action creators
 
@@ -82,6 +83,7 @@ export const logoutCustomer = isReset => async (dispatch, getState) => {
     dispatch(resetCustomerOrder())
     dispatch(resetCustomerOrders())
     dispatch(resetGroupOrder())
+    dispatch(resetCustomerRewards())
     dispatch(resetCustomerCommunicationPreferences())
     dispatch(fulfill(LOGOUT_CUSTOMER, null))
   } catch (err) {
