@@ -879,6 +879,16 @@ class OpenTenderAPI {
     )
   }
 
+  putCustomerCommunicationPreference(token, data) {
+    return this.request(
+      `/customer/notification-preferences`,
+      'PUT',
+      data,
+      null,
+      token
+    )
+  }
+
   deleteCustomerCommunicationPreference(token, communicationPreferenceId) {
     return this.request(
       `/customer/notification-preferences/${communicationPreferenceId}`,
@@ -889,10 +899,10 @@ class OpenTenderAPI {
     )
   }
 
-  putCustomerFcmToken(token, fcmToken) {
+  postCustomerFcmToken(token, fcmToken) {
     return this.request(
-      `/customer/fcm-token`,
-      'PUT',
+      `/customer/fcm-tokens`,
+      'POST',
       { fcm_token: fcmToken },
       null,
       token
@@ -900,11 +910,11 @@ class OpenTenderAPI {
   }
 
   getCustomerFcmToken(token) {
-    return this.request(`/customer/fcm-token`, 'GET', null, null, token)
+    return this.request(`/customer/fcm-tokens`, 'GET', null, null, token)
   }
 
   deleteCustomerFcmToken(token) {
-    return this.request(`/customer/fcm-token`, 'DELETE', null, null, token)
+    return this.request(`/customer/fcm-tokens`, 'DELETE', null, null, token)
   }
 
   getCustomerLoyalty(token) {

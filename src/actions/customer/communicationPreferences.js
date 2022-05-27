@@ -89,12 +89,7 @@ export const setCustomerCommunicationDefaultPreferences =
       return dispatch(reject(`${name}/add${entity}`, MISSING_CUSTOMER))
     dispatch(pending(`${name}/add${entity}`))
     try {
-      const setAllPrefs = async () => {
-        for (let data of prefs) {
-          await api.postCustomerCommunicationPreference(token, data)
-        }
-      }
-      await setAllPrefs()
+      await api.putCustomerCommunicationPreference(token, prefs)
       const { data: communicationPreferences } =
         await api.getCustomerCommunicationPreferences(token)
       dispatch(fulfill(`${name}/add${entity}`, communicationPreferences))

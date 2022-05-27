@@ -23,7 +23,7 @@ export const addCustomerFcmToken =
       return dispatch(reject(ADD_CUSTOMER_FCM_TOKEN, MISSING_CUSTOMER))
     dispatch(pending(ADD_CUSTOMER_FCM_TOKEN))
     try {
-      await api.putCustomerFcmToken(token, fcmToken)
+      await api.postCustomerFcmToken(token, fcmToken)
       dispatch(fulfill(ADD_CUSTOMER_FCM_TOKEN))
       if (callback) callback()
     } catch (err) {
@@ -31,7 +31,7 @@ export const addCustomerFcmToken =
     }
   }
 
-export const fetchCustomerFcmToken = () => async (dispatch, getState) => {
+export const fetchCustomerFcmTokens = () => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   const token = selectToken(getState())
@@ -46,7 +46,7 @@ export const fetchCustomerFcmToken = () => async (dispatch, getState) => {
   }
 }
 
-export const removeCustomerFcmToken =
+export const removeCustomerFcmTokens =
   callback => async (dispatch, getState) => {
     const { api } = getState().config
     if (!api) return
