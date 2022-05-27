@@ -81,7 +81,7 @@ export const removeCustomerCommunicationPreference =
   }
 
 export const setCustomerCommunicationDefaultPreferences =
-  prefs => async (dispatch, getState) => {
+  (prefs, callback) => async (dispatch, getState) => {
     const { api } = getState().config
     if (!api) return
     const token = selectToken(getState())
@@ -93,6 +93,7 @@ export const setCustomerCommunicationDefaultPreferences =
       const { data: communicationPreferences } =
         await api.getCustomerCommunicationPreferences(token)
       dispatch(fulfill(`${name}/add${entity}`, communicationPreferences))
+      if (callback) callback()
     } catch (err) {
       const errors = makeFormErrors(err)
       dispatch(checkAuth(err, () => reject(`${name}/add${entity}`, errors)))
