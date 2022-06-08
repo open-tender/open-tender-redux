@@ -27,27 +27,15 @@ export const fetchAnnouncementPage = page => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
   dispatch(pending(FETCH_ANNOUNCEMENT_PAGE))
-  const seconds = Math.floor(Date.now() / 1000)
-  const { pages } = getState().data.announcements
-  const existing = pages ? pages.find(i => i.page === page) : null
-  if (existing && seconds - existing.lastUpdated < 3600) {
-    dispatch({ type: `${FETCH_ANNOUNCEMENT_PAGE}/cached` })
-  } else {
-    try {
-      const response = await api.getAnnouncementPage(page)
-      const settings = { ...response }
-      delete settings.announcements
-      const entities = response.announcements
-      const payload = {
-        settings,
-        entities,
-        page,
-        lastUpdated: seconds,
-      }
-      dispatch(fulfill(FETCH_ANNOUNCEMENT_PAGE, payload))
-    } catch (err) {
-      const payload = { page, error: handleError(err) }
-      dispatch({ type: `${FETCH_ANNOUNCEMENT_PAGE}/rejected`, payload })
-    }
+  try {
+    const response = await api.getAnnouncementPage(page)
+    const settings = { ...response }
+    delete settings.announcements
+    const entities = response.announcements
+    const payload = { settings, entities, page }
+    dispatch(fulfill(FETCH_ANNOUNCEMENT_PAGE, payload))
+  } catch (err) {
+    const payload = { page, error: handleError(err) }
+    dispatch({ type: `${FETCH_ANNOUNCEMENT_PAGE}/rejected`, payload })
   }
 }
