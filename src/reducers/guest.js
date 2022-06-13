@@ -19,7 +19,7 @@ export default (state = initState, action) => {
     case RESET_GUEST:
       return { ...initState }
     case RESET_GUEST_ERRORS:
-      return { ...state, loading: 'idle', errors: null }
+      return { ...state, loading: 'idle', errors: null, showMagicLink: false }
     case SET_GUEST_EMAIL:
       return { ...state, email: action.payload }
 
