@@ -1,10 +1,11 @@
 import { makeFormErrors } from '@open-tender/js'
 import { pending, fulfill } from '../utils'
 import {
-  RESET_GUEST,
-  SET_GUEST_EMAIL,
   FETCH_GUEST,
+  FETCH_GUEST_THANX,
+  RESET_GUEST,
   RESET_GUEST_ERRORS,
+  SET_GUEST_EMAIL,
 } from '../reducers/guest'
 
 export const resetGuest = () => ({ type: RESET_GUEST })
@@ -30,3 +31,21 @@ export const fetchGuest = (email, callback) => async (dispatch, getState) => {
     dispatch({ type: `${FETCH_GUEST}/rejected`, payload: { errors, email } })
   }
 }
+
+export const fetchGuestThanx =
+  (email, callback) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    dispatch(pending(FETCH_GUEST_THANX))
+    try {
+      await api.postThanxLogin(email)
+      dispatch(fulfill(FETCH_GUEST_THANX, { email }))
+      if (callback) callback()
+    } catch (err) {
+      let errors = makeFormErrors(err)
+      dispatch({
+        type: `${FETCH_GUEST_THANX}/rejected`,
+        payload: { errors, email },
+      })
+    }
+  }
