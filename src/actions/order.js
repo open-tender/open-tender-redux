@@ -273,12 +273,11 @@ export const editOrder = order => async (dispatch, getState) => {
     }
     dispatch(fulfill(EDIT_ORDER, payload))
     dispatch(setAlert({ type: 'closeAndSidebar' }))
-    // dispatch(setAlert({ type: 'sidebar' }))
   } catch (err) {
+    dispatch(resetAlert())
     dispatch(addMessage('Something went wrong. Please contact support.'))
     dispatch(reject(EDIT_ORDER, null))
   }
-  dispatch(resetAlert())
 }
 
 export const reorderPastOrder =
