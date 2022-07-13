@@ -22,6 +22,7 @@ const initState = {
   prepType: null,
   requestedAt: 'asap',
   address: null,
+  currentVendor: null,
   currentCategory: null,
   currentItem: null,
   cart: [],
@@ -56,6 +57,7 @@ export const SET_PREP_TYPE = `${NAME}/setPrepType`
 export const SET_ADDRESS = `${NAME}/setAddress`
 export const SET_REQUESTED_AT = `${NAME}/setRequestedAt`
 export const SET_CART = `${NAME}/setCart`
+export const SET_CURRENT_VENDOR = `${NAME}/setCurrentVendor`
 export const SET_CURRENT_CATEGORY = `${NAME}/setCurrentCategory`
 export const SET_CURRENT_ITEM = `${NAME}/setCurrentItem`
 export const ADD_ITEM = `${NAME}/addItemToCart`
@@ -189,6 +191,8 @@ export default (state = initState, action) => {
       const cartCounts = calcCartCounts(action.payload)
       return { ...state, cart: action.payload, cartCounts }
     }
+    case SET_CURRENT_VENDOR:
+      return { ...state, currentVendor: action.payload }
     case SET_CURRENT_CATEGORY:
       return { ...state, currentCategory: action.payload }
     case SET_CURRENT_ITEM:

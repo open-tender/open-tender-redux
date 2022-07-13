@@ -78,6 +78,8 @@ export const selectMenuVars = state => {
   }
 }
 
+export const selectCurrentVendor = state => state.data.order.currentVendor
+
 export const selectCurrentCategory = state => state.data.order.currentCategory
 
 export const selectCurrentItem = state => state.data.order.currentItem

@@ -23,6 +23,7 @@ import {
   SET_ADDRESS,
   SET_REQUESTED_AT,
   SET_CART,
+  SET_CURRENT_VENDOR,
   SET_CURRENT_CATEGORY,
   SET_CURRENT_ITEM,
   SET_ALERT,
@@ -136,6 +137,10 @@ export const setCurrentItem = item => ({
 })
 export const setCurrentCategory = item => ({
   type: SET_CURRENT_CATEGORY,
+  payload: item,
+})
+export const setCurrentVendor = item => ({
+  type: SET_CURRENT_VENDOR,
   payload: item,
 })
 export const addItemToCart = item => ({
