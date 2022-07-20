@@ -13,6 +13,7 @@ import {
   UPDATE_CUSTOMER,
   VERIFY_CUSTOMER,
   LINK_POS_TOKEN,
+  DELETE_CUSTOMER,
 } from '../../reducers/customer/account'
 import { setSelectedAllergens } from '../allergens'
 import { setAlert, addMessage, resetOrder } from '../order'
@@ -157,6 +158,24 @@ export const updateCustomer =
     } catch (err) {
       const errors = makeFormErrors(err)
       dispatch(checkAuth(err, () => reject(UPDATE_CUSTOMER, errors)))
+    }
+  }
+
+export const deleteCustomer =
+  (data, callback) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    const token = selectToken(getState())
+    if (!token) return dispatch(reject(DELETE_CUSTOMER, MISSING_CUSTOMER))
+    dispatch(pending(DELETE_CUSTOMER))
+    try {
+      await api.deleteCustomer(token)
+      await api.postLogout(token)
+      dispatch(fulfill(DELETE_CUSTOMER))
+      dispatch(showNotification('Account deleted!'))
+      if (callback) callback(data)
+    } catch (err) {
+      dispatch(checkAuth(err, () => reject(DELETE_CUSTOMER, err)))
     }
   }
 

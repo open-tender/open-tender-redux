@@ -617,6 +617,10 @@ class OpenTenderAPI {
     return this.request(`/customer`, 'PUT', data, null, token)
   }
 
+  deleteCustomer(token) {
+    return this.request(`/customer`, 'DELETE', null, null, token)
+  }
+
   postCustomerPosToken(token, posToken) {
     const data = { pos_token: posToken }
     return this.request(`/customer/pos-token`, 'POST', data, null, token)

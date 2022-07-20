@@ -13,6 +13,7 @@ export const LOGIN_CUSTOMER = `${NAME}/loginCustomer`
 export const LOGOUT_CUSTOMER = `${NAME}/logoutCustomer`
 export const FETCH_CUSTOMER = `${NAME}/fetchCustomer`
 export const UPDATE_CUSTOMER = `${NAME}/updateCustomer`
+export const DELETE_CUSTOMER = `${NAME}/delteCustomer`
 export const VERIFY_CUSTOMER = `${NAME}/verifyCustomer`
 export const LINK_POS_TOKEN = `${NAME}/linkPosToken`
 
@@ -42,6 +43,14 @@ export default (state = initState, action) => {
     case `${LOGOUT_CUSTOMER}/fulfilled`:
       return { ...initState }
     case `${LOGOUT_CUSTOMER}/rejected`:
+      return { ...initState }
+
+    // delete
+    case `${DELETE_CUSTOMER}/pending`:
+      return { ...state, loading: 'pending' }
+    case `${DELETE_CUSTOMER}/fulfilled`:
+      return { ...initState }
+    case `${DELETE_CUSTOMER}/rejected`:
       return { ...initState }
 
     // fetch
