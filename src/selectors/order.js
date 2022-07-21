@@ -86,6 +86,10 @@ export const selectCurrentItem = state => state.data.order.currentItem
 
 export const selectCart = state => state.data.order.cart
 
+export const selectCartIds = state => {
+  return state.data.order.cart ? state.data.order.cart.map(i => i.id) : []
+}
+
 export const selectCartQuantity = state => {
   return state.data.order.cart
     ? state.data.order.cart.reduce((t, i) => (t += i.quantity), 0)
