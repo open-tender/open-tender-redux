@@ -88,6 +88,7 @@ export const logoutCustomer = isReset => async (dispatch, getState) => {
     dispatch(resetCustomerRewards())
     dispatch(resetCustomerCommunicationPreferences())
     dispatch(resetGuest())
+    dispatch(setSelectedAllergens(null))
     dispatch(fulfill(LOGOUT_CUSTOMER, null))
   } catch (err) {
     dispatch(reject(LOGOUT_CUSTOMER, null))
