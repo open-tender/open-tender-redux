@@ -234,15 +234,16 @@ export const loginCustomerThanx =
     }
   }
 
-export const authCustomerThanx = (code, path) => async (dispatch, getState) => {
-  const { api } = getState().config
-  if (!api) return
-  dispatch(pending(LOGIN_CUSTOMER))
-  try {
-    const auth = await api.postThanxAuth(code, path)
-    dispatch(fulfill(LOGIN_CUSTOMER, auth))
-    dispatch(fetchCustomer())
-  } catch (err) {
-    dispatch(reject(LOGIN_CUSTOMER, err))
+export const authCustomerThanx =
+  (code, path, origin) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    dispatch(pending(LOGIN_CUSTOMER))
+    try {
+      const auth = await api.postThanxAuth(code, path, origin)
+      dispatch(fulfill(LOGIN_CUSTOMER, auth))
+      dispatch(fetchCustomer())
+    } catch (err) {
+      dispatch(reject(LOGIN_CUSTOMER, err))
+    }
   }
-}
