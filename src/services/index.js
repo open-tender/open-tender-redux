@@ -577,8 +577,9 @@ class OpenTenderAPI {
     return this.request(`/levelup`, 'POST', data)
   }
 
-  postThanxLogin(email) {
-    return this.request('/thanx-login', 'POST', { email })
+  postThanxLogin(email, origin) {
+    const data = origin ? { email, origin } : { email }
+    return this.request('/thanx-login', 'POST', data)
   }
 
   postThanxAuth(code, path) {

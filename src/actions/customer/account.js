@@ -215,23 +215,24 @@ export const sendCustomerVerificationEmail =
     }
   }
 
-export const loginCustomerThanx = email => async (dispatch, getState) => {
-  const { api } = getState().config
-  if (!api) return
-  dispatch(pending(LOGIN_CUSTOMER))
-  try {
-    await api.postThanxLogin(email)
-    dispatch(setAlert({ type: 'close' }))
-    dispatch(addMessage('Thanks! Please check your email on this device.'))
-    dispatch(fulfill(LOGIN_CUSTOMER, null))
-  } catch (err) {
-    const error = err.params ? err.params['$.email'] : null
-    if (error && error.includes("'email'")) {
-      err.detail = 'Please enter a valid email address'
+export const loginCustomerThanx =
+  (email, origin) => async (dispatch, getState) => {
+    const { api } = getState().config
+    if (!api) return
+    dispatch(pending(LOGIN_CUSTOMER))
+    try {
+      await api.postThanxLogin(email, origin)
+      dispatch(setAlert({ type: 'close' }))
+      dispatch(addMessage('Thanks! Please check your email on this device.'))
+      dispatch(fulfill(LOGIN_CUSTOMER, null))
+    } catch (err) {
+      const error = err.params ? err.params['$.email'] : null
+      if (error && error.includes("'email'")) {
+        err.detail = 'Please enter a valid email address'
+      }
+      dispatch(reject(LOGIN_CUSTOMER, err))
     }
-    dispatch(reject(LOGIN_CUSTOMER, err))
   }
-}
 
 export const authCustomerThanx = (code, path) => async (dispatch, getState) => {
   const { api } = getState().config

@@ -33,12 +33,12 @@ export const fetchGuest = (email, callback) => async (dispatch, getState) => {
 }
 
 export const fetchGuestThanx =
-  (email, callback) => async (dispatch, getState) => {
+  (email, callback, origin) => async (dispatch, getState) => {
     const { api } = getState().config
     if (!api) return
     dispatch(pending(FETCH_GUEST_THANX))
     try {
-      await api.postThanxLogin(email)
+      await api.postThanxLogin(email, origin)
       dispatch(fulfill(FETCH_GUEST_THANX, { email }))
       if (callback) callback()
     } catch (err) {
