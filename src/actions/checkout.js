@@ -111,6 +111,12 @@ const assembleOrder = orderData => {
   } = form
   // const defaultTip = check ? getDefaultTip(check.config) : null
   const fullAddress = { ...order.address, ...address }
+  const orderAddress =
+    serviceType !== 'DELIVERY'
+      ? null
+      : isEmpty(fullAddress)
+      ? null
+      : fullAddress
   const data = {
     orderId,
     revenueCenterId,
@@ -118,7 +124,7 @@ const assembleOrder = orderData => {
     requestedAt,
     cart,
     customer,
-    address: isEmpty(fullAddress) ? null : fullAddress,
+    address: orderAddress,
     details,
     surcharges,
     discounts,
