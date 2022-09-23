@@ -151,6 +151,9 @@ const handleOrderErrors = (err, preparedOrder, dispatch) => {
     dispatch(reject(SUBMIT_ORDER, {}))
   } else if (contains(keys, ['cart'])) {
     const cartError = errors.cart
+    if (contains(cartError, ['delivery minimum', 'maximum'])) {
+      return dispatch(reject(SUBMIT_ORDER, { form: cartError }))
+    }
     if (isString(cartError)) {
       dispatch(fetchMenu(args))
     } else {
