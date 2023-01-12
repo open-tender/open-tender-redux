@@ -125,7 +125,7 @@ export const printTickets =
     if (!api) return
     dispatch(pending(PRINT_TICKETS))
     try {
-      const data = status ? { prep_status: status } : {}
+      const data = status || {}
       const order = await api.postTicketsPrint(order_uuid, data)
       dispatch(updateOrder(order, itemTypes))
       dispatch(fulfill(PRINT_TICKETS))
