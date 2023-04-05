@@ -24,6 +24,7 @@ import {
 import { refreshRevenueCenter, setAlert } from './order'
 import { fetchMenu } from './menu'
 import { loginCustomer } from './customer/account'
+import { selectToken } from '../selectors/customer'
 
 // action creators
 
@@ -57,10 +58,11 @@ const makeRefreshArgs = order => ({
 export const validateOrder = order => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
+  const token = selectToken(getState())
   dispatch(pending(VALIDATE_ORDER))
   try {
     if (!order) order = assembleOrder(getState().data)
-    const check = await api.postOrderValidate(order)
+    const check = await api.postOrderValidate(order, token)
     const errMessages = handleCheckoutErrors({ params: check.errors })
     let errors = {}
     const keys = Object.keys(errMessages)
@@ -173,12 +175,13 @@ const handleOrderErrors = (err, preparedOrder, dispatch) => {
 export const submitOrder = () => async (dispatch, getState) => {
   const { api } = getState().config
   if (!api) return
+  const token = selectToken(getState())
   dispatch(pending(SUBMIT_ORDER))
   const alert = { type: 'working', args: { text: 'Submitting your order...' } }
   dispatch(setAlert(alert))
   const preparedOrder = assembleOrder(getState().data)
   try {
-    const completedOrder = await api.postOrder(preparedOrder)
+    const completedOrder = await api.postOrder(preparedOrder, token)
     const auth = getState().data.customer.account.auth
     const { email, password } = preparedOrder.customer
     if (password && !auth) await dispatch(loginCustomer(email, password))
@@ -195,6 +198,7 @@ export const submitOrderPay =
   async (dispatch, getState) => {
     const { api } = getState().config
     if (!api) return
+    const token = selectToken(getState())
     dispatch(setSubmitting(true))
     dispatch(pending(SUBMIT_ORDER))
     if (showAlert) {
@@ -206,7 +210,7 @@ export const submitOrderPay =
     }
     const preparedOrder = assembleOrder(getState().data)
     try {
-      const completedOrder = await api.postOrder(preparedOrder)
+      const completedOrder = await api.postOrder(preparedOrder, token)
       const auth = getState().data.customer.account.auth
       const { email, password } = preparedOrder.customer
       if (password && !auth) await dispatch(loginCustomer(email, password))

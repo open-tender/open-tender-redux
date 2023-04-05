@@ -456,12 +456,12 @@ class OpenTenderAPI {
     return this.request(`/apple-pay/payment`, 'POST', data)
   }
 
-  postOrderValidate(order) {
-    return this.request(`/orders/validate`, 'POST', order)
+  postOrderValidate(order, token) {
+    return this.request(`/orders/validate`, 'POST', order, null, token)
   }
 
-  postOrder(order) {
-    return this.request(`/orders`, 'POST', order)
+  postOrder(order, token) {
+    return this.request(`/orders`, 'POST', order, null, token)
   }
 
   deleteOrder(order) {
